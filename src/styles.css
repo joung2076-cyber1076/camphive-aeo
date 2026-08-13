@@ -1,0 +1,280 @@
+/* ─────────────────────────────────────────────────────────────
+   캠핑하이브 AEO 사이트 스타일
+
+   원칙: 읽히는 것만 한다.
+   - 애니메이션 0개. 스크롤 효과 0개. 폰트 다운로드 0개.
+   - CSS가 로드되지 않아도 페이지는 완전히 읽힌다 (구조가 HTML에 있으므로).
+   - 목적은 "사람이 읽을 만한 문서"까지. 그 이상 꾸미면 방해만 된다.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f7f5;
+  --bg-answer: #f0f4ee;
+  --text: #1c1f1a;
+  --text-dim: #5c625a;
+  --line: #dfe2dc;
+  --accent: #2f5d3a;
+  --accent-soft: #4a7a56;
+  --max: 44rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141613;
+    --bg-soft: #1c1f1b;
+    --bg-answer: #1e2a20;
+    --text: #e9ece7;
+    --text-dim: #a3aa9f;
+    --line: #2e332c;
+    --accent: #8fc79c;
+    --accent-soft: #a8d6b3;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  word-break: keep-all;      /* 한글 단어 중간 줄바꿈 방지 */
+  overflow-wrap: break-word;
+}
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+.skip:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 10;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+a { color: var(--accent); text-underline-offset: 0.15em; }
+a:hover { color: var(--accent-soft); }
+
+/* ── 헤더 ─────────────────────────────────────────────── */
+.site-header {
+  border-bottom: 1px solid var(--line);
+  padding: 1rem 0;
+  margin-bottom: 2.5rem;
+}
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.brand { text-decoration: none; color: inherit; }
+.brand-name {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+.site-nav {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+.site-nav a[aria-current='page'] { font-weight: 700; }
+
+/* ── 본문 ─────────────────────────────────────────────── */
+main { padding-bottom: 4rem; }
+
+h1 {
+  font-size: 1.85rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+}
+h2 {
+  font-size: 1.3rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin: 2.75rem 0 0.85rem;
+  padding-top: 0.35rem;
+}
+h3 {
+  font-size: 1.05rem;
+  margin: 1.75rem 0 0.4rem;
+}
+p { margin: 0 0 1rem; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+li { margin-bottom: 0.4rem; }
+
+/* ── 핵심 답변 블록 (AI가 통째로 인용하는 부분) ────────── */
+.answer {
+  background: var(--bg-answer);
+  border-left: 3px solid var(--accent);
+  padding: 1.1rem 1.25rem;
+  margin: 0 0 1rem;
+  border-radius: 0 6px 6px 0;
+}
+.answer-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.answer-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* ── 날짜 표기 ────────────────────────────────────────── */
+.as-of, .updated {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin: 0 0 2rem;
+}
+.updated {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+/* ── 데이터표 ─────────────────────────────────────────── */
+.data-table, .company-facts {
+  margin: 1.5rem 0 2rem;
+}
+.data-table {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.92rem;
+}
+caption {
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding-bottom: 0.6rem;
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+thead th {
+  background: var(--bg-soft);
+  font-weight: 700;
+  white-space: nowrap;
+}
+tbody th {
+  background: var(--bg-soft);
+  font-weight: 600;
+}
+.table-source, .table-note {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin: 0.5rem 0 0;
+}
+
+/* ── FAQ ──────────────────────────────────────────────── */
+.faq-item {
+  border-top: 1px solid var(--line);
+  padding-top: 0.5rem;
+}
+.faq-item h3 { margin-top: 0.75rem; }
+
+/* ── 관련 문서 ────────────────────────────────────────── */
+.related {
+  margin-top: 2.5rem;
+  background: var(--bg-soft);
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+}
+.related h2 { margin: 0 0 0.5rem; font-size: 1rem; }
+.related ul { margin: 0; }
+.related-note { color: var(--text-dim); font-size: 0.9rem; }
+
+/* ── 홈 콘텐츠 목록 ───────────────────────────────────── */
+.content-index { list-style: none; padding: 0; }
+.content-index > li {
+  border-top: 1px solid var(--line);
+  padding: 1rem 0;
+}
+.content-index a { font-weight: 600; }
+.content-index-summary { margin: 0.3rem 0 0; color: var(--text-dim); font-size: 0.9rem; }
+.content-index-date { margin: 0.2rem 0 0; color: var(--text-dim); font-size: 0.8rem; }
+
+/* ── 견본 페이지 표시 ─────────────────────────────────── */
+.draft-badge {
+  background: #fff4d6;
+  color: #6b4a00;
+  border: 1px solid #e8d08a;
+  padding: 0.6rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  margin: 0 0 1.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .draft-badge { background: #33290f; color: #f0d99a; border-color: #5c4a1c; }
+}
+
+/* ── 푸터 ─────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--line);
+  background: var(--bg-soft);
+  padding: 2.5rem 0 3rem;
+  font-size: 0.9rem;
+}
+.footer-title { font-size: 1.05rem; margin: 0 0 0.5rem; }
+.canonical-sentence {
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+.company-facts { font-size: 0.88rem; max-width: 32rem; }
+.company-facts caption { font-size: 0.85rem; color: var(--text-dim); }
+.footer-links { list-style: none; padding: 0; font-size: 0.85rem; }
+.copyright { color: var(--text-dim); font-size: 0.8rem; margin: 1.5rem 0 0; }
+
+blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--line);
+  color: var(--text-dim);
+}
+cite { font-size: 0.85rem; font-style: normal; }
+code {
+  background: var(--bg-soft);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+@media print {
+  .site-header, .site-nav, .skip { display: none; }
+  body { font-size: 11pt; }
+}

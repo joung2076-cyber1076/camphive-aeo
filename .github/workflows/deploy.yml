@@ -1,0 +1,66 @@
+# aeo.camphive.kr 자동 배포
+#
+# main 브랜치에 내용이 올라가면 → 빌드 → 소스 보기 검증 → GitHub Pages 배포.
+# 검증이 실패하면 배포가 멈춘다. 깨진 페이지가 인터넷에 올라가지 않는다.
+#
+# npm install 이 없다는 점에 주목할 것. 이 저장소는 의존성 0개라
+# 내려받을 패키지가 없고, 그래서 배포가 빠르고 깨지지 않는다.
+
+name: aeo.camphive.kr 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # GitHub 화면에서 손으로 실행할 때 쓴다
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 빌드와 검증
+    runs-on: ubuntu-latest
+    steps:
+      - name: 소스 내려받기
+        uses: actions/checkout@v4
+
+      - name: Node.js 준비
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # BASE_PATH — github.io 임시 주소는 /저장소이름/ 하위에서 열린다.
+      # 이 값을 넣어야 CSS와 내부 링크가 깨지지 않는다.
+      # aeo.camphive.kr 도메인이 연결되면 아래 env 두 줄씩을 지운다.
+      - name: 빌드 (dist/ 생성)
+        run: node build.mjs
+        env:
+          BASE_PATH: /camphive-aeo
+
+      - name: 소스 보기 검증 — 실패하면 배포하지 않는다
+        run: node verify.mjs
+        env:
+          BASE_PATH: /camphive-aeo
+
+      - name: 결과물 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: 배포
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: GitHub Pages에 올리기
+        id: deployment
+        uses: actions/deploy-pages@v4
