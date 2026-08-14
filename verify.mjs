@@ -52,6 +52,30 @@ function check(condition, label, detail = '') {
   return condition;
 }
 
+/** 실패로 세지 않고 눈에만 띄게 한다. 규격은 아니지만 봐야 하는 것. */
+function warn(label, detail = '') {
+  console.log(`  ${C.warn('경고')}  ${label}${detail ? C.dim(`  ${detail}`) : ''}`);
+}
+
+// ── 질의 3원칙 (2026-08-14 확정) ────────────────────────────
+//  ① 업종어 필수 ② 운영주 시점 ③ 반말 구어체
+//  ①·③ 만 기계로 잡는다. ②는 문장을 읽어야 판단할 수 있다.
+//
+//  검사 대상은 "질문"뿐이다. 물음표로 끝나지 않는 H2("지금 할 수 있는
+//  3단계" 등)는 질문이 아니므로 건드리지 않는다.
+//  기업정보·자료실 페이지는 질의를 노리는 문서가 아니라 제외한다.
+const CORPORATE_SLUGS = new Set([
+  'about', 'contact', 'privacy',
+  'intro/company', 'intro/consulting', 'intro/ai-marketing',
+]);
+const POLITE_ENDING = /(나요|가요|까요|습니까|해요)\?\s*$/;
+const INDUSTRY_WORD = /(캠핑장|글램핑)/;
+
+/** 업종어 예외 — 파일·문장 단위로 사유를 적어서만 연다. 규칙을 끄지 않는다. */
+const INDUSTRY_EXCEPTIONS = [
+  // 예) { slug: 'faq/xxx', text: '…?', why: '…' }
+];
+
 /** HTML 엔티티를 되돌려, 원고 문자열과 소스를 같은 기준으로 비교한다. */
 /** 공백을 한 칸으로 눌러 비교한다. 줄바꿈·들여쓰기 차이로 어긋나지 않게. */
 function norm(s) {
@@ -318,6 +342,56 @@ async function main() {
     const broken = [...new Set(internal)].filter((h) => !slugs.has(h.endsWith('/') ? h : `${h}/`));
     check(broken.length === 0, `내부 링크 유효 (${[...new Set(internal)].length}개)`,
       broken.length ? `깨짐: ${broken.join(', ')}` : '');
+
+    // ── 7) 질의 3원칙 — 문체·업종어 ──────────────────────
+    const slugKey = String(page.slug ?? '').replace(/^\/+|\/+$/g, '');
+    if (!page.template && !CORPORATE_SLUGS.has(slugKey)) {
+      const questions = [];
+      if (page.type === 'landing') {
+        // 랜딩은 FAQ만 대상이다. 섹션 H2는 시안 확정 카피라 질의가 아니다.
+        (LANDING?.s14?.items ?? []).forEach((f, i) => questions.push([`홈 FAQ ${i + 1}`, f.q]));
+      } else {
+        if (page.question) questions.push(['H1', page.question]);
+        (page.sections ?? []).forEach((s, i) => {
+          if (/\?\s*$/.test(s.h2 ?? '')) questions.push([`H2 ${i + 1}`, s.h2]);
+        });
+        (page.faq ?? []).forEach((f, i) => questions.push([`FAQ ${i + 1}`, f.q]));
+      }
+
+      const polite = questions.filter(([, q]) => POLITE_ENDING.test(q));
+      check(
+        polite.length === 0,
+        `질문 ${questions.length}개 문체 — 질문은 반말이다(2026-08-14 확정)`,
+        polite.length ? '' : '존댓말 어미 0건'
+      );
+      for (const [where, q] of polite.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
+
+      const noWord = questions.filter(([, q]) => {
+        if (INDUSTRY_WORD.test(q)) return false;
+        return !INDUSTRY_EXCEPTIONS.some((e) => e.slug === slugKey && e.text === q);
+      });
+      check(
+        noWord.length === 0,
+        `질문 ${questions.length}개 업종어 — 질문에 업종어가 없다(질의 3원칙 ①)`,
+        noWord.length ? '' : '캠핑장·글램핑 포함'
+      );
+      for (const [where, q] of noWord.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
+
+      // 답변은 존댓말이어야 한다. 반말 종결이 섞이면 눈에 띄게만 한다.
+      const casual = [];
+      const scanBlocks = (blocks, label) => {
+        for (const b of blocks ?? []) {
+          const t = b?.p?.text;
+          if (t && /(야|어|지)\.\s*$/.test(t)) casual.push([label, t]);
+        }
+      };
+      scanBlocks(page.lead, '도입');
+      (page.sections ?? []).forEach((s, i) => scanBlocks(s.body, `H2 ${i + 1}`));
+      if (casual.length) {
+        warn(`본문 ${casual.length}곳이 반말로 끝납니다 — 답변은 존댓말입니다`);
+        for (const [where, t] of casual.slice(0, 3)) console.log(C.dim(`         ${where}: "…${t.slice(-32)}"`));
+      }
+    }
   }
 
   // ── 사이트 전역 파일 ─────────────────────────────────────
@@ -397,6 +471,8 @@ async function main() {
     // 추정 표현. robots.txt 원문 확인(2026-08-14)으로 이름 단위 차단이
     // 확인되었으므로 "차단하고 있습니다" 로 쓴다. 되돌아가지 않도록 막는다.
     '수집하기 어렵', '수집하지 못합니다',
+    // 업종이 특정되지 않는 표현. 질의 3원칙 ① 위반이라 폐기했다.
+    '우리 가게',
   ];
   const scanTargets = [];
   const walkAll = async (dir) => {
