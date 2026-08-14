@@ -1,4 +1,4 @@
-# aeo.camphive.kr 자동 배포
+# aicampingmarketing.co.kr 자동 배포
 #
 # main 브랜치에 내용이 올라가면 → 빌드 → 소스 보기 검증 → GitHub Pages 배포.
 # 검증이 실패하면 배포가 멈춘다. 깨진 페이지가 인터넷에 올라가지 않는다.
@@ -6,7 +6,7 @@
 # npm install 이 없다는 점에 주목할 것. 이 저장소는 의존성 0개라
 # 내려받을 패키지가 없고, 그래서 배포가 빠르고 깨지지 않는다.
 
-name: aeo.camphive.kr 배포
+name: aicampingmarketing.co.kr 배포
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
 
       # BASE_PATH — github.io 임시 주소는 /저장소이름/ 하위에서 열린다.
       # 이 값을 넣어야 CSS와 내부 링크가 깨지지 않는다.
-      # aeo.camphive.kr 도메인이 연결되면 아래 env 두 줄씩을 지운다.
+      # aicampingmarketing.co.kr 도메인이 연결되면 아래 env 두 줄씩을 지운다.
       - name: 빌드 (dist/ 생성)
         run: node build.mjs
         env:

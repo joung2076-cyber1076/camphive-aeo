@@ -3,8 +3,8 @@
 //
 //  ⚠ 이 사이트는 camphive.kr(회사 홈페이지)과 별개다.
 //     정본 문장이 서로 다르다. 절대 섞어 쓰지 않는다.
-//       · camphive.kr  → 회사 홈페이지 + 창업 정보. 대상: 창업 준비자
-//       · aeo.camphive.kr → AEO/GEO 마케팅 상품 홍보. 대상: 캠핑장 운영자(캠핑주)
+//       · camphive.kr              → 회사 홈페이지 + 창업 정보. 대상: 창업 준비자
+//       · aicampingmarketing.co.kr → AEO/GEO 마케팅 상품 홍보. 대상: 캠핑장 운영자(캠핑주)
 // ─────────────────────────────────────────────────────────────
 
 /**
@@ -19,8 +19,15 @@ export const CANONICAL_SENTENCE =
   '2014년부터 글램핑장을 운영·제작하며 전국 캠핑장 280곳을 시공한 회사가 제공하는, 캠핑장 전용 AI 답변 최적화(AEO·GEO) 서비스';
 
 export const site = {
-  // 절대 URL 기준 도메인 (https 포함, 끝에 슬래시 없음)
-  baseUrl: 'https://aeo.camphive.kr',
+  /**
+   * 절대 URL 기준 도메인 (https 포함, 끝에 슬래시 없음)
+   *
+   * 메인 도메인은 이 하나뿐이다. canonical·sitemap·JSON-LD의 모든 절대 URL이
+   * 여기서 나온다. 서브 도메인(aimarketing.ai.kr)은 이 주소로 301 넘길 뿐이며
+   * 여기에 적지 않는다. 두 주소가 같은 본문을 내보내면 AI가 어느 쪽이 원본인지
+   * 판단하지 못해 양쪽 다 인용에서 밀린다.
+   */
+  baseUrl: 'https://aicampingmarketing.co.kr',
 
   name: '캠핑하이브 AEO',
   legalName: '주식회사 캠핑하이브',
@@ -45,7 +52,7 @@ export const site = {
   /**
    * 하위 경로 배포용 접두사. 예) GitHub Pages 프로젝트 주소
    *   https://사용자명.github.io/저장소이름/  → BASE_PATH=/저장소이름
-   * aeo.camphive.kr 도메인이 연결되면 비워둔다.
+   * aicampingmarketing.co.kr 도메인이 연결되면 비워둔다.
    */
   basePath: (process.env.BASE_PATH || '').replace(/\/+$/, ''),
 };
