@@ -461,6 +461,59 @@ async function main() {
   );
   for (const e of linkErrors.slice(0, 10)) console.log(C.err(`         ${e}`));
 
+  // ── 중복 질의 검사 (질의 4원칙 ④) ────────────────────────
+  //
+  //  홈 FAQ 와 하위 페이지 H1 이 같은 질의를 겨냥하면 우리끼리 경쟁한다.
+  //  AI 는 같은 질문에 대해 사이트 안에서 어느 쪽을 인용할지 정하지 못하고,
+  //  결국 둘 다 밀린다.
+  //
+  //  유사도 판정은 사람이 봐야 하는 영역이라 실패가 아니라 경고로 둔다.
+  //  겹치면 홈 FAQ 는 짧은 답 + 하위 페이지 링크로 처리하고
+  //  전문은 하위 페이지가 갖는다.
+  //
+  //  ※ 하위 페이지에 원고가 들어오면 아래 3쌍이 충돌한다.
+  //     지금은 그 페이지들이 비어 있어 문제되지 않는다.
+  //       홈 4번  ↔ B4 캠핑장 홈페이지 꼭 있어야 돼?
+  //       홈 7번  ↔ C4 소규모 캠핑장도 AI 마케팅 효과 있어?
+  //       홈 11번 ↔ C3 캠핑장 GEO 마케팅 비용 얼마나 들어?
+  const qkey = (s) => String(s).replace(/[^가-힣a-zA-Z0-9]/g, '');
+  const bigrams = (s) => {
+    const k = qkey(s);
+    const out = new Set();
+    for (let i = 0; i < k.length - 1; i++) out.add(k.slice(i, i + 2));
+    return out;
+  };
+  const similarity = (a, b) => {
+    const A = bigrams(a);
+    const B = bigrams(b);
+    if (!A.size || !B.size) return 0;
+    let inter = 0;
+    for (const g of A) if (B.has(g)) inter++;
+    return inter / (A.size + B.size - inter);
+  };
+
+  const homeFaq = (LANDING?.s14?.items ?? []).map((f) => f.q);
+  const subH1 = pages
+    .filter((p) => p.question && p.type !== 'landing' && !p.template && !CORPORATE_SLUGS.has(String(p.slug ?? '').replace(/^\/+|\/+$/g, '')))
+    .map((p) => ({ slug: p.slug, q: p.question }));
+
+  const collisions = [];
+  for (const [i, hq] of homeFaq.entries()) {
+    for (const s of subH1) {
+      const sim = similarity(hq, s.q);
+      if (sim >= 0.6) collisions.push({ i: i + 1, hq, slug: s.slug, sq: s.q, sim });
+    }
+  }
+  if (collisions.length) {
+    warn(`홈 FAQ 와 하위 페이지 H1 이 겹칩니다 — ${collisions.length}쌍 (질의 4원칙 ④)`);
+    for (const c of collisions) {
+      console.log(C.dim(`         홈 FAQ ${c.i}: "${c.hq}"`));
+      console.log(C.dim(`         /${c.slug}/: "${c.sq}"  유사도 ${(c.sim * 100).toFixed(0)}%`));
+    }
+  } else {
+    check(true, `중복 질의 없음 (홈 FAQ ${homeFaq.length} × 하위 H1 ${subH1.length} 대조)`, '유사도 60% 이상 0쌍');
+  }
+
   // ── 12-2) 금칙어 검사 ────────────────────────────────────
   //
   //  자칭 수식어와 성과 약속, 쓰지 않기로 한 옛 명칭. 산출물에 하나라도

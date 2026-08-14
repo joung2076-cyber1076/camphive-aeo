@@ -514,6 +514,19 @@ function s135(s) {
 
 /* ── 14 FAQ — 접지 않는다 ──────────────────────────────────── */
 function s14(s) {
+  // 답변 안의 페이지명을 내부 링크로 바꾼다.
+  // 먼저 통째로 이스케이프한 뒤 링크 문구만 앵커로 교체한다 —
+  // 순서를 바꾸면 앵커까지 이스케이프되어 글자로 보인다.
+  // JSON-LD FAQPage 에는 평문 f.a 가 그대로 들어간다(링크 없음).
+  const answerHtml = (f) => {
+    const plain = esc(f.a);
+    if (!f.link?.slug || !f.link?.text) return plain;
+    const needle = esc(f.link.text);
+    if (!plain.includes(needle)) return plain;
+    const anchor = `<a href="${esc(pathFor(f.link.slug))}">${needle}</a>`;
+    return plain.replace(needle, anchor);
+  };
+
   const body = `<div class="faq-list">
       ${s.items
         .map(
@@ -521,7 +534,7 @@ function s14(s) {
         <span class="num">Q${i + 1}</span>
         <div>
           <h3>${esc(f.q)}</h3>
-          <p>${esc(f.a)}</p>
+          <p>${answerHtml(f)}</p>
         </div>
       </div>`
         )
