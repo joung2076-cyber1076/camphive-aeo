@@ -200,6 +200,27 @@ function itemListNode(site, pages, url) {
  * @param {object} page      콘텐츠 모듈
  * @param {object} ctx       { site, org, allPages }
  */
+/**
+ * Service — 이 회사가 제공하는 것.
+ * 값이 확정되지 않은 필드(가격 등)는 아예 만들지 않는다.
+ * 빈 문자열을 내보내면 AI가 "가격이 빈칸인 서비스"로 읽는다.
+ */
+function serviceNode(site, org, url) {
+  return {
+    '@type': 'Service',
+    '@id': `${url}#service`,
+    name: '캠핑장 전용 AI 답변 최적화(AEO·GEO) 서비스',
+    serviceType: 'AEO·GEO 최적화',
+    description: site.description,
+    provider: { '@id': `${site.baseUrl}/#organization` },
+    areaServed: org.areaServed,
+    audience: {
+      '@type': 'Audience',
+      audienceType: '캠핑장·글램핑장 운영자',
+    },
+  };
+}
+
 export function buildGraph(page, ctx) {
   const { site, org, allPages = [] } = ctx;
   const url = urlFor(site.baseUrl, page.slug);
@@ -211,7 +232,12 @@ export function buildGraph(page, ctx) {
     webPageNode(site, page, url),
   ];
 
-  if (page.type === 'home') {
+  if (page.type === 'landing') {
+    // 랜딩은 "우리가 파는 것"을 밝히는 페이지다. Article이 아니라 Service를 건다.
+    // Article로 걸면 AI가 이 회사를 '글을 쓴 매체'로 읽는다. 우리는 공급자다.
+    nodes.push(serviceNode(site, org, url));
+    if (page.faq?.length) nodes.push(faqNode(site, page, url));
+  } else if (page.type === 'home') {
     nodes.push(itemListNode(site, allPages, url));
   } else if (page.type === 'page') {
     // 일반 페이지 — 본문이 기사(Article)가 아니므로 WebPage와 경로만 남긴다.

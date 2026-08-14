@@ -4,7 +4,7 @@
 //
 //  검사 항목:
 //   1. 본문 텍스트가 HTML 소스에 그대로 있는가 (Ctrl+U 통과 여부)
-//   2. 실행 스크립트가 0개인가 (JS로 그려지는 텍스트가 없는가)
+//   2. JS가 본문을 그리지 않는가 (인라인 스크립트 0개 + JS 제거해도 본문 유지)
 //   3. 정본 문장이 전 페이지에 글자 단위로 동일하게 있는가
 //   4. JSON-LD 가 유효한 JSON 이고 @graph 노드가 서로 연결되어 있는가
 //   5. sitemap / robots 가 존재하고 봇이 전부 허용되어 있는가
@@ -20,6 +20,14 @@ import { fileURLToPath } from 'node:url';
 
 import { site, bots, CANONICAL_SENTENCE } from './site.config.mjs';
 import { loadPages } from './src/lib/content.mjs';
+
+// 랜딩 카피 데이터 — 없으면 그 검사만 건너뛴다
+let LANDING = null;
+try {
+  ({ LANDING } = await import('./src/content/home.data.mjs'));
+} catch {
+  LANDING = null;
+}
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
@@ -44,6 +52,11 @@ function check(condition, label, detail = '') {
 }
 
 /** HTML 엔티티를 되돌려, 원고 문자열과 소스를 같은 기준으로 비교한다. */
+/** 공백을 한 칸으로 눌러 비교한다. 줄바꿈·들여쓰기 차이로 어긋나지 않게. */
+function norm(s) {
+  return String(s).replace(/\s+/g, ' ').trim();
+}
+
 function unescapeHtml(s) {
   return s
     .replace(/&quot;/g, '"')
@@ -67,6 +80,25 @@ function expectedStrings(page) {
 
   add('H1 질의문', page.question ?? page.title);
   add('답변 블록', page.answer);
+
+  // 랜딩은 카피가 데이터 모듈에 있다. 그 안의 모든 문자열이 소스에 그대로
+  // 나오는지 본다. 하나라도 빠지면 그 문장은 AI에게 존재하지 않는 문장이다.
+  if (page.type === 'landing' && LANDING) {
+    const walk = (node, trail) => {
+      if (typeof node === 'string') {
+        // 자리표시자 표기(【…】)와 주소·경로는 대조 대상에서 뺀다
+        if (node.trim() && !/^[/#]/.test(node)) add(`랜딩 ${trail}`, node);
+      } else if (Array.isArray(node)) {
+        node.forEach((n, i) => walk(n, `${trail}[${i}]`));
+      } else if (node && typeof node === 'object') {
+        for (const [k, v] of Object.entries(node)) {
+          if (k === 'href' || k === 'id' || k === 'icon') continue;
+          walk(v, trail ? `${trail}.${k}` : k);
+        }
+      }
+    };
+    walk(LANDING, '');
+  }
 
   (page.tables ?? []).forEach((t, i) => {
     add(`표${i + 1} 제목`, t.caption);
@@ -138,8 +170,16 @@ async function main() {
     const source = unescapeHtml(raw);
 
     // 1) 본문 텍스트가 소스에 그대로 있는가
+    //
+    //    문장 중간에 <strong> 이 끼면 원문 문자열이 통으로는 안 잡힌다.
+    //    ("**굵게**" 를 쓰면 A<strong>B</strong>C 가 되어 "ABC" 로는 못 찾는다)
+    //    사람이 소스를 읽을 때는 태그가 보이지 않으므로, 태그를 걷어낸
+    //    평문에서도 한 번 더 찾는다. 둘 중 하나만 걸리면 통과다.
     const expected = expectedStrings(page);
-    const missing = expected.filter((e) => !source.includes(e.text));
+    const plain = norm(source.replace(/<[^>]+>/g, ''));
+    const missing = expected.filter(
+      (e) => !source.includes(e.text) && !plain.includes(norm(e.text))
+    );
     check(
       missing.length === 0,
       `본문 텍스트가 소스에 존재 (${expected.length - missing.length}/${expected.length} 항목)`
@@ -148,13 +188,36 @@ async function main() {
       console.log(C.err(`         누락 → ${m.label}: "${m.text.slice(0, 50)}…"`));
     }
 
-    // 2) 실행 스크립트 0개
+    // 2) JS가 본문을 그리지 않는가
+    //
+    //    예전 규칙은 "<script> 0개"였다. 그러나 지시된 진입 페이드·카운트업·
+    //    헤더 변형은 JS 없이 만들 수 없다. 그래서 규칙을 '스크립트 금지'가 아니라
+    //    '스크립트가 텍스트를 만들지 못함'으로 바꾼다. 지키려던 것은 애초에
+    //    "AI 크롤러가 JS를 실행하지 않아도 본문이 전부 보인다"였고, 그것은
+    //    아래 두 가지로 보장된다.
+    //      · 인라인 스크립트 금지 — 외부 파일 1개(enhance.js)만 허용
+    //      · 그 파일이 텍스트 생성 API를 쓰지 않음 (아래 6-1에서 검사)
+    //    본문 존재 자체는 위 1)이 원문 문자열 대조로 이미 확인한다.
     const scripts = [...raw.matchAll(/<script\b([^>]*)>/gi)].map((m) => m[1]);
-    const executable = scripts.filter((attrs) => !/application\/ld\+json/i.test(attrs));
+    const jsonLd = scripts.filter((a) => /application\/ld\+json/i.test(a));
+    const other = scripts.filter((a) => !/application\/ld\+json/i.test(a));
+    const allowed = other.filter((a) => /\bsrc="[^"]*enhance\.js[^"]*"/i.test(a));
     check(
-      executable.length === 0,
-      '실행 스크립트 0개 (JS로 그려지는 텍스트 없음)',
-      `<script> ${scripts.length}개 중 JSON-LD ${scripts.length - executable.length}개`
+      other.length === allowed.length,
+      '인라인 스크립트 0개 (외부 enhance.js 외 실행 스크립트 없음)',
+      `<script> ${scripts.length}개 = JSON-LD ${jsonLd.length} + enhance.js ${allowed.length}`
+    );
+
+    // 2-1) 스크립트를 지운 상태에서도 본문이 그대로 남는가
+    //      = JS를 실행하지 않는 크롤러가 보는 화면
+    const noJs = unescapeHtml(raw.replace(/<script[\s\S]*?<\/script>/gi, ''));
+    const noJsPlain = norm(noJs.replace(/<[^>]+>/g, ''));
+    const missingNoJs = expected.filter(
+      (e) => !noJs.includes(e.text) && !noJsPlain.includes(norm(e.text))
+    );
+    check(
+      missingNoJs.length === 0,
+      `JS를 지워도 본문 전부 존재 (${expected.length - missingNoJs.length}/${expected.length} 항목)`
     );
 
     // 3) 정본 문장
@@ -232,6 +295,26 @@ async function main() {
 
   // ── 사이트 전역 파일 ─────────────────────────────────────
   console.log(C.b('\n[사이트 전역]'));
+
+  // enhance.js 가 텍스트를 만들어내지 않는지 — 만들면 그 글자는 소스에 없다
+  const enhancePath = path.join(DIST, 'js', 'enhance.js');
+  if (existsSync(enhancePath)) {
+    const js = await readFile(enhancePath, 'utf8');
+    // 주석은 코드가 아니다. 금지 API 이름을 주석에 적어 둔 것까지 잡히면
+    // 규칙을 설명할 수가 없다.
+    const code = js.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+    const banned = ['innerHTML', 'outerHTML', 'insertAdjacentHTML', 'document.write', 'createTextNode', 'createElement'];
+    const found = banned.filter((b) => code.includes(b));
+    check(
+      found.length === 0,
+      'enhance.js 가 텍스트·요소를 생성하지 않음',
+      found.length ? `금지 API 사용: ${found.join(', ')}` : `${banned.length}종 전부 미사용`
+    );
+    check(
+      js.includes('prefers-reduced-motion'),
+      'enhance.js 가 prefers-reduced-motion 을 존중함'
+    );
+  }
 
   const robotsPath = path.join(DIST, 'robots.txt');
   if (check(existsSync(robotsPath), 'robots.txt 존재')) {

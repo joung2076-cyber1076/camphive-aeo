@@ -33,7 +33,11 @@ export function validatePage(page) {
   need(Boolean(page.title), 'title 이 비어 있습니다.');
   need(Boolean(page.description), 'description(메타 설명)이 비어 있습니다.');
 
-  if (page.type === 'home') {
+  // 홈·랜딩은 8단 구조를 요구하지 않는다.
+  // 8단 구조는 "질문 하나에 답하는 문서" 규격이다. 랜딩은 16개 섹션이
+  // 각자 다른 일을 하는 페이지라 표 2개·H2 5~8개 같은 수치를 강제하면
+  // 오히려 구조를 망가뜨린다. 대신 랜딩은 렌더러가 구조를 고정한다.
+  if (page.type === 'home' || page.type === 'landing') {
     need(Boolean(page.answer), 'answer(핵심 답변)가 비어 있습니다.');
     return { errors, warnings };
   }

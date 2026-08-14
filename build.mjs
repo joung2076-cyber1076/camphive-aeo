@@ -21,6 +21,8 @@ import { buildGraph } from './src/lib/jsonld.mjs';
 import { renderDocument } from './src/lib/layout.mjs';
 import { renderArticle } from './src/lib/render-article.mjs';
 import { renderHome } from './src/lib/render-home.mjs';
+import { renderLanding, LANDING } from './src/lib/render-landing.mjs';
+import { renderDiagnosis } from './src/lib/render-diagnosis.mjs';
 import { validatePage } from './src/lib/validate.mjs';
 import { urlFor } from './src/lib/html.mjs';
 
@@ -154,8 +156,15 @@ async function main() {
 
   const written = [];
   for (const page of pages) {
+    // 랜딩의 FAQ 16문항은 카피 데이터에 있다. FAQPage 스키마가 그것을 쓴다.
+    if (page.type === 'landing') page.faq = LANDING.s14.items;
+
     const graph = buildGraph(page, ctx);
-    const main = page.type === 'home' ? renderHome(page, ctx) : renderArticle(page, ctx);
+    const main =
+      page.type === 'landing' ? renderLanding(page, ctx)
+      : page.type === 'diagnosis' ? renderDiagnosis(page, ctx)
+      : page.type === 'home' ? renderHome(page, ctx)
+      : renderArticle(page, ctx);
     const html = renderDocument(page, ctx, graph, main);
 
     const out = outputPathFor(page.slug);
