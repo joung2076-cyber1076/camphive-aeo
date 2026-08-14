@@ -377,6 +377,24 @@ async function main() {
       );
       for (const [where, q] of noWord.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
 
+      // 질문에는 약어를 쓰지 않는다 (v9).
+      // 운영주는 "예약 플랫폼"이라고 치지 "OTA"라고 치지 않는다.
+      // 약어로 쓴 질문은 그 질의를 잡지 못한다.
+      const abbrev = questions.filter(([, q]) => /OTA/.test(q));
+      check(
+        abbrev.length === 0,
+        `질문 ${questions.length}개 약어 — 질문에는 약어를 쓰지 않는다(v9)`,
+        abbrev.length ? '' : 'OTA 0건'
+      );
+      for (const [where, q] of abbrev.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
+
+      // 본문에서 OTA 를 쓰려면 그 페이지 어딘가에 "예약 플랫폼(OTA)" 가
+      // 한 번은 있어야 한다. 첫 등장에 묶어 두어야 AI 가 두 표현을
+      // 같은 것으로 읽는다(지침 11.1 — 전문 용어는 첫 등장에서 풀이).
+      if (/OTA/.test(source) && !source.includes('예약 플랫폼(OTA)')) {
+        warn('본문에 OTA 가 있는데 "예약 플랫폼(OTA)" 병기가 없습니다 — 첫 등장에서 묶어 주십시오');
+      }
+
       // 답변은 존댓말이어야 한다. 반말 종결이 섞이면 눈에 띄게만 한다.
       const casual = [];
       const scanBlocks = (blocks, label) => {
