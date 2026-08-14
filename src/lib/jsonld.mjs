@@ -70,14 +70,19 @@ function localBusinessNode(site, org) {
     url: `${site.baseUrl}/`,
     description: CANONICAL_SENTENCE,
     parentOrganization: { '@id': ID.org(site.baseUrl) },
-    address: {
-      '@type': 'PostalAddress',
-      addressCountry: org.address.country,
-      addressRegion: org.address.region,
-      addressLocality: org.address.locality,
-      ...(org.address.street ? { streetAddress: org.address.street } : {}),
-      ...(org.address.postalCode ? { postalCode: org.address.postalCode } : {}),
-    },
+    // 손님이 방문하는 곳 = 포천 전시장. 공장 주소를 넣으면 AI가
+    // 손님에게 공장을 안내한다.
+    address: (() => {
+      const a = org.showroom ?? org.address;
+      return {
+        '@type': 'PostalAddress',
+        addressCountry: a.country,
+        addressRegion: a.region,
+        addressLocality: a.locality,
+        ...(a.street ? { streetAddress: a.street } : {}),
+        ...(a.postalCode ? { postalCode: a.postalCode } : {}),
+      };
+    })(),
     areaServed: org.areaServed,
   };
 

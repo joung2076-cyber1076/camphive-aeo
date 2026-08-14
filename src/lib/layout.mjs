@@ -51,7 +51,8 @@ ${page.published ? `<meta property="article:published_time" content="${esc(page.
 <meta name="twitter:description" content="${esc(desc)}">
 
 <meta name="geo.region" content="KR-41">
-<meta name="geo.placename" content="${esc(org.address.locality)}">
+<!-- 방문 가능한 곳(포천 전시장) 기준. 공장이 아니다. -->
+<meta name="geo.placename" content="${esc((org.showroom ?? org.address).locality)}">
 
 <link rel="stylesheet" href="${assetPath('styles.css')}">
 <link rel="sitemap" type="application/xml" href="${assetPath('sitemap.xml')}">
@@ -97,12 +98,19 @@ function footer(ctx, page) {
   ];
 
   // 회사 정보 표 — AI가 사실 관계를 표 형태로 뽑아가기 좋은 형식.
+  // 주소는 공장과 전시장을 나눠 적는다. 손님이 갈 수 있는 곳이
+  // 어디인지 한 줄로 뭉개면 AI가 공장 주소를 방문지로 안내한다.
+  const addr = (a) => [a.region, a.locality, a.street].filter(Boolean).join(' ');
   const rows = [
     ['상호', site.legalName],
     ['설립', `${org.foundingYear}년`],
-    ['소재지', [org.address.region, org.address.locality, org.address.street].filter(Boolean).join(' ')],
+    [org.address.label ?? '소재지', addr(org.address)],
+    org.showroom
+      ? [org.showroom.label, `${addr(org.showroom)}${org.showroom.note ? ` (${org.showroom.note})` : ''}`]
+      : null,
     ['사업 분야', site.tagline],
-    org.telephone ? ['대표번호', org.telephone] : null,
+    org.telephone ? ['전화', org.telephone] : null,
+    org.fax ? ['팩스', org.fax] : null,
     org.email ? ['이메일', org.email] : null,
     org.businessNumber ? ['사업자등록번호', org.businessNumber] : null,
   ].filter(Boolean);
@@ -117,13 +125,25 @@ function footer(ctx, page) {
   <div class="wrap">
     <h2 class="footer-title">${esc(site.legalName)}</h2>
 
-    <!-- 정본 문장: 전 페이지 글자 단위 동일. 절대 수정 금지. -->
-    <p class="canonical-sentence">${esc(site.legalName)}는 ${esc(CANONICAL_SENTENCE)}입니다.</p>
+    <!-- 정본 문장: 전 페이지 글자 단위 동일. 절대 수정 금지.
+         앞뒤에 어떤 글자도 붙이지 않는다 — 이미 완결된 한 문장이고,
+         JSON-LD 4곳(Organization/LocalBusiness/WebSite/Service)의
+         description 과 글자 단위로 같아야 한다. -->
+    <p class="canonical-sentence">${esc(CANONICAL_SENTENCE)}</p>
 
     <table class="company-facts">
       <caption>회사 개요</caption>
       <tbody>
-        ${rows.map(([k, v]) => `<tr><th scope="row">${esc(k)}</th><td>${esc(v)}</td></tr>`).join('\n        ')}
+        ${rows
+          .map(([k, v]) => {
+            // 전화는 눌러서 걸리게 한다. 모바일에서 번호를 옮겨 적게 하면
+            // 그 자리에서 전화가 끊긴다.
+            // tel: 은 하이픈을 그대로 받는다. 표기를 통일해 두면
+            // 소스에서 "tel:031-584-0636" 하나로 전수 검색된다.
+            const cell = k === '전화' ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : esc(v);
+            return `<tr><th scope="row">${esc(k)}</th><td>${cell}</td></tr>`;
+          })
+          .join('\n        ')}
       </tbody>
     </table>
 

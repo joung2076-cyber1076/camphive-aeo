@@ -267,11 +267,37 @@ async function main() {
       check(dangling.length === 0, `@graph 노드 참조가 전부 연결됨 (참조 ${refs.length}개)`,
         dangling.length ? `끊김: ${[...new Set(dangling)].join(', ')}` : '');
 
-      const orgNode = graph.find((n) => [].concat(n['@type']).includes('Organization'));
+      // ── 5) 정본 문장 5곳 완전 일치 ───────────────────────
+      //
+      //  푸터 + JSON-LD 4노드. 조사 하나, 마침표 하나 다르면 실패다.
+      //  AI 는 여러 위치에서 완전히 같은 문장을 반복 확인해야 그 표현을
+      //  회사의 정의로 굳힌다. 한 글자라도 흔들리면 자기 말로 요약해버리고
+      //  우리가 쓴 문장은 답변에 남지 않는다.
+      const nodeDesc = (type) =>
+        graph.find((n) => [].concat(n['@type']).includes(type))?.description;
+
+      const spots = [
+        ['푸터 .canonical-sentence', (() => {
+          const m = raw.match(/<p class="canonical-sentence">([\s\S]*?)<\/p>/);
+          return m ? unescapeHtml(m[1]).trim() : undefined;
+        })()],
+        ['Organization.description', nodeDesc('Organization')],
+        ['LocalBusiness.description', nodeDesc('LocalBusiness')],
+        ['WebSite.description', nodeDesc('WebSite')],
+        // Service 는 홈에만 있다. 없는 페이지에서는 검사 대상에서 뺀다.
+        ...(graph.some((n) => [].concat(n['@type']).includes('Service'))
+          ? [['Service.description', nodeDesc('Service')]]
+          : []),
+      ];
+      const mismatched = spots.filter(([, v]) => v !== CANONICAL_SENTENCE);
       check(
-        orgNode?.description === CANONICAL_SENTENCE,
-        'Organization.description == 정본 문장'
+        mismatched.length === 0,
+        `정본 문장 ${spots.length}곳 완전 일치`,
+        mismatched.length ? '' : spots.map(([k]) => k.split('.')[0]).join(' · ')
       );
+      for (const [where, got] of mismatched) {
+        console.log(C.err(`         ${where}: ${got === undefined ? '(없음)' : `"${String(got).slice(0, 60)}…"`}`));
+      }
     }
 
     // 5) 소스 대비 실제 텍스트 비중 — 낮으면 껍데기 페이지라는 뜻

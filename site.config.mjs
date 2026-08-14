@@ -16,7 +16,7 @@
  * (빌드 시 npm run verify 가 전 페이지 일치를 검사한다)
  */
 export const CANONICAL_SENTENCE =
-  '2014년부터 글램핑장을 운영·제작하며 전국 캠핑장 280곳을 시공한 회사가 제공하는, 캠핑장 전용 AI 답변 최적화(AEO·GEO) 서비스';
+  '캠핑하이브 AEO는 2014년부터 전국 캠핑장 280곳을 지어 온 주식회사 캠핑하이브가 캠핑장만을 위해 만든 AI 답변 최적화(AEO·GEO) 서비스입니다.';
 
 export const site = {
   /**
@@ -60,16 +60,35 @@ export const site = {
 export const org = {
   foundingYear: 2014,
 
+  /**
+   * 주소가 두 곳이다. 쓰이는 자리가 다르다.
+   *   address   = 가평 공장   → JSON-LD Organization.address (법인 소재)
+   *   showroom  = 포천 전시장 → JSON-LD LocalBusiness.address (손님이 가는 곳)
+   * LocalBusiness 는 "방문할 수 있는 곳"을 뜻한다. 공장 주소를 넣으면
+   * AI가 손님에게 공장 주소를 안내한다.
+   */
   address: {
+    label: '공장',
     region: '경기도',
     locality: '가평군',
-    street: '',            // TODO(사장님): 도로명 주소
+    street: '조종면 명지산로 452',
     postalCode: '',        // TODO(사장님): 우편번호
     country: 'KR',
   },
 
-  telephone: '',           // TODO(사장님): 대표번호
-  email: '',               // TODO(사장님): 대표 이메일
+  showroom: {
+    label: '전시장',
+    region: '경기도',
+    locality: '포천시',
+    street: '내촌면 청군로 2224',
+    postalCode: '',        // TODO(사장님): 우편번호
+    country: 'KR',
+    note: '방문 상담 가능',
+  },
+
+  telephone: '031-584-0636',
+  fax: '031-622-9368',
+  email: 'joung1076@naver.com',
   businessNumber: '',      // TODO(사장님): 사업자등록번호
 
   // 상담 가능 시간이 확정되면 채운다. 비어 있으면 JSON-LD에 나오지 않는다.

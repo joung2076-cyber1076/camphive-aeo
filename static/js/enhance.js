@@ -27,9 +27,35 @@
   }
 
   ready(function () {
-    /* 1) 스크롤 진입 페이드업 — 카드 격자는 0.08s 시차 */
+    /* 1) 스크롤 진입 페이드업 — 카드 격자는 0.08s 시차
+     *
+     * ⚠ 이 블록은 "실패하면 아무것도 안 보이는" 구조라 안전장치를 세 겹 둔다.
+     *   .reveal 은 opacity:0 으로 시작하므로, is-in 이 끝내 안 붙으면
+     *   페이지가 통째로 빈 화면이 된다. IntersectionObserver 는 페이지가
+     *   실제로 그려지지 않는 상황(숨은 탭, 프리렌더, 헤드리스)에서는
+     *   콜백을 부르지 않는다. 그래서:
+     *     ① 처음부터 화면 안에 있는 것은 옵저버를 기다리지 않고 바로 켠다
+     *     ② 옵저버는 스크롤로 들어오는 것만 담당한다
+     *     ③ 1.5초가 지나면 이유를 불문하고 전부 켠다
+     *   애니메이션은 어디까지나 장식이고, 글이 보이는 것이 먼저다.
+     */
     var targets = document.querySelectorAll('.reveal');
-    if (!reduced && 'IntersectionObserver' in window) {
+
+    function revealAll() {
+      for (var a = 0; a < targets.length; a++) targets[a].classList.add('is-in');
+    }
+
+    if (reduced || !('IntersectionObserver' in window)) {
+      revealAll();
+    } else {
+      // ① 첫 화면에 이미 들어와 있는 것
+      for (var b = 0; b < targets.length; b++) {
+        if (targets[b].getBoundingClientRect().top < window.innerHeight) {
+          targets[b].classList.add('is-in');
+        }
+      }
+
+      // ② 스크롤해서 들어오는 것
       var io = new IntersectionObserver(
         function (entries) {
           for (var i = 0; i < entries.length; i++) {
@@ -41,9 +67,12 @@
         },
         { rootMargin: '0px 0px -10% 0px', threshold: 0.05 }
       );
-      for (var i = 0; i < targets.length; i++) io.observe(targets[i]);
-    } else {
-      for (var j = 0; j < targets.length; j++) targets[j].classList.add('is-in');
+      for (var c = 0; c < targets.length; c++) {
+        if (!targets[c].classList.contains('is-in')) io.observe(targets[c]);
+      }
+
+      // ③ 마지막 안전장치 — 무슨 일이 있어도 글은 보인다
+      window.setTimeout(revealAll, 1500);
     }
 
     /* 2) 헤더 스크롤 변형 (72px → 60px + 배경 흐림) */

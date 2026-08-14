@@ -4,16 +4,35 @@
 //  카피는 src/content/home.data.mjs 에 있고 여기서는 구조만 만든다.
 //  모든 문자열은 HTML에 그대로 박힌다. JS로 그리는 텍스트는 하나도 없다.
 //
-//  섹션 순서: 01 히어로 / 앵커목차 / 02 / 03 / 04 / 05 / CTA① / 06 /
-//            07 / 08 / 09 / CTA② / 10 / 11 / 12 / 13 / CTA③ / 13.5 /
+//  섹션 순서: 01 히어로 / 앵커목차 / 핵심답변 / 02 / 03 / 04 / 05 / CTA① /
+//            06 / 07 / 08 / 09 / CTA② / 10 / 11 / 12 / 13 / CTA③ / 13.5 /
 //            14 / 15
 // ─────────────────────────────────────────────────────────────
 
 import { esc, pathFor } from './html.mjs';
 import { LANDING as L } from '../content/home.data.mjs';
 
-/* 진입 페이드 대상. 격자는 0.08s 씩 밀어 시차를 준다. */
-const rv = (i) => (i == null ? 'class="reveal"' : `class="reveal" style="--d:${(i * 0.08).toFixed(2)}s"`);
+/**
+ * 진입 페이드 표식.
+ *
+ * ⚠ class 와 style 을 여기서 함께 만들어야 한다. 예전에는 이 함수가
+ *   class="reveal" 만 돌려주고 호출부에 class="card" 가 따로 있었다.
+ *   그러면 한 태그에 class 가 두 번 나오고 브라우저는 뒤쪽을 버린다.
+ *   → reveal 이 104곳에서 조용히 죽어 있었다. 합쳐서 한 번만 내보낸다.
+ *
+ * @param {number|null} i  격자 안 순서. 0.08s 씩 밀어 시차를 준다.
+ * @param {string} cls     이 요소가 원래 갖는 클래스
+ * @param {string} style   이 요소가 원래 갖는 인라인 스타일
+ */
+const rv = (i, cls = '', style = '') => {
+  const cn = cls ? `${cls} reveal` : 'reveal';
+  const d = i == null ? '' : `--d:${(i * 0.08).toFixed(2)}s`;
+  const parts = [style, d].filter(Boolean).join(';');
+  return `class="${cn}"${parts ? ` style="${parts}"` : ''}`;
+};
+
+/* 이미지 자리표시 — 미완성이 아니라 "여기에 들어간다"로 읽히게 한다. */
+const imageSlot = (n) => `<div class="block-thumb"><span>IMAGE ${n} / 16:10</span></div>`;
 
 /* ── 01 히어로 ─────────────────────────────────────────────── */
 function hero(h) {
@@ -24,15 +43,15 @@ function hero(h) {
   return `<section class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow" ${rv(0)}>${esc(h.eyebrow)}</p>
+      <p ${rv(0, 'eyebrow')}>${esc(h.eyebrow)}</p>
       <h1 ${rv(1)}>${esc(h.h1[0])}<br>${esc(h.h1[1])}</h1>
-      <p class="hero-lead" ${rv(2)}>${esc(h.leadBefore)}<strong class="mark">${esc(h.leadMark)}</strong></p>
-      <div class="hero-cta" ${rv(3)}>
+      <p ${rv(2, 'hero-lead')}>${esc(h.leadLine1)}<br><strong class="mark">${esc(h.leadLine2)}</strong></p>
+      <div ${rv(3, 'hero-cta')}>
         <a class="btn btn-primary" href="#diagnose">${esc(h.ctaPrimary)}</a>
         <a class="btn btn-secondary" href="#report">${esc(h.ctaSecondary)}</a>
       </div>
       <!-- 【실측 확인 필요】 "15초" — 진단 도구 실제 소요시간 측정 후 확정 -->
-      <p class="hero-note" ${rv(4)}>${esc(h.note)}</p>
+      <p ${rv(4, 'hero-note')}>${esc(h.note)}</p>
     </div>
 
     <div class="hero-visual">
@@ -40,7 +59,7 @@ function hero(h) {
       <div class="globe-labels">
         ${labels}
       </div>
-      <div class="chat-card" ${rv(2)}>
+      <div ${rv(2, 'chat-card')}>
         <div class="chat-head">
           <span>${esc(h.chat.title)}</span>
           <span>${esc(h.chat.meta)}</span>
@@ -68,10 +87,18 @@ function hero(h) {
    라벨은 이 SVG 밖 HTML 텍스트라 소스에서 검색된다. */
 function globeSvg() {
   const meridians = [0, 30, 60, 90, 120, 150]
-    .map((d) => `<ellipse cx="200" cy="200" rx="${d === 90 ? 160 : Math.round(160 * Math.abs(Math.cos((d * Math.PI) / 180)))}" ry="160" transform="rotate(${d} 200 200)"/>`)
+    .map(
+      (d) =>
+        `<ellipse cx="200" cy="200" rx="${
+          d === 90 ? 160 : Math.round(160 * Math.abs(Math.cos((d * Math.PI) / 180)))
+        }" ry="160" transform="rotate(${d} 200 200)"/>`
+    )
     .join('\n      ');
   const parallels = [-120, -80, -40, 0, 40, 80, 120]
-    .map((y) => `<ellipse cx="200" cy="${200 + y}" rx="${Math.round(Math.sqrt(Math.max(160 * 160 - y * y, 0)))}" ry="${Math.round(Math.sqrt(Math.max(160 * 160 - y * y, 0)) * 0.16)}"/>`)
+    .map((y) => {
+      const r = Math.round(Math.sqrt(Math.max(160 * 160 - y * y, 0)));
+      return `<ellipse cx="200" cy="${200 + y}" rx="${r}" ry="${Math.round(r * 0.16)}"/>`;
+    })
     .join('\n      ');
 
   return `<svg class="globe" viewBox="0 0 400 400" role="presentation" focusable="false">
@@ -104,17 +131,22 @@ function anchorNav(items) {
 }
 
 /* ── 섹션 껍데기 ───────────────────────────────────────────── */
-function section({ id, deep, query, eyebrow, h2, sub, body, foot }) {
+function section({ id, deep, query, eyebrow, h2, sub, intro, body, foot }) {
+  const introHtml = (intro ?? [])
+    .map((p, i) => `<p ${rv(i + 1, 'section-intro')}>${esc(p)}</p>`)
+    .join('\n    ');
+
   return `<section class="section${deep ? ' on-deep' : ''}"${id ? ` id="${esc(id)}"` : ''}>
   <div class="wrap">
-    <div class="section-head" ${rv(0)}>
+    <div ${rv(0, 'section-head')}>
       ${query ? `<p class="query-sub">${esc(query)}</p>` : ''}
       ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
       <h2>${esc(h2)}</h2>
       ${sub ? `<p>${esc(sub)}</p>` : ''}
     </div>
+    ${introHtml}
     ${body}
-    ${foot ? `<p class="caption" style="margin-top:var(--s8)" ${rv(1)}>${esc(foot)}</p>` : ''}
+    ${foot ? `<p ${rv(1, 'caption', 'margin-top:var(--s8)')}>${esc(foot)}</p>` : ''}
   </div>
 </section>`;
 }
@@ -124,7 +156,7 @@ function s02(s) {
   const body = `<div class="grid grid-3">
       ${s.cards
         .map(
-          (c, i) => `<article class="card" ${rv(i)}>
+          (c, i) => `<article ${rv(i, 'card')}>
         <span class="num">${esc(c.n)}</span>
         <h3>${esc(c.h3)}</h3>
         <p>${esc(c.p)}</p>
@@ -137,11 +169,9 @@ function s02(s) {
 
 /* ── 03 ────────────────────────────────────────────────────── */
 function s03(s) {
-  // 【게시 전 출처 확인】 아래 통계 4개와 전환율 2개는 시안 수치 그대로다.
-  // 색인 해제 전에 원 출처를 다시 확인하고 기준일을 붙인다.
   const stats = s.stats
     .map(
-      (st, i) => `<div class="stat" ${rv(i)}>
+      (st, i) => `<div ${rv(i, 'stat')}>
         <p class="stat-num" data-countup>${esc(st.num)}</p>
         <p class="stat-label">${esc(st.label)}</p>
         <p class="stat-src">${esc(st.src)}</p>
@@ -151,7 +181,7 @@ function s03(s) {
 
   const conv = s.conv
     .map(
-      (c) => `<div class="conv-row">
+      (c, i) => `<div ${rv(i, 'conv-row')}>
         <span>${esc(c.label)}</span>
         <span class="conv-track"><span class="conv-fill${c.dim ? ' is-dim' : ''}" data-pct="${c.pct}" style="--pct:${c.pct}%"></span></span>
         <span class="conv-val">${esc(c.value)}</span>
@@ -163,7 +193,7 @@ function s03(s) {
     <div class="grid grid-4">
       ${stats}
     </div>
-    <div class="conv" ${rv(1)}>
+    <div ${rv(1, 'conv')}>
       <p class="eyebrow">${esc(s.convTitle)}</p>
       ${conv}
       <p class="caption">${esc(s.convNote)}</p>
@@ -174,14 +204,14 @@ function s03(s) {
 /* ── 04 ────────────────────────────────────────────────────── */
 function s04(s) {
   const body = `<div class="contrast">
-      <div class="panel panel-bad" ${rv(0)}>
+      <div ${rv(0, 'panel panel-bad')}>
         <p class="panel-title">△ ${esc(s.bad.title)}</p>
         <h3>${esc(s.bad.h3)}</h3>
         <p style="margin-top:var(--s3)">${esc(s.bad.p)}</p>
         <p class="cost-note">${esc(s.bad.cost)}</p>
       </div>
       <div class="contrast-arrow" aria-hidden="true">→</div>
-      <div class="panel panel-good" ${rv(1)}>
+      <div ${rv(1, 'panel panel-good')}>
         <p class="panel-title">✓ ${esc(s.good.title)}</p>
         <ul>
           ${s.good.items.map((it) => `<li>${esc(it)}</li>`).join('\n          ')}
@@ -196,7 +226,7 @@ function s04(s) {
 function s05(s) {
   const body = s.steps
     .map(
-      (st, i) => `<div class="step-row${st.featured ? ' is-featured' : ''}" ${rv(i)}>
+      (st, i) => `<div ${rv(i, `step-row${st.featured ? ' is-featured' : ''}`)}>
       <div>
         <span class="num">${esc(st.n)}</span>
         ${st.badge ? `<span class="plan-badge" style="margin-top:var(--s2)">← ${esc(st.badge)}</span>` : ''}
@@ -220,25 +250,27 @@ function ctaBand(c, href = '#diagnose') {
   return `<section class="cta-band">
   <div class="wrap">
     <p ${rv(0)}>${esc(c.text)}</p>
-    <a class="btn btn-primary" href="${esc(href)}" ${rv(1)}>${esc(c.btn)}</a>
+    <a href="${esc(href)}" ${rv(1, 'btn btn-primary')}>${esc(c.btn)}</a>
   </div>
 </section>`;
 }
 
-/* ── 진단 폼 (06·15 공통) ──────────────────────────────────── */
+/* ── 진단 폼 (06·15·/diagnosis/ 공통) ──────────────────────── */
 export function diagnosisForm(f, { id, title, lead } = {}) {
   const fields = f.fields
     .map(
       (fd) => `<div class="field">
         <label for="${esc(id ?? 'd')}-${esc(fd.name)}">${esc(fd.label)}</label>
-        <input id="${esc(id ?? 'd')}-${esc(fd.name)}" name="${esc(fd.name)}" type="${fd.name === 'email' ? 'email' : fd.name === 'url' ? 'url' : 'text'}" placeholder="${esc(fd.placeholder)}" required>
+        <input id="${esc(id ?? 'd')}-${esc(fd.name)}" name="${esc(fd.name)}" type="${
+        fd.name === 'email' ? 'email' : fd.name === 'url' ? 'url' : 'text'
+      }" placeholder="${esc(fd.placeholder)}" required>
       </div>`
     )
     .join('\n      ');
 
   // 도구 직행 — 우리 서버는 없다. 입력값을 쿼리스트링으로 붙여 도구로 보낸다.
   // action 이 확정되면 아래 한 줄만 바꾼다. 파라미터명도 도구 쪽에 맞춘다.
-  return `<div class="form-block" ${rv(0)}${id ? ` id="${esc(id)}"` : ''}>
+  return `<div ${rv(0, 'form-block')}${id ? ` id="${esc(id)}"` : ''}>
       ${title ? `<h3>${esc(title)}</h3>` : ''}
       ${lead ? `<p>${esc(lead)}</p>` : ''}
       <!-- 【확인 필요】 진단 도구 URL — action 에 넣는다. 예: action="https://도구주소/" -->
@@ -260,7 +292,7 @@ export function diagnosisForm(f, { id, title, lead } = {}) {
       <button class="btn btn-primary btn-block" type="submit">${esc(f.submit)}</button>
       </form>
       <!-- 【실측 확인 필요】 "15초" -->
-      <p class="form-note">${esc(f.note)}<br>${esc(f.limit)}<br>${esc(f.flow)}</p>
+      <p class="form-note">${esc(f.note)}<br>${esc(f.note2)}</p>
     </div>`;
 }
 
@@ -268,10 +300,10 @@ export function diagnosisForm(f, { id, title, lead } = {}) {
 function s06(s, f) {
   const t = s.table;
   const body = `<div class="split">
-      <div class="split-head" ${rv(0)}>
+      <div ${rv(0, 'split-head')}>
         <p class="eyebrow">${esc(s.proofTitle)}</p>
         <!-- 이미지 슬롯: AI 답변 화면 캡처. 임시 이미지 넣지 말 것 -->
-        <div class="block-thumb" style="border-radius:var(--radius);border:1px solid var(--line)">${esc(L.s07.thumbLabel)}</div>
+        ${imageSlot('00')}
         <p class="caption" style="margin-top:var(--s4)">${esc(s.proofCaption)}</p>
         <div class="table-wrap">
           <table>
@@ -296,9 +328,9 @@ function s07(s) {
   const body = `<div class="grid grid-4" id="report">
       ${s.blocks
         .map(
-          (b, i) => `<article class="block-card" ${rv(i)}>
+          (b, i) => `<article ${rv(i, 'block-card')}>
         <!-- 이미지 슬롯: 진단서 ${esc(b.n)} 실제 캡처 -->
-        <div class="block-thumb">${esc(s.thumbLabel)}</div>
+        ${imageSlot(String(i + 1).padStart(2, '0'))}
         <div class="block-body">
           <span class="num">${esc(b.n)}</span>
           <h3>${esc(b.h3)}</h3>
@@ -315,7 +347,7 @@ function s07(s) {
 function s08(s) {
   const body = s.steps
     .map(
-      (st, i) => `<div class="step-row${st.featured ? ' is-featured' : ''}" ${rv(i)}>
+      (st, i) => `<div ${rv(i, `step-row${st.featured ? ' is-featured' : ''}`)}>
       <div class="step-letter">${esc(st.letter)}</div>
       <div>
         <span class="step-en">${esc(st.en)}</span>
@@ -334,7 +366,7 @@ function s09(s) {
   const body = `<div class="grid grid-4">
       ${s.cards
         .map(
-          (c, i) => `<article class="card" ${rv(i)}>
+          (c, i) => `<article ${rv(i, 'card')}>
         <span class="num">${esc(c.when)}</span>
         <h3>${esc(c.h3)}</h3>
         <ul style="list-style:none;display:grid;gap:var(--s2);margin-top:var(--s4)">
@@ -351,20 +383,23 @@ function s09(s) {
 /* ── 10 ────────────────────────────────────────────────────── */
 function s10(s) {
   const t = s.table;
-  const body = `<div class="table-wrap" ${rv(0)}>
+  const body = `<div ${rv(0, 'table-wrap')}>
       <table>
         <caption>${esc(t.caption)}</caption>
         <thead><tr>${t.head.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead>
         <tbody>
           ${t.rows
-            .map((r) => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((c) => `<td class="is-num">${esc(c)}</td>`).join('')}</tr>`)
+            .map(
+              (r) =>
+                `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((c) => `<td class="is-num">${esc(c)}</td>`).join('')}</tr>`
+            )
             .join('\n          ')}
         </tbody>
       </table>
     </div>
     <p class="caption">${esc(s.note)}</p>
-    <p style="margin-top:var(--s6)" ${rv(1)}>${esc(s.fail)}</p>
-    <div class="block-deep" style="margin-top:var(--s10);padding:var(--s8);border-radius:var(--radius)" ${rv(2)}>
+    <p ${rv(1, '', 'margin-top:var(--s6)')}>${esc(s.fail)}</p>
+    <div ${rv(2, 'block-deep', 'margin-top:var(--s10);padding:var(--s8);border-radius:var(--radius)')}>
       <p class="eyebrow">${esc(s.halluLead)}</p>
       <h3>${esc(s.halluTitle)}</h3>
       <p style="color:var(--muted);margin-top:var(--s3)">${esc(s.halluBody)}</p>
@@ -377,7 +412,7 @@ function s11(s) {
   const body = `<div class="grid grid-4">
       ${s.cards
         .map(
-          (c, i) => `<article class="card" ${rv(i)}>
+          (c, i) => `<article ${rv(i, 'card')}>
         <span class="num">${esc(c.n)}</span>
         <h3>${esc(c.h3)}</h3>
         <p>${esc(c.p)}</p>
@@ -386,29 +421,29 @@ function s11(s) {
         .join('\n      ')}
     </div>
 
-    <div class="deny-line" ${rv(1)}>
+    <div ${rv(1, 'deny-line')}>
       <b>${esc(s.denyTitle)}</b>
       <span>${esc(s.denyBody)}</span>
     </div>
 
-    <div class="record-band" ${rv(2)}>
+    <div ${rv(2, 'record-band')}>
       ${s.band
         .map(
-          (b) => `<div>
+          (b, i) => `<div ${rv(i)}>
         <span class="num" data-countup>${esc(b.num)}</span>
         <p>${esc(b.label)}</p>
       </div>`
         )
         .join('\n      ')}
     </div>`;
-  return section({ deep: true, h2: s.h2, body });
+  return section({ deep: true, h2: s.h2, intro: s.intro, body });
 }
 
 /* ── 12 ────────────────────────────────────────────────────── */
 function s12(s) {
   const plans = s.plans
     .map(
-      (p, i) => `<article class="plan${p.featured ? ' is-featured' : ''}" ${rv(i)}>
+      (p, i) => `<article ${rv(i, `plan${p.featured ? ' is-featured' : ''}`)}>
         ${p.badge ? `<span class="plan-badge">★ ${esc(p.badge)}</span>` : ''}
         <span class="num">${esc(p.code)}</span>
         <h3>${esc(p.name)}</h3>
@@ -424,7 +459,7 @@ function s12(s) {
 
   const extras = s.extras
     .map(
-      (e, i) => `<article class="card" ${rv(i)}>
+      (e, i) => `<article ${rv(i, 'card')}>
         <h3>${esc(e.name)}</h3>
         <p class="plan-price" style="margin-top:var(--s2)">${esc(e.price)}</p>
         <ul>
@@ -448,7 +483,7 @@ function s13(s) {
   const body = `<div class="grid grid-3">
       ${s.cards
         .map(
-          (c, i) => `<article class="ask-card" ${rv(i)}>
+          (c, i) => `<article ${rv(i, 'ask-card')}>
         <h3>${esc(c.h3)}</h3>
         <dl class="ask-row ask-good"><dt>✓ ${esc(s.labels.good)}</dt><dd>${esc(c.good)}</dd></dl>
         <dl class="ask-row ask-bad"><dt>✕ ${esc(s.labels.bad)}</dt><dd>${esc(c.bad)}</dd></dl>
@@ -465,7 +500,7 @@ function s135(s) {
   const body = `<div class="grid grid-4">
       ${s.cards
         .map(
-          (c, i) => `<a class="card" href="${esc(pathFor(c.slug))}" ${rv(i)}>
+          (c, i) => `<a href="${esc(pathFor(c.slug))}" ${rv(i, 'card')}>
         <span class="num">${esc(c.n)}</span>
         <h3>${esc(c.h3)}</h3>
         <p>${esc(c.p)}</p>
@@ -473,7 +508,7 @@ function s135(s) {
         )
         .join('\n      ')}
     </div>
-    <p style="margin-top:var(--s8)" ${rv(1)}><a class="btn btn-secondary" href="${esc(pathFor(s.moreSlug))}">${esc(s.more)} →</a></p>`;
+    <p ${rv(1, '', 'margin-top:var(--s8)')}><a class="btn btn-secondary" href="${esc(pathFor(s.moreSlug))}">${esc(s.more)} →</a></p>`;
   return section({ h2: s.h2, sub: s.sub, body });
 }
 
@@ -482,7 +517,7 @@ function s14(s) {
   const body = `<div class="faq-list">
       ${s.items
         .map(
-          (f, i) => `<div class="faq-item" ${rv(Math.min(i, 6))}>
+          (f, i) => `<div ${rv(Math.min(i, 6), 'faq-item')}>
         <span class="num">Q${i + 1}</span>
         <div>
           <h3>${esc(f.q)}</h3>
@@ -497,11 +532,12 @@ function s14(s) {
 
 /* ── 15 ────────────────────────────────────────────────────── */
 function s15(s, f) {
+  // 【확인 필요】 카카오 채널 URL — 개설되면 아래 tel: 을 채널 주소로 바꾼다.
   const body = `<div class="split">
-      <div class="split-head" ${rv(0)}>
+      <div ${rv(0, 'split-head')}>
         <p style="font-size:1.0625rem;color:var(--muted)">${esc(s.lead)}</p>
         <p class="caption" style="margin-top:var(--s4)">${esc(s.sub)}</p>
-        <p style="margin-top:var(--s6)"><a class="btn btn-secondary" href="#">${esc(s.kakao)}</a></p>
+        <p style="margin-top:var(--s6)"><a class="btn btn-secondary" href="${esc(s.kakaoHref)}">${esc(s.kakao)}</a></p>
       </div>
       <div>
         ${diagnosisForm(f, { id: 'form-bottom' })}
@@ -512,6 +548,7 @@ function s15(s, f) {
 
 /* ── 플로팅 ────────────────────────────────────────────────── */
 export function floatingButtons(items) {
+  // 【확인 필요】 카카오 채널 URL — 개설되면 tel: 을 채널 주소로 바꾼다.
   return `<div class="floating" role="complementary" aria-label="바로가기">
   ${items
     .map(
@@ -529,7 +566,7 @@ export function floatingButtons(items) {
 function answerBlock(page) {
   return `<section class="section" style="padding-block:var(--s12)">
   <div class="wrap">
-    <div class="answer" style="max-width:72ch" ${rv(0)}>
+    <div ${rv(0, 'answer', 'max-width:72ch')}>
       <p class="answer-label">${esc(page.question ?? '핵심 답변')}</p>
       <p class="answer-text">${esc(page.answer)}</p>
     </div>

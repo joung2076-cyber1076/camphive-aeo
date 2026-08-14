@@ -6,7 +6,7 @@ navLabel: 홈
 changefreq: weekly
 
 title: 캠핑장 AI 마케팅 어디에 맡겨야 돼? | 캠핑하이브
-description: 캠핑장 AI 마케팅은 ChatGPT·Claude·Gemini 답변에 우리 캠핑장이 인용되게 만드는 작업입니다. 2014년부터 전국 280곳을 시공한 캠핑하이브가 캠핑장만 전담합니다. 하루 20곳 무료 진단.
+description: 캠핑장 AI 마케팅은 ChatGPT·Claude·Gemini 답변에 우리 캠핑장이 인용되게 만드는 작업입니다. 2014년부터 전국 280곳을 지어 온 캠핑하이브가 캠핑장만을 위해 만들었습니다. 하루 20곳 무료 진단.
 
 question: 캠핑장 AI 마케팅 어디에 맡겨야 돼?
 answer: >

@@ -10,7 +10,7 @@
 //  실행: npm run build
 // ─────────────────────────────────────────────────────────────
 
-import { readdir, mkdir, writeFile, copyFile, rm, stat } from 'node:fs/promises';
+import { readdir, mkdir, readFile, writeFile, copyFile, rm, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -192,8 +192,17 @@ async function main() {
     );
   }
 
-  await copyFile(path.join(ROOT, 'src', 'styles.css'), path.join(DIST, 'styles.css'));
-  console.log(`  ${C.ok('생성')}  styles.css`);
+  // styles.css = Pretendard 서브셋 @font-face 92개 + 본 스타일시트.
+  // 파일을 둘로 나눠 <link> 를 두 개 걸면 렌더 차단 요청이 하나 늘어난다.
+  // 빌드 때 붙여 하나로 내보낸다. (반복이 많은 텍스트라 압축이 잘 먹는다)
+  const fontCss = await readFile(path.join(ROOT, 'src', 'fonts-pretendard.css'), 'utf8');
+  const mainCss = await readFile(path.join(ROOT, 'src', 'styles.css'), 'utf8');
+  await writeFile(path.join(DIST, 'styles.css'), `${fontCss}\n${mainCss}`, 'utf8');
+  console.log(
+    `  ${C.ok('생성')}  styles.css  ${C.dim(
+      `본문 ${(mainCss.length / 1024).toFixed(1)}KB + 폰트 선언 ${(fontCss.length / 1024).toFixed(1)}KB`
+    )}`
+  );
 
   const copied = await copyStatic();
   for (const f of copied) console.log(`  ${C.ok('복사')}  ${f}`);
