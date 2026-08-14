@@ -408,13 +408,32 @@ async function main() {
   };
   await walkAll(DIST);
 
+  // 예외는 파일 단위로, 사유를 적어서만 둔다.
+  //
+  //  금칙어 규칙의 뜻은 "우리를 이렇게 소개하지 않는다"다. 원고가 그 표현을
+  //  '이렇게 쓰면 안 된다'는 반례로 인용하는 경우는 규칙을 어기는 게 아니라
+  //  오히려 규칙을 설명하는 것이다. 그렇다고 단어를 통째로 풀면 자칭 표현이
+  //  다시 들어와도 못 잡는다. 그래서 파일 하나, 단어 하나씩만 열어 둔다.
+  const BANNED_EXCEPTIONS = [
+    {
+      file: 'faq/why-not-in-chatgpt/index.html',
+      word: '최고의',
+      why: '원고 표 3의 "이렇게 쓰면 인용되지 않습니다" 칸에 인용된 반례. 자칭이 아니다.',
+    },
+  ];
+
   const hits = [];
   for (const file of scanTargets) {
+    const rel = path.relative(DIST, file).replace(/\\/g, '/');
     const body = await readFile(file, 'utf8');
     for (const word of BANNED) {
-      if (body.includes(word)) {
-        hits.push(`"${word}" → ${path.relative(DIST, file).replace(/\\/g, '/')}`);
+      if (!body.includes(word)) continue;
+      const ex = BANNED_EXCEPTIONS.find((e) => e.file === rel && e.word === word);
+      if (ex) {
+        console.log(C.dim(`         예외 허용  "${word}" → ${rel}  (${ex.why})`));
+        continue;
       }
+      hits.push(`"${word}" → ${rel}`);
     }
   }
   check(

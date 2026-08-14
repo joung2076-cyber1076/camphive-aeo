@@ -12,7 +12,8 @@ import { wordCount } from './html.mjs';
 const RULES = {
   answerMin: 40,
   answerMax: 60,
-  tables: 2,
+  tablesMin: 2,
+  tablesMax: 3,
   sectionsMin: 5,
   sectionsMax: 8,
   faq: 4,
@@ -72,9 +73,22 @@ export function validatePage(page) {
   // 3. 기준일자
   need(DATE.test(page.asOf ?? ''), 'asOf(기준일자)가 없거나 YYYY-MM-DD 형식이 아닙니다.');
 
-  // 4. 데이터표 2개
-  const tables = page.tables ?? [];
-  need(tables.length === RULES.tables, `데이터표가 ${tables.length}개입니다. 정확히 ${RULES.tables}개여야 합니다.`);
+  // 4. 데이터표 2~3개
+  //
+  //  예전 규칙은 "첫 ## 앞에 정확히 2개"였다. 두 가지를 고쳤다.
+  //   · 개수를 2~3개로 넓혔다 — 아키가 확정한 원고가 표 3개 구성이다.
+  //   · 위치를 따지지 않는다 — 규칙의 뜻은 "이 페이지에 데이터표가 있다"이지
+  //     "맨 위에 몰아 둔다"가 아니었다. 표는 그 사실을 설명하는 절 안에
+  //     있어야 읽는 사람과 AI 모두 맥락을 잃지 않는다.
+  const topTables = page.tables ?? [];
+  const sectionTables = (page.sections ?? []).flatMap((s) =>
+    (s.body ?? []).filter((b) => b && b.table).map((b) => b.table)
+  );
+  const tables = [...topTables, ...sectionTables];
+  need(
+    tables.length >= RULES.tablesMin && tables.length <= RULES.tablesMax,
+    `데이터표가 ${tables.length}개입니다. ${RULES.tablesMin}~${RULES.tablesMax}개여야 합니다.`
+  );
   tables.forEach((t, i) => {
     need(Boolean(t.caption), `표 ${i + 1}: caption(표 제목)이 없습니다.`);
     need((t.columns ?? []).length > 0, `표 ${i + 1}: columns(열 이름)가 없습니다.`);

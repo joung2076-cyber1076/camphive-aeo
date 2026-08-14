@@ -22,16 +22,18 @@ updated: 2026-08-14
 # 목록 페이지이므로 하위 4개로 가는 링크를 여기에 둔다.
 # 마크다운 본문에 주소를 직접 쓰지 않는다 — 하위 경로 배포에서 루트로
 # 나가 404 가 된다. slug 를 적으면 pathFor() 가 basePath 를 붙인다.
+# 원고가 들어간 2개는 요약문을 각 원고 "답변" 절의 첫 문장으로 바꿨다.
+# 원고가 없는 2개는 분야 표기를 그대로 둔다.
 related:
   - slug: faq/why-not-in-chatgpt
     label: 챗GPT에 우리 캠핑장이 안 나오는데 왜 그런가요?
-    note: 노출·검색 30문항
+    note: 챗GPT는 웹에서 읽어 온 문서를 근거로 답합니다.
   - slug: faq/direct-booking
     label: 캠핑장 직예약을 늘리려면 어떻게 해야 하나요?
     note: 예약·직예약 30문항
   - slug: faq/naver-blog-still-works
     label: 네이버 블로그 마케팅이 아직도 효과가 있나요?
-    note: 콘텐츠·블로그 30문항
+    note: 효과는 있습니다. 다만 닿는 손님이 둘로 갈렸습니다.
   - slug: faq/ad-budget
     label: 캠핑장 홍보비를 어디에 써야 하나요?
     note: 홍보비·예산 30문항
