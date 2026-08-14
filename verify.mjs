@@ -394,6 +394,9 @@ async function main() {
   const BANNED = [
     'JS글램핑', 'JAYEONEURO', 'modoo', "Korea's Number One",
     '매출 상승', '최고의', '믿을 수 있는',
+    // 추정 표현. robots.txt 원문 확인(2026-08-14)으로 이름 단위 차단이
+    // 확인되었으므로 "차단하고 있습니다" 로 쓴다. 되돌아가지 않도록 막는다.
+    '수집하기 어렵', '수집하지 못합니다',
   ];
   const scanTargets = [];
   const walkAll = async (dir) => {
