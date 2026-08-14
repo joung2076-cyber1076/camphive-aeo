@@ -8,12 +8,13 @@
 //   3. 정본 문장이 전 페이지에 글자 단위로 동일하게 있는가
 //   4. JSON-LD 가 유효한 JSON 이고 @graph 노드가 서로 연결되어 있는가
 //   5. sitemap / robots 가 존재하고 봇이 전부 허용되어 있는가
-//   6. 내부 링크가 실제 존재하는 페이지를 가리키는가
+//   6. 내부 링크가 basePath 를 타고 실제 파일에 닿는가 (12-1)
+//   7. 금칙어(자칭 수식어·성과 약속·옛 명칭)가 산출물에 없는가 (12-2)
 //
 //  실행: npm run verify
 // ─────────────────────────────────────────────────────────────
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -295,6 +296,104 @@ async function main() {
 
   // ── 사이트 전역 파일 ─────────────────────────────────────
   console.log(C.b('\n[사이트 전역]'));
+
+  // ── 12-1) 내부 링크 도달 검사 ────────────────────────────
+  //
+  //  "페이지가 존재한다"와 "링크가 그 페이지에 닿는다"는 다른 검사다.
+  //  하위 경로 배포(/camphive-aeo/)에서 href="/privacy/" 라고 쓰면
+  //  페이지는 멀쩡히 있는데 링크는 루트로 나가 404 가 된다.
+  //  그래서 산출물의 href/src 를 실제 파일 경로로 풀어 존재를 확인하고,
+  //  basePath 가 걸린 빌드에서는 접두사 누락 자체를 실패로 잡는다.
+  const htmlFiles = [];
+  const walkHtml = async (dir) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) await walkHtml(full);
+      else if (e.name.endsWith('.html')) htmlFiles.push(full);
+    }
+  };
+  await walkHtml(DIST);
+
+  const linkErrors = [];
+  let linkCount = 0;
+  for (const file of htmlFiles) {
+    const html = await readFile(file, 'utf8');
+    const from = path.relative(DIST, file).replace(/\\/g, '/');
+    const links = [...html.matchAll(/(?:href|src)="([^"]+)"/g)].map((m) => m[1]);
+
+    for (const raw of links) {
+      // 외부·앵커·특수 스킴은 대상이 아니다
+      if (/^(https?:)?\/\//i.test(raw) || /^(mailto|tel|data):/i.test(raw)) continue;
+      const clean = raw.split('#')[0].split('?')[0];
+      if (!clean) continue;
+      linkCount++;
+
+      let rel;
+      if (clean.startsWith('/')) {
+        if (site.basePath) {
+          if (clean !== site.basePath && !clean.startsWith(`${site.basePath}/`)) {
+            linkErrors.push(`${from} → "${raw}" (basePath "${site.basePath}" 누락 — 루트로 나가 404)`);
+            continue;
+          }
+          rel = clean.slice(site.basePath.length) || '/';
+        } else {
+          rel = clean;
+        }
+        rel = rel.replace(/^\/+/, '');
+      } else {
+        rel = path.posix.join(path.dirname(from), clean);
+      }
+
+      // 확장자가 없으면 디렉터리로 보고 index.html 을 찾는다
+      const target = /\.[a-z0-9]+$/i.test(rel)
+        ? path.join(DIST, ...rel.split('/'))
+        : path.join(DIST, ...rel.split('/').filter(Boolean), 'index.html');
+
+      if (!existsSync(target)) {
+        linkErrors.push(`${from} → "${raw}" (없음: ${path.relative(DIST, target).replace(/\\/g, '/')})`);
+      }
+    }
+  }
+  check(
+    linkErrors.length === 0,
+    `내부 링크 도달 (${linkCount}개 검사, 404 ${linkErrors.length}건)`,
+    linkErrors.length ? '' : `basePath="${site.basePath || '(없음)'}"`
+  );
+  for (const e of linkErrors.slice(0, 10)) console.log(C.err(`         ${e}`));
+
+  // ── 12-2) 금칙어 검사 ────────────────────────────────────
+  //
+  //  자칭 수식어와 성과 약속, 쓰지 않기로 한 옛 명칭. 산출물에 하나라도
+  //  있으면 실패다. 색인이 켜진 뒤에 발견하면 이미 학습된 뒤다.
+  const BANNED = [
+    'JS글램핑', 'JAYEONEURO', 'modoo', "Korea's Number One",
+    '매출 상승', '최고의', '믿을 수 있는',
+  ];
+  const scanTargets = [];
+  const walkAll = async (dir) => {
+    for (const e of await readdir(dir, { withFileTypes: true })) {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) await walkAll(full);
+      else if (/\.(html|css|js|txt|xml|svg)$/i.test(e.name)) scanTargets.push(full);
+    }
+  };
+  await walkAll(DIST);
+
+  const hits = [];
+  for (const file of scanTargets) {
+    const body = await readFile(file, 'utf8');
+    for (const word of BANNED) {
+      if (body.includes(word)) {
+        hits.push(`"${word}" → ${path.relative(DIST, file).replace(/\\/g, '/')}`);
+      }
+    }
+  }
+  check(
+    hits.length === 0,
+    `금칙어 ${BANNED.length}종 미사용 (${scanTargets.length}개 파일 검사)`,
+    hits.length ? '' : BANNED.join(' · ')
+  );
+  for (const h of hits.slice(0, 10)) console.log(C.err(`         ${h}`));
 
   // enhance.js 가 텍스트를 만들어내지 않는지 — 만들면 그 글자는 소스에 없다
   const enhancePath = path.join(DIST, 'js', 'enhance.js');

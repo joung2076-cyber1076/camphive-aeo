@@ -19,7 +19,22 @@ answer: >
 asOf: 2026-08-14
 updated: 2026-08-14
 
+# 목록 페이지이므로 하위 4개로 가는 링크를 여기에 둔다.
+# 마크다운 본문에 주소를 직접 쓰지 않는다 — 하위 경로 배포에서 루트로
+# 나가 404 가 된다. slug 를 적으면 pathFor() 가 basePath 를 붙인다.
 related:
+  - slug: faq/why-not-in-chatgpt
+    label: 챗GPT에 우리 캠핑장이 안 나오는데 왜 그런가요?
+    note: 노출·검색 30문항
+  - slug: faq/direct-booking
+    label: 캠핑장 직예약을 늘리려면 어떻게 해야 하나요?
+    note: 예약·직예약 30문항
+  - slug: faq/naver-blog-still-works
+    label: 네이버 블로그 마케팅이 아직도 효과가 있나요?
+    note: 콘텐츠·블로그 30문항
+  - slug: faq/ad-budget
+    label: 캠핑장 홍보비를 어디에 써야 하나요?
+    note: 홍보비·예산 30문항
   - slug:
     label: 캠핑하이브 홈
     note: 전체 안내

@@ -1,35 +1,41 @@
-# 폰트 — 여기에 파일을 넣으십시오
+# 폰트 — 자체 호스팅 (설치 완료)
 
-**현재 이 폴더는 비어 있습니다.** 폰트 파일이 없어도 사이트는 정상 동작하며,
-시스템 한글 폰트(맑은 고딕 등)로 그려집니다. 아래 두 파일을 넣으면 그때부터
-설계된 서체로 바뀝니다. 코드는 이미 그 이름을 찾도록 되어 있습니다.
+이 폴더의 파일이 그대로 사이트에 실린다. **외부 CDN을 부르지 않는다.**
 
-| 넣을 파일 이름 | 무엇 | 어디서 |
-|---|---|---|
-| `PretendardVariable.woff2` | 본문·한글 전체 | Pretendard 공식 배포처의 `woff2` 가변 폰트 |
-| `Archivo-Expanded.woff2` | 영문 헤딩(자폭 넓은 대문자) | Archivo 계열 Expanded |
+| 파일 | 크기 | 무엇 | 라이선스 |
+|---|---|---|---|
+| `PretendardVariable.woff2` | 2.0MB | 본문·한글 전체 (가변 45~920) | OFL 1.1 → `OFL-Pretendard.txt` |
+| `Archivo-Variable.woff2` | 88KB | 영문 헤딩 (가변 wdth 62.5~125 / wght 100~900) | OFL 1.1 → `OFL-Archivo.txt` |
 
-## 왜 CDN을 쓰지 않는가
+둘 다 **SIL Open Font License 1.1** 이라 자체 호스팅 재배포가 허용된다.
+라이선스 전문을 같은 폴더에 함께 둔다 — OFL이 요구하는 조건이다.
 
-외부 CDN에서 폰트를 불러오면 **의존성이 0이 아니게 된다.** 그 서버가 죽으면
-글자가 깨지고, 접속 국가에 따라 로딩이 느려진다. 무엇보다 AI 크롤러가 페이지를
-읽는 시점에 외부 요청이 하나 더 붙는다. 폰트는 우리 서버에 둔다.
+## "Expanded" 는 별도 파일이 아니다
 
-## 넣은 뒤 확인
+Archivo는 **자폭(wdth) 축을 가진 가변 폰트 한 개**다. 넓은 헤딩은
+`font-stretch: 125%` 로 뽑아 쓴다. `styles.css` 에서 h1·h2·브랜드·큰 숫자에
+그 값을 걸어 두었다. 별도의 `Archivo-Expanded` 파일을 찾지 않는다.
 
-```bash
-npm run check
-```
+## 한글은 Archivo 로 그리지 않는다
 
-빌드가 통과하면 `npm run dev` 로 열어 헤딩이 바뀌었는지 눈으로 봅니다.
-파일 이름이 위 표와 한 글자라도 다르면 조용히 무시되고 fallback으로 그려집니다.
+`Archivo-Variable.woff2` 는 **라틴 문자만 담긴 서브셋**이다. `@font-face` 에
+`unicode-range` 를 걸어 두었으므로 한글 헤딩은 브라우저가 자동으로
+Pretendard 로 넘긴다. 그래서 88KB로 끝난다.
 
-## 지금 무엇으로 그려지고 있나
+## Pretendard 2MB가 부담이면
 
-`src/styles.css` 의 `--sans` / `--head` 순서대로 찾습니다.
+지금은 전 글자를 담은 한 파일이다. `font-display: swap` 이라 글자는 즉시
+보이고 폰트는 나중에 바뀌므로 화면이 비는 시간은 없다.
 
-- 본문 `--sans`: Pretendard Variable → Pretendard → 시스템 → **맑은 고딕**
-- 헤딩 `--head`: Archivo Expanded → Pretendard Variable → 본문과 동일
+더 줄이려면 Pretendard 가 제공하는 **동적 서브셋**(unicode-range 로 쪼갠
+woff2 수백 개)으로 바꿀 수 있다. 실제로 쓰는 글자만 내려받으므로 첫 화면
+전송량이 크게 줄지만, 파일이 수백 개로 늘고 `@font-face` 선언도 그만큼
+늘어난다. **필요해지면 그때 바꾼다.** 지금 구조로도 외부 요청은 0이다.
 
-즉 지금은 본문·헤딩이 같은 서체로 보입니다. 의도한 "자폭 넓은 영문 헤딩 대비"는
-`Archivo-Expanded.woff2` 를 넣어야 살아납니다.
+## 출처
+
+- Pretendard — `github.com/orioncactus/pretendard` (dist/web/variable/woff2)
+- Archivo — `github.com/google/fonts` (ofl/archivo), 라틴 서브셋 woff2
+
+폰트를 갱신할 때는 위에서 파일을 다시 받아 같은 이름으로 덮어쓰고
+`npm run check` 를 돌린다. 파일명이 바뀌면 `styles.css` 도 함께 고친다.

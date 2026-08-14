@@ -9,7 +9,7 @@
 //            14 / 15
 // ─────────────────────────────────────────────────────────────
 
-import { esc } from './html.mjs';
+import { esc, pathFor } from './html.mjs';
 import { LANDING as L } from '../content/home.data.mjs';
 
 /* 진입 페이드 대상. 격자는 0.08s 씩 밀어 시차를 준다. */
@@ -248,7 +248,7 @@ export function diagnosisForm(f, { id, title, lead } = {}) {
       <div class="consent">
         <label>
           <input type="checkbox" name="agree" required>
-          <span>${esc(f.consentRequired)} <a href="/privacy/">${esc(f.consentRequiredLink)}</a></span>
+          <span>${esc(f.consentRequired)} <a href="${esc(pathFor(f.consentLinkSlug))}">${esc(f.consentRequiredLink)}</a></span>
         </label>
         <label>
           <input type="checkbox" name="marketing">
@@ -465,7 +465,7 @@ function s135(s) {
   const body = `<div class="grid grid-4">
       ${s.cards
         .map(
-          (c, i) => `<a class="card" href="${esc(c.href)}" ${rv(i)}>
+          (c, i) => `<a class="card" href="${esc(pathFor(c.slug))}" ${rv(i)}>
         <span class="num">${esc(c.n)}</span>
         <h3>${esc(c.h3)}</h3>
         <p>${esc(c.p)}</p>
@@ -473,7 +473,7 @@ function s135(s) {
         )
         .join('\n      ')}
     </div>
-    <p style="margin-top:var(--s8)" ${rv(1)}><a class="btn btn-secondary" href="/faq/">${esc(s.more)} →</a></p>`;
+    <p style="margin-top:var(--s8)" ${rv(1)}><a class="btn btn-secondary" href="${esc(pathFor(s.moreSlug))}">${esc(s.more)} →</a></p>`;
   return section({ h2: s.h2, sub: s.sub, body });
 }
 

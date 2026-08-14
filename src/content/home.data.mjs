@@ -175,6 +175,9 @@ export const LANDING = {
     ],
     consentRequired: '[필수] 개인정보 수집·이용에 동의합니다',
     consentRequiredLink: '약관 보기',
+    // 링크는 slug 로 둔다. 렌더러가 pathFor() 로 basePath 를 붙인다.
+    // 여기에 '/privacy/' 를 직접 쓰면 하위 경로 배포에서 루트로 나가 404 가 된다.
+    consentLinkSlug: 'privacy',
     consentOptional: '[선택] 캠핑하이브 최신 인사이트 받기 (마케팅 정보 수신)',
     consentOptionalNote: '동의하지 않아도 진단 이용에 제한이 없습니다',
     submit: '지금 진단하기',
@@ -365,7 +368,8 @@ export const LANDING = {
   s13: {
     h2: '어느 업체를 만나든 이 6가지를 물어보세요',
     sub: '캠핑하이브를 포함해서요.',
-    labels: { good: '믿을 수 있는 답변', bad: '위험 신호', ours: '캠핑하이브의 답' },
+    // "믿을 수 있는" 은 금칙어다(자칭 신뢰 수식어). 검증 가능성으로 바꿔 적는다.
+    labels: { good: '확인할 수 있는 답변', bad: '위험 신호', ours: '캠핑하이브의 답' },
     cards: [
       { h3: '어떤 AI를 측정하나요', good: '엔진 이름과 개수를 명시', bad: '“주요 AI 전부”', ours: 'ChatGPT · Claude · Gemini 3사' },
       { h3: '어떤 질문으로 측정했나요', good: '질문 목록 공개', bad: '질의어 비공개', ours: '진단서에 질문 원문 전부 표시' },
@@ -384,13 +388,16 @@ export const LANDING = {
   s135: {
     h2: '캠핑장 운영 질문 120개, 답을 미리 써뒀습니다',
     sub: '캠핑주가 실제로 검색하고 AI에 묻는 질문을 모아 분야별로 30문항씩 정리했습니다.',
+    // 카드 제목은 각 페이지의 확정 H1 주제에 맞춘다.
+    // href 대신 slug — 렌더러가 pathFor() 로 basePath 를 붙인다.
     cards: [
-      { n: '30문항', h3: '노출·검색', p: '검색에 안 뜨는 이유부터 AI 답변 진입까지', href: '/faq/search-visibility/' },
-      { n: '30문항', h3: '예약·플랫폼·가격', p: 'OTA 수수료, 직예약 전환, 요금 설계', href: '/faq/booking-pricing/' },
-      { n: '30문항', h3: '콘텐츠·SNS·리뷰', p: '무엇을 써야 인용되는가, 리뷰는 어떻게 다루는가', href: '/faq/content-review/' },
-      { n: '30문항', h3: '비수기 매출·수익', p: '비수기 객실 채우기와 수익 구조', href: '/faq/off-season-revenue/' },
+      { n: '30문항', h3: '노출·검색', p: '챗GPT에 우리 캠핑장이 안 나오는 이유부터', slug: 'faq/why-not-in-chatgpt' },
+      { n: '30문항', h3: '예약·직예약', p: 'OTA 수수료를 줄이고 직예약을 늘리는 방법', slug: 'faq/direct-booking' },
+      { n: '30문항', h3: '콘텐츠·블로그', p: '네이버 블로그가 아직 효과가 있는지부터', slug: 'faq/naver-blog-still-works' },
+      { n: '30문항', h3: '홍보비·예산', p: '홍보비를 어디에 써야 하는지', slug: 'faq/ad-budget' },
     ],
     more: '전체 보기',
+    moreSlug: 'faq',
   },
 
   /* ── 14 FAQ (Q1~Q16, 전부 펼침) ──────────────────────────── */
@@ -433,10 +440,6 @@ export const LANDING = {
     { label: '카카오톡 문의', href: '#', primary: false },
   ],
 
-  /* ── 푸터 자료 3종 ───────────────────────────────────────── */
-  footerDocs: [
-    { label: '회사소개서', href: '/intro/company/' },
-    { label: '캠핑장 컨설팅', href: '/intro/consulting/' },
-    { label: 'AI마케팅 소개서', href: '/intro/ai-marketing/' },
-  ],
+  // 푸터 자료 3종은 layout.mjs 가 pathFor() 로 직접 그린다.
+  // 여기에 중복으로 두면 어느 쪽이 원본인지 알 수 없게 된다.
 };
