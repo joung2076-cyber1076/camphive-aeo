@@ -6,6 +6,7 @@
 slug: service
 noindex: true
 nav: true
+navOrder: 2
 navLabel: 서비스
 changefreq: monthly
 

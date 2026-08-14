@@ -2,6 +2,7 @@
 type: landing
 slug:
 nav: true
+navOrder: 1
 navLabel: 홈
 changefreq: weekly
 

@@ -2,6 +2,7 @@
 type: diagnosis
 slug: diagnosis
 nav: true
+navOrder: 3
 navLabel: 무료 진단
 changefreq: monthly
 

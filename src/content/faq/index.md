@@ -5,6 +5,7 @@ type: page
 slug: faq
 noindex: true
 nav: true
+navOrder: 4
 navLabel: 질문 120개
 changefreq: monthly
 

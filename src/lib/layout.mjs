@@ -91,11 +91,21 @@ function footer(ctx, page) {
 
   // 자료 3종은 PDF 직링크가 아니라 안내 페이지로 보낸다.
   // PDF를 직접 걸면 AI가 본문을 읽지 못하고 링크만 보게 된다.
+  //
+  // 라벨에 업종어를 넣는다. 푸터 링크의 글자는 AI에게 "이 사이트가
+  // 무엇을 주는 곳인가"를 알리는 신호다. "회사소개서"보다
+  // "캠핑장 컨설팅 안내"가 우리 정체를 한 번 더 박아 준다.
+  //
+  // status 는 없는 것을 있다고 하지 않기 위한 줄이다.
+  // PDF가 올라오면 "PDF · 25면" 형식으로 바꾼다.
   const docs = [
-    ['회사소개서', '/intro/company/'],
-    ['캠핑장 컨설팅', '/intro/consulting/'],
-    ['AI마케팅 소개서', '/intro/ai-marketing/'],
+    { label: '캠핑하이브 회사소개서', slug: 'intro/company', status: 'PDF 준비 중' },
+    { label: '캠핑장 컨설팅 안내', slug: 'intro/consulting', status: 'PDF 준비 중' },
+    { label: '캠핑장 AI 마케팅 소개서', slug: 'intro/ai-marketing', status: 'PDF 준비 중' },
   ];
+
+  // 내려받기 아이콘 — 인라인 SVG. 이미지 파일·아이콘 폰트·CDN 없음.
+  const downloadIcon = `<svg class="doc-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 2v8"/><path d="M4.5 7 8 10.5 11.5 7"/><path d="M2.5 13.5h11"/></svg>`;
 
   // 회사 정보 표 — AI가 사실 관계를 표 형태로 뽑아가기 좋은 형식.
   // 주소는 공장과 전시장을 나눠 적는다. 손님이 갈 수 있는 곳이
@@ -103,6 +113,8 @@ function footer(ctx, page) {
   const addr = (a) => [a.region, a.locality, a.street].filter(Boolean).join(' ');
   const rows = [
     ['상호', site.legalName],
+    org.founder ? ['대표자', org.founder] : null,
+    org.businessNumber ? ['사업자등록번호', org.businessNumber] : null,
     ['설립', `${org.foundingYear}년`],
     [org.address.label ?? '소재지', addr(org.address)],
     org.showroom
@@ -112,7 +124,6 @@ function footer(ctx, page) {
     org.telephone ? ['전화', org.telephone] : null,
     org.fax ? ['팩스', org.fax] : null,
     org.email ? ['이메일', org.email] : null,
-    org.businessNumber ? ['사업자등록번호', org.businessNumber] : null,
   ].filter(Boolean);
 
   const sameAs = org.sameAs?.length
@@ -122,34 +133,56 @@ function footer(ctx, page) {
     : '';
 
   return `<footer class="site-footer">
-  <div class="wrap">
-    <h2 class="footer-title">${esc(site.legalName)}</h2>
+  <div class="wrap footer-grid">
+    <div class="footer-main">
+      <!-- 브랜드 표기는 하나로 유지한다. 서브 브랜드를 나란히 놓으면
+           AI가 "브랜드가 여러 개인 회사"로 읽어 관문③(식별)에서 손해다.
+           "캠핑하이브 AEO"는 정본 문장 안에 이미 들어 있다. -->
+      <p class="footer-logo">CAMPINGHIVE</p>
+      <h2 class="footer-title">${esc(site.legalName)}</h2>
 
-    <!-- 정본 문장: 전 페이지 글자 단위 동일. 절대 수정 금지.
-         앞뒤에 어떤 글자도 붙이지 않는다 — 이미 완결된 한 문장이고,
-         JSON-LD 4곳(Organization/LocalBusiness/WebSite/Service)의
-         description 과 글자 단위로 같아야 한다. -->
-    <p class="canonical-sentence">${esc(CANONICAL_SENTENCE)}</p>
+      <!-- 정본 문장: 전 페이지 글자 단위 동일. 절대 수정 금지.
+           앞뒤에 어떤 글자도 붙이지 않는다 — 이미 완결된 한 문장이고,
+           JSON-LD 4곳(Organization/LocalBusiness/WebSite/Service)의
+           description 과 글자 단위로 같아야 한다. -->
+      <p class="canonical-sentence">${esc(CANONICAL_SENTENCE)}</p>
 
-    <table class="company-facts">
-      <caption>회사 개요</caption>
-      <tbody>
-        ${rows
-          .map(([k, v]) => {
-            // 전화는 눌러서 걸리게 한다. 모바일에서 번호를 옮겨 적게 하면
-            // 그 자리에서 전화가 끊긴다.
-            // tel: 은 하이픈을 그대로 받는다. 표기를 통일해 두면
-            // 소스에서 "tel:031-584-0636" 하나로 전수 검색된다.
-            const cell = k === '전화' ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : esc(v);
-            return `<tr><th scope="row">${esc(k)}</th><td>${cell}</td></tr>`;
-          })
+      <table class="company-facts">
+        <caption>회사 개요</caption>
+        <tbody>
+          ${rows
+            .map(([k, v]) => {
+              // 전화는 눌러서 걸리게 한다. 모바일에서 번호를 옮겨 적게 하면
+              // 그 자리에서 전화가 끊긴다.
+              // tel: 은 하이픈을 그대로 받는다. 표기를 통일해 두면
+              // 소스에서 "tel:031-584-0636" 하나로 전수 검색된다.
+              const cell = k === '전화' ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : esc(v);
+              return `<tr><th scope="row">${esc(k)}</th><td>${cell}</td></tr>`;
+            })
+            .join('\n          ')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-aside">
+      <h2 class="footer-aside-title">자료 내려받기</h2>
+      <nav class="footer-docs" aria-label="자료">
+        ${docs
+          .map(
+            (d) => `<a class="doc-card" href="${esc(pathFor(d.slug))}">
+          <span class="doc-text">
+            <span class="doc-label">${esc(d.label)}</span>
+            <span class="doc-status">${esc(d.status)}</span>
+          </span>
+          ${downloadIcon}
+        </a>`
+          )
           .join('\n        ')}
-      </tbody>
-    </table>
+      </nav>
+    </div>
+  </div>
 
-    <nav class="footer-docs" aria-label="자료">
-      ${docs.map(([label, href]) => `<a href="${esc(pathFor(href.replace(/^\/|\/$/g, '')))}">${esc(label)}</a>`).join('\n      ')}
-    </nav>
+  <div class="wrap footer-bottom">
 
     ${sameAs}
 

@@ -5,6 +5,7 @@ type: page
 slug: contact
 noindex: true
 nav: true
+navOrder: 6
 navLabel: 문의
 changefreq: monthly
 

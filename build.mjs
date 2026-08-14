@@ -151,7 +151,10 @@ async function main() {
     site,
     org,
     allPages: pages,
-    nav: pages.filter((p) => p.nav),
+    // ⚠ loadPages 는 파일 경로순으로 정렬한다(빌드를 재현 가능하게 하려고).
+    //   그 배열을 그대로 메뉴에 쓰면 가나다순이 되어 "홈"이 다섯 번째로 간다.
+    //   메뉴 순서는 손님이 처음 보는 줄이므로 각 페이지의 navOrder 로 고정한다.
+    nav: pages.filter((p) => p.nav).sort((a, b) => (a.navOrder ?? 99) - (b.navOrder ?? 99)),
   };
 
   const written = [];

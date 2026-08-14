@@ -86,10 +86,11 @@ export const org = {
     note: '방문 상담 가능',
   },
 
+  founder: '정용택',
   telephone: '031-584-0636',
   fax: '031-622-9368',
   email: 'joung1076@naver.com',
-  businessNumber: '',      // TODO(사장님): 사업자등록번호
+  businessNumber: '829-88-03202',
 
   // 상담 가능 시간이 확정되면 채운다. 비어 있으면 JSON-LD에 나오지 않는다.
   opens: '',

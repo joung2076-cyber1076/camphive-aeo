@@ -62,6 +62,9 @@ export async function loadPages(contentDir) {
       template: bool(data.template),
       nav: bool(data.nav),
       navLabel: data.navLabel || undefined,
+      // 메뉴 순서. 없으면 뒤로 밀린다.
+      // 이 값이 없으면 파일 경로순(가나다순)이 그대로 메뉴가 된다.
+      navOrder: data.navOrder != null && data.navOrder !== '' ? Number(data.navOrder) : undefined,
       changefreq: data.changefreq || undefined,
 
       // 본문에서 뽑아낸 구조

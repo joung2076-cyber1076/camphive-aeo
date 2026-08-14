@@ -5,6 +5,7 @@ type: page
 slug: about
 noindex: true
 nav: true
+navOrder: 5
 navLabel: 회사
 changefreq: monthly
 
