@@ -9,7 +9,7 @@
 //            14 / 15
 // ─────────────────────────────────────────────────────────────
 
-import { esc, pathFor } from './html.mjs';
+import { esc, pathFor, assetPath } from './html.mjs';
 import { LANDING as L } from '../content/home.data.mjs';
 
 /**
@@ -34,89 +34,154 @@ const rv = (i, cls = '', style = '') => {
 /* 이미지 자리표시 — 미완성이 아니라 "여기에 들어간다"로 읽히게 한다. */
 const imageSlot = (n) => `<div class="block-thumb"><span>IMAGE ${n} / 16:10</span></div>`;
 
-/* ── 01 히어로 ─────────────────────────────────────────────── */
-function hero(h) {
-  const labels = h.globeLabels
-    .map((t) => `<span class="globe-label">${esc(t)}</span>`)
+/* ── 00 커버 ───────────────────────────────────────────────────
+   시안 S00. 배경 이미지 3장 + 카피 3벌이 7초마다 함께 넘어간다.
+
+   구조가 시안과 다른 곳이 한 군데 있다. 시안은 <p> 하나의 글자를
+   JS 로 갈아끼우지만, 여기서는 <p> 3개를 겹쳐 두고 is-on 클래스로
+   투명도만 바꾼다. 화면 결과는 같고, 카피 3벌이 전부 소스에 남는다.
+   JS 가 죽거나 크롤러가 실행하지 않으면 첫 벌이 그대로 보인다.
+
+   이미지는 시안과 동일하게 3장을 겹쳐 두고 opacity 로만 바꾼다.
+   ------------------------------------------------------------ */
+function cover(c) {
+  const imgs = c.images
+    .map(
+      (im, i) =>
+        // lazy 를 쓰지 않는다. 셋 다 21초 안에 화면에 오르는 데다
+        // opacity:0 인 요소는 브라우저가 로드를 미뤄, 교체 순간
+        // 아직 안 받아진 빈 이미지가 뜬다. (2026-08-15 실제로 그랬다)
+        `<img class="cover-img${i === 0 ? ' is-on' : ''}" src="${assetPath(im.src)}"` +
+        ` alt="${esc(im.alt)}" style="--drift:${im.drift}s"` +
+        ` fetchpriority="${i === 0 ? 'high' : 'low'}" decoding="async">`
+    )
+    .join('\n    ');
+
+  const lines = c.lines
+    .map(
+      (pair, i) =>
+        `<p class="cover-line${i === 0 ? ' is-on' : ''}">` +
+        `<span>${esc(pair[0])}</span><span>${esc(pair[1])}</span></p>`
+    )
     .join('\n        ');
 
-  return `<section class="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p ${rv(0, 'eyebrow')}>${esc(h.eyebrow)}</p>
-      <h1 ${rv(1)}>${esc(h.h1[0])}<br>${esc(h.h1[1])}</h1>
-      <p ${rv(2, 'hero-lead')}>${esc(h.leadLine1)}<br><strong class="mark">${esc(h.leadLine2)}</strong></p>
-      <div ${rv(3, 'hero-cta')}>
-        <a class="btn btn-primary" href="#diagnose">${esc(h.ctaPrimary)}</a>
-        <a class="btn btn-secondary" href="#report">${esc(h.ctaSecondary)}</a>
-      </div>
-      <!-- 【실측 확인 필요】 "15초" — 진단 도구 실제 소요시간 측정 후 확정 -->
-      <p ${rv(4, 'hero-note')}>${esc(h.note)}</p>
-    </div>
-
-    <div class="hero-visual">
-      <div class="globe-layer" aria-hidden="true">${globeSvg()}</div>
-      <div class="globe-labels">
-        ${labels}
-      </div>
-      <div ${rv(2, 'chat-card')}>
-        <div class="chat-head">
-          <span>${esc(h.chat.title)}</span>
-          <span>${esc(h.chat.meta)}</span>
-        </div>
-        <p class="chat-q">${esc(h.chat.question)}</p>
-        <p class="chat-a">${esc(h.chat.answer)}</p>
-        <ul class="chat-list">
-          ${h.chat.items
-            .map((it) => `<li><span class="num">${esc(it.n)}</span><span>${esc(it.name)}</span></li>`)
-            .join('\n          ')}
-        </ul>
-        <div class="chat-missing">
-          <b>✕ ${esc(h.chat.missingLabel)}</b>
-          <p>${esc(h.chat.missingText)}</p>
-        </div>
-        <p class="chat-foot">${esc(h.chat.foot)}</p>
+  return `<section class="cover" data-cover>
+  <div class="cover-media" aria-hidden="true">
+    ${imgs}
+  </div>
+  <div class="cover-scrim" aria-hidden="true"></div>
+  <div class="cover-glow" aria-hidden="true"></div>
+  <div class="cover-sweep cover-sweep-a" aria-hidden="true"></div>
+  <div class="cover-sweep cover-sweep-b" aria-hidden="true"></div>
+  <div class="cover-vignette" aria-hidden="true"></div>
+  <div class="cover-scan" aria-hidden="true"></div>
+  <div class="cover-inner">
+    <div class="cover-stage">
+      <div class="cover-lines">
+        ${lines}
       </div>
     </div>
   </div>
 </section>`;
 }
 
-/* 구체 — SVG 직접 제작. 이미지 파일 없음.
-   경위선 흰색 25%, 중심 발광은 오렌지→투명. 보라 없음.
-   라벨은 이 SVG 밖 HTML 텍스트라 소스에서 검색된다. */
-function globeSvg() {
-  const meridians = [0, 30, 60, 90, 120, 150]
-    .map(
-      (d) =>
-        `<ellipse cx="200" cy="200" rx="${
-          d === 90 ? 160 : Math.round(160 * Math.abs(Math.cos((d * Math.PI) / 180)))
-        }" ry="160" transform="rotate(${d} 200 200)"/>`
-    )
-    .join('\n      ');
-  const parallels = [-120, -80, -40, 0, 40, 80, 120]
-    .map((y) => {
-      const r = Math.round(Math.sqrt(Math.max(160 * 160 - y * y, 0)));
-      return `<ellipse cx="200" cy="${200 + y}" rx="${r}" ry="${Math.round(r * 0.16)}"/>`;
-    })
-    .join('\n      ');
+/* ── 01 히어로 ─────────────────────────────────────────────────
+   시안 S01. 좌 1.05fr / 우 0.95fr.
 
-  return `<svg class="globe" viewBox="0 0 400 400" role="presentation" focusable="false">
-  <defs>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#FF5A1F" stop-opacity="0.42"/>
-      <stop offset="55%" stop-color="#FF5A1F" stop-opacity="0.10"/>
-      <stop offset="100%" stop-color="#FF5A1F" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <circle cx="200" cy="200" r="188" fill="url(#glow)"/>
-  <g class="globe-lines" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1">
-    <circle cx="200" cy="200" r="160"/>
-      ${meridians}
-      ${parallels}
-  </g>
-  <circle cx="200" cy="200" r="176" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1" stroke-dasharray="2 8"/>
-</svg>`;
+   ⚠ 구 디자인의 오렌지 지구본 SVG(globeSvg)는 2026-08-15 폐기했다.
+     시안에 없는 요소다. 되살리지 말 것. */
+function hero(h) {
+  const chips = h.chips
+    .map(
+      (c) =>
+        `<span class="ai-chip ai-chip-${c.tone}">` +
+        `<span class="ai-chip-glyph" aria-hidden="true">${esc(c.glyph)}</span>${esc(c.name)}</span>`
+    )
+    .join('\n        ');
+
+  const items = h.chat.items
+    .map(
+      (it) =>
+        `<li><span class="num">${esc(it.n)}</span><span>${esc(it.name)}</span></li>`
+    )
+    .join('\n            ');
+
+  const liveRows = h.live.rows
+    .map(
+      (r, i) =>
+        `<div class="live-row">
+            <span class="live-name live-${r.tone}">${esc(r.name)}</span>
+            <span class="live-track"><span class="live-scan" style="--lag:${(i * 0.35).toFixed(2)}s"></span></span>
+            <span class="live-val" style="--lag:${(i * 0.35).toFixed(2)}s">${esc(r.value)}</span>
+          </div>`
+    )
+    .join('\n          ');
+
+  return `<section class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p ${rv(0, 'eyebrow')}><span class="eyebrow-bar" aria-hidden="true"></span>${esc(h.eyebrow)}</p>
+      <div ${rv(1, 'ai-chips')}>
+        ${chips}
+        <span class="ai-chip-note">${esc(h.chipsNote)}</span>
+      </div>
+      <h1 ${rv(2)}>${esc(h.h1[0])}<br>${esc(h.h1[1])}</h1>
+      <p ${rv(3, 'hero-lead')}>${esc(h.leadHead)} <strong class="mark">${esc(h.leadMark)}</strong></p>
+      <div ${rv(4, 'hero-cta')}>
+        <a class="btn btn-primary" href="#diagnose">${esc(h.ctaPrimary)} <span class="btn-arrow" aria-hidden="true">▸</span></a>
+        <a class="btn btn-secondary" href="#report">${esc(h.ctaSecondary)}</a>
+      </div>
+      <!-- 【실측 확인 필요】 "15초" — 진단 도구 실제 소요시간 측정 후 확정 -->
+      <p ${rv(5, 'hero-note')}>${esc(h.note)}</p>
+    </div>
+
+    <div ${rv(2, 'chat-card')}>
+      <div class="chat-head">
+        <span class="chat-title">${esc(h.chat.title)}</span>
+        <span class="chat-meta">${esc(h.chat.meta)}</span>
+      </div>
+      <div class="chat-ask">
+        <p class="chat-q">${esc(h.chat.question)}<span class="caret" aria-hidden="true"></span></p>
+      </div>
+      <div class="chat-reply">
+        <p class="chat-a">${esc(h.chat.answer)}</p>
+        <ul class="chat-list">
+            ${items}
+        </ul>
+        <div class="chat-missing">
+          <b>✕ ${esc(h.chat.missingLabel)}</b>
+          <span>${esc(h.chat.missingText)}</span>
+        </div>
+      </div>
+      <p class="chat-foot">${esc(h.chat.foot)}</p>
+
+      <div class="live-panel">
+        <div class="live-head">
+          <span class="live-label">${esc(h.live.label)}</span>
+          <span class="live-badge"><span class="live-dot" aria-hidden="true"></span>${esc(h.live.badge)}</span>
+        </div>
+        <div class="live-rows">
+          ${liveRows}
+        </div>
+        <p class="live-note">${esc(h.live.note)}</p>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+/* ── 01b 흐름 띠 ───────────────────────────────────────────────
+   시안의 marquee. 같은 문장을 두 벌 이어 붙여 끊김 없이 흐르게 한다.
+   두 번째 벌은 시각 장치일 뿐이라 aria-hidden 으로 빼, 스크린리더가
+   같은 문장을 두 번 읽지 않게 한다. */
+function marquee(text) {
+  const strip = `<span class="marquee-item">${esc(text)} · </span>`;
+  return `<div class="marquee-band">
+  <div class="marquee-track">
+    ${strip}
+    <span class="marquee-item" aria-hidden="true">${esc(text)} · </span>
+  </div>
+</div>`;
 }
 
 /* ── 앵커 목차 ─────────────────────────────────────────────── */
@@ -590,7 +655,9 @@ function answerBlock(page) {
 /* ── 조립 ──────────────────────────────────────────────────── */
 export function renderLanding(page, ctx) {
   return [
+    cover(L.cover),
     hero(L.hero),
+    marquee(L.marquee),
     anchorNav(L.anchors),
     answerBlock(page),
     s02(L.s02),

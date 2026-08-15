@@ -144,6 +144,42 @@
       for (var n = 0; n < nums.length; n++) io2.observe(nums[n]);
     }
 
+    /* 4-1) 커버 회전 — 이미지 3장 + 카피 3벌, 7초 간격
+     *
+     * 클래스만 토글한다. 글자도 요소도 만들지 않는다.
+     * 카피 3벌은 이미 HTML 에 다 있고 CSS 가 opacity 로 감춰 둔 것이라,
+     * 이 블록이 통째로 죽어도 첫 벌은 그대로 읽힌다.
+     *
+     * 이미지는 겹쳐서 교차 페이드(900ms). 카피는 시안과 같게
+     * "먼저 사라지고(900ms) 다음 것이 나타나는" 순서로 간다.
+     */
+    var coverEl = document.querySelector('[data-cover]');
+    if (coverEl && !reduced) {
+      var cImgs = coverEl.querySelectorAll('.cover-img');
+      var cLines = coverEl.querySelectorAll('.cover-line');
+      var slides = Math.min(cImgs.length, cLines.length);
+
+      if (slides > 1) {
+        var at = 0;
+        window.setInterval(function () {
+          var next = (at + 1) % slides;
+
+          // 이미지 — 교차 페이드
+          cImgs[at].classList.remove('is-on');
+          cImgs[next].classList.add('is-on');
+
+          // 카피 — 사라진 뒤에 다음 것을 올린다
+          cLines[at].classList.remove('is-on');
+          var show = next;
+          window.setTimeout(function () {
+            cLines[show].classList.add('is-on');
+          }, 900);
+
+          at = next;
+        }, 7000);
+      }
+    }
+
     /* 5) 전환율 바 — 0에서 목표 %까지. % 숫자 자체는 정적 텍스트다 */
     var bars = document.querySelectorAll('.conv-fill');
     if (!reduced && 'IntersectionObserver' in window) {

@@ -2,11 +2,16 @@
 /* ─────────────────────────────────────────────────────────────
    캠핑하이브 AEO — 스타일
 
-   원칙
-   · 색은 먹빛 3층 + 형광 오렌지 1색. 색을 늘리지 않는다.
-   · 그림자 없음. 평면. 경계는 선(--line)으로만 만든다.
+   원칙 (2026-08-15 개정 — 시안 디자인으로 전환)
+   · 색은 푸른 먹빛 4층 + 액센트 블루. 시안 팔레트를 그대로 쓴다.
+   · 그림자를 쓴다. 시안이 3단계(카드/패널/부상)로 층을 만든다.
    · 간격은 4px 배수. 하드코딩 색상 금지 — 전부 토큰.
    · 모션은 장식이다. 꺼져도 내용은 전부 보인다.
+
+   ⚠ 색·폰트·그림자를 되돌리지 말 것. 2026-08-15 사장님 확정 사항이다.
+     정본은 「홈페이지 디자인/Firecrawl B2B 마케팅 사이트/
+     캠핑하이브 AEO 홈페이지.dc.html」 이고, 화면이 그 시안과 같아야 한다.
+     이전 팔레트(먹빛 3층 + 오렌지 #FF5A1F)는 폐기되었다.
    ───────────────────────────────────────────────────────────── */
 
 /* ── 폰트 ────────────────────────────────────────────────────
@@ -36,28 +41,57 @@
 }
 
 :root {
-  /* 층위 — 카드는 배경보다 밝게, 강조 블록은 더 어둡게 */
-  --bg: #171717;
-  --surface: #202020;
-  --deep: #0F0F0F;
+  /* ── 층위 — 시안 배경 4단계 ──────────────────────────────
+     시안은 섹션을 번갈아 칠해 경계를 만든다. 선이 아니라 명도차로
+     끊는 구조라, 두 값이 가까워 보여도 붙여 놓으면 층이 보인다. */
+  --bg: #0B0E13;          /* 기본 섹션 */
+  --alt: #0F1319;         /* 교차 섹션 — bg 와 번갈아 쓴다 */
+  --surface: #161B22;     /* 카드 */
+  --deep: #12161D;        /* 다크 패널 (강조 블록) */
+  --cover: #08090C;       /* 커버·오프닝 — 가장 어둡다 */
+  --footer-bg: #070910;
 
-  --accent: #FF5A1F;
-  --accent-ink: #171717;        /* 오렌지 위에 얹는 글자색. 흰색 금지 */
-  --accent-soft: rgba(255, 90, 31, 0.20);   /* 형광펜 */
-  --accent-line: rgba(255, 90, 31, 0.40);   /* 호버 테두리 */
-  --accent-dim: rgba(255, 90, 31, 0.08);    /* 2차 CTA 호버 배경 */
+  /* ── 액센트 블루 ──────────────────────────────────────── */
+  --accent: #3B82F6;            /* 버튼 */
+  --accent-hover: #2563EB;      /* 버튼 호버 */
+  --accent-bright: #60A5FA;     /* 강조 텍스트 — 배경 위에서 이게 더 읽힌다 */
+  --accent-ink: #FFFFFF;        /* 블루 위에 얹는 글자색 */
+  --accent-soft: rgba(59, 130, 246, 0.20);   /* 형광펜 */
+  --accent-line: rgba(59, 130, 246, 0.40);   /* 호버 테두리 */
+  --accent-dim: rgba(59, 130, 246, 0.08);    /* 2차 CTA 호버 배경 */
+  --accent-glow: rgba(59, 130, 246, 0.35);   /* 커버 발광·버튼 그림자 */
 
-  --danger: #E5484D;
-  --danger-soft: rgba(229, 72, 77, 0.12);
+  /* ── 상태색 ───────────────────────────────────────────────
+     빨강을 쓰지 않는다. 2026-08-12 수정지시 A-3 — 「차단」이 아니라
+     「미흡」이므로 위험(빨강)에서 주의(앰버)로 낮춘 것이다. */
+  --warn: #E8A33D;        /* 주의 — 앰버 */
+  --caution: #C9903F;     /* 주의(약) */
+  --success: #4ADE80;
+  --danger: #E8A33D;      /* 구 이름 유지. 값은 앰버다 */
+  --danger-soft: rgba(232, 163, 61, 0.12);
 
-  --line: rgba(255, 255, 255, 0.10);
+  /* ── 선 ─────────────────────────────────────────────────── */
+  --line: rgba(255, 255, 255, 0.09);
   --line-strong: rgba(255, 255, 255, 0.18);
   --hover-row: rgba(255, 255, 255, 0.03);
 
-  --text: #F5F5F5;
-  --muted: #A1A1A1;
+  /* ── 글자 — 시안은 6단계를 쓴다 ─────────────────────────── */
+  --text-strong: #FFFFFF; /* 제목 */
+  --text: #E7EBF2;        /* 본문 */
+  --text-2: #C4CCD8;
+  --text-3: #AFB8C6;
+  --muted: #8C96A6;
+  --caption: #7C8697;
 
-  --radius: 10px;
+  /* ── 모서리 ─────────────────────────────────────────────── */
+  --radius: 8px;          /* 카드 */
+  --radius-panel: 16px;   /* 패널 */
+  --radius-pill: 100px;   /* 버튼 */
+
+  /* ── 그림자 — 시안 3단계 ────────────────────────────────── */
+  --shadow-1: 0 2px 12px rgba(0, 0, 0, 0.45);
+  --shadow-2: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 20px 60px rgba(0, 0, 0, 0.55);
 
   --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
           'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
@@ -69,8 +103,8 @@
   --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
   --s20: 80px; --s24: 96px; --s32: 128px;
 
-  /* 섹션 간격 — 시안의 1.5배 */
-  --section-y: clamp(72px, 9vw, 168px);
+  /* 섹션 간격 — 시안 그대로 96px. 1.5배로 벌리던 것을 되돌렸다 */
+  --section-y: clamp(64px, 8vw, 96px);
   --wrap: 1200px;
 }
 
@@ -276,82 +310,253 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 @media (max-width: 980px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 620px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
 
+/* ── 00 커버 ───────────────────────────────────────────────────
+   시안 S00 의 수치를 그대로 옮겼다. 바꾸지 말 것.
+     높이 96vh / 최소 760px · 이미지 교체 7s 간격 · 페이드 900ms
+     켄번스 48s·54s·60s · 라이트 스윕 34s(2줄, 17s 오프셋)
+     글로우 16s · 비네트 24s · 스캔라인 26s
+   ------------------------------------------------------------ */
+.cover {
+  position: relative;
+  height: 96vh; min-height: 760px;
+  overflow: hidden;
+  background: var(--cover);
+  border-bottom: 1px solid var(--line);
+}
+.cover-media { position: absolute; inset: 0; }
+.cover-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 900ms ease-in-out;
+  animation: heroDrift var(--drift, 48s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+.cover-img.is-on { opacity: 1; }
+
+.cover-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(8, 9, 12, 0.30) 0%,
+    rgba(8, 9, 12, 0.05) 45%,
+    rgba(8, 9, 12, 0.85) 100%);
+}
+.cover-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(60% 55% at 50% 45%, rgba(59, 130, 246, 0.18), transparent 72%);
+  animation: heroGlow 16s ease-in-out infinite;
+}
+.cover-sweep { position: absolute; top: 0; bottom: 0; left: 0; will-change: transform; }
+.cover-sweep-a {
+  width: 34%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.22), transparent);
+  animation: sweepX 34s ease-in-out infinite;
+}
+.cover-sweep-b {
+  width: 20%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.10), transparent);
+  animation: sweepX 34s ease-in-out 17s infinite;
+}
+.cover-vignette { position: absolute; inset: 0; animation: vignettePulse 24s ease-in-out infinite; }
+.cover-scan {
+  position: absolute; left: 0; right: 0; top: -2px; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.55), transparent);
+  animation: scanLine 26s linear infinite;
+}
+
+.cover-inner {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 32px 32px 88px;
+}
+.cover-stage { position: relative; width: 100%; max-width: 1000px; height: 210px; }
+.cover-lines { position: absolute; inset: 0; }
+.cover-line {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+  margin: 0; text-align: center;
+  font-size: clamp(28px, 4.4vw, 58px); line-height: 1.3;
+  font-weight: 900; letter-spacing: -0.03em;
+  color: #FFFFFF;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.85), 0 0 40px var(--accent-glow);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+.cover-line.is-on { opacity: 1; transform: none; }
+
+@keyframes heroDrift {
+  0%, 100% { transform: scale(1.06) translate3d(0, 0, 0); }
+  50%      { transform: scale(1.14) translate3d(-1.5%, -1%, 0); }
+}
+@keyframes heroGlow  { 0%, 100% { opacity: 0.75; } 50% { opacity: 1; } }
+@keyframes sweepX    { 0% { transform: translateX(-120%); } 100% { transform: translateX(560%); } }
+@keyframes vignettePulse {
+  0%, 100% { box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.55); }
+  50%      { box-shadow: inset 0 0 260px rgba(0, 0, 0, 0.75); }
+}
+@keyframes scanLine  { 0% { transform: translateY(0); } 100% { transform: translateY(96vh); } }
+
+/* 모션을 끈 사람에게는 첫 장면만 고정으로 보여 준다. 내용은 같다. */
+@media (prefers-reduced-motion: reduce) {
+  .cover-img, .cover-glow, .cover-sweep, .cover-vignette, .cover-scan { animation: none; }
+  .cover-sweep, .cover-scan { display: none; }
+}
+
+@media (max-width: 720px) {
+  .cover { height: 88vh; min-height: 560px; }
+  .cover-inner { padding: 24px 20px 64px; }
+  .cover-stage { height: 180px; }
+}
+
 /* ── 히어로 ─────────────────────────────────────────────────── */
 .hero { padding-block: clamp(56px, 8vw, 128px) var(--section-y); position: relative; overflow: hidden; }
-/* 우상단에서 번지는 오렌지 한 겹. 8%라 글자 대비는 그대로다. */
+/* 가운데서 번지는 블루 한 겹. 시안 커버의 heroGlow 와 같은 값이다. */
 .hero::before {
   content: '';
   position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(
-    60% 55% at 78% 18%,
-    rgba(255, 90, 31, 0.08) 0%,
-    rgba(255, 90, 31, 0.03) 45%,
+    60% 55% at 50% 45%,
+    rgba(59, 130, 246, 0.18) 0%,
     transparent 72%
   );
 }
 .hero > .wrap { position: relative; z-index: 1; }
+/* 시안 S01 — 좌 1.05fr / 우 0.95fr, 간격 56px */
 .hero-grid {
-  display: grid; grid-template-columns: 7fr 5fr;   /* 비대칭 */
-  gap: clamp(32px, 5vw, 80px); align-items: center;
+  display: grid; grid-template-columns: 1.05fr 0.95fr;
+  gap: 56px; align-items: center;
 }
-@media (max-width: 1000px) { .hero-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
 
-.hero h1 { margin-bottom: var(--s6); }
-.hero-lead { font-size: clamp(1.0625rem, 1.6vw, 1.3125rem); color: var(--muted); max-width: 34ch; margin-bottom: var(--s10); }
-.hero-lead strong { color: var(--text); }
-.hero-cta { display: flex; flex-wrap: wrap; gap: var(--s3); margin-bottom: var(--s5); }
-.hero-note { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.hero .eyebrow { gap: 10px; font-size: 13px; letter-spacing: 0.10em; color: var(--caption); margin-bottom: 26px; }
+.hero .eyebrow::before { content: none; }   /* 아래 .eyebrow-bar 로 대체 */
+.eyebrow-bar { width: 26px; height: 3px; background: var(--accent); display: inline-block; }
 
-/* 구체 + 대화 카드 */
-.hero-visual { position: relative; display: grid; place-items: center; min-height: 420px; }
-.globe-layer {
-  position: absolute; inset: 0; display: grid; place-items: center;
-  pointer-events: none; z-index: 0;
+/* AI 3사 칩 — 각 사 브랜드색. 이 셋 외에 추가 금지(제작 지시서 규칙 2) */
+.ai-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
+.ai-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 14px; border-radius: var(--radius-pill);
+  font-family: var(--mono); font-size: 13px;
 }
-.globe { width: min(120%, 520px); height: auto; opacity: 0.9; }
-.globe .globe-lines { animation: globe-spin 60s linear infinite; transform-origin: 50% 50%; }
-@keyframes globe-spin { to { transform: rotate(360deg); } }
-
-.globe-labels { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.globe-label {
-  position: absolute; font-family: var(--mono); font-size: 0.6875rem; color: var(--muted);
-  white-space: nowrap; transform: translate(-50%, -50%);
-  padding: var(--s1) var(--s2); background: color-mix(in srgb, var(--bg) 70%, transparent);
-  border-radius: 4px;
+.ai-chip-glyph { font-size: 14px; line-height: 1; }
+.ai-chip-gpt    { border: 1px solid rgba(16, 163, 127, 0.45); background: rgba(16, 163, 127, 0.10); color: #3DD6AC; }
+.ai-chip-claude { border: 1px solid rgba(217, 119, 87, 0.45); background: rgba(217, 119, 87, 0.10); color: #E89476; }
+.ai-chip-gemini { border: 1px solid rgba(66, 133, 244, 0.45); background: rgba(66, 133, 244, 0.10); color: #7BA9F7; }
+.ai-chip-note {
+  display: inline-flex; align-items: center; padding: 8px 4px;
+  font-family: var(--mono); font-size: 13px; color: var(--caption);
 }
-.globe-label:nth-child(1) { top: 8%;  left: 50%; }
-.globe-label:nth-child(2) { top: 27%; left: 90%; }
-.globe-label:nth-child(3) { top: 73%; left: 90%; }
-.globe-label:nth-child(4) { top: 92%; left: 50%; }
-.globe-label:nth-child(5) { top: 73%; left: 10%; }
-.globe-label:nth-child(6) { top: 27%; left: 10%; }
-@media (max-width: 560px) { .globe-label:nth-child(n+4) { display: none; } }
 
+.hero h1 {
+  margin: 0 0 24px; font-size: clamp(30px, 3.6vw, 45px); line-height: 1.32;
+  font-weight: 900; letter-spacing: -0.03em; color: var(--text-strong); text-wrap: pretty;
+}
+.hero-lead {
+  margin: 0 0 34px; font-size: 19px; line-height: 1.75;
+  color: var(--text-3); max-width: 520px; text-wrap: pretty;
+}
+/* 형광펜은 밑줄 형태로 글자 아래만 덮는다. 시안의 inset box-shadow 방식 */
+.hero-lead .mark {
+  background: none; font-weight: 700; color: var(--text-strong);
+  box-shadow: inset 0 -10px 0 rgba(59, 130, 246, 0.45);
+}
+.hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; }
+.btn-arrow { font-family: var(--mono); }
+.hero-note { margin: 0; font-family: var(--mono); font-size: 14px; color: var(--caption); }
+
+/* ── AI 대화 재현 카드 (시안 S01 우측) ─────────────────────── */
 .chat-card {
-  position: relative; z-index: 2; width: 100%; max-width: 420px;
-  background: var(--surface); border: 1px solid var(--line-strong);
-  border-radius: var(--radius); padding: var(--s6);
+  position: relative; z-index: 2; width: 100%;
+  background: var(--deep); border: 1px solid var(--line);
+  border-radius: var(--radius-panel); padding: 26px;
+  box-shadow: var(--shadow-3);
 }
 .chat-head {
   display: flex; justify-content: space-between; align-items: center;
-  font-family: var(--mono); font-size: 0.6875rem; color: var(--muted);
-  padding-bottom: var(--s3); border-bottom: 1px solid var(--line); margin-bottom: var(--s5);
+  padding-bottom: 16px; border-bottom: 1px solid var(--line-strong); margin-bottom: 20px;
 }
+.chat-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.10em; color: var(--accent-bright); }
+.chat-meta  { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* 사용자 말풍선 — 오른쪽 정렬, 꼬리는 오른쪽 아래 */
+.chat-ask { display: flex; justify-content: flex-end; margin-bottom: 22px; }
 .chat-q {
-  background: var(--bg); border-radius: var(--radius); padding: var(--s3) var(--s4);
-  font-size: 0.9375rem; margin-bottom: var(--s4);
+  margin: 0; background: #2E2E2A; color: #F2F2EC; font-size: 17px;
+  padding: 13px 18px; border-radius: 14px 14px 4px 14px; max-width: 88%;
 }
-.chat-a { font-size: 0.9375rem; color: var(--muted); margin-bottom: var(--s4); }
-.chat-list { list-style: none; display: grid; gap: var(--s2); margin-bottom: var(--s5); }
-.chat-list li { display: flex; gap: var(--s3); align-items: center; font-size: 0.875rem; }
-.chat-list .num { color: var(--accent); }
+.caret {
+  display: inline-block; width: 2px; height: 17px; background: var(--accent);
+  margin-left: 3px; vertical-align: -3px; animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.chat-a { margin: 0 0 14px; font-size: 16px; line-height: 1.7; color: #D8D8D0; }
+.chat-list { list-style: none; display: grid; gap: 10px; margin: 0 0 18px; padding: 0; }
+.chat-list li {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255, 255, 255, 0.06); border-radius: var(--radius); padding: 12px 14px;
+}
+.chat-list .num { font-family: var(--mono); font-size: 12px; color: var(--accent-bright); }
+.chat-list li span:last-child { font-size: 16px; color: #F2F2EC; }
 .chat-missing {
-  border: 1px dashed var(--danger); background: var(--danger-soft);
-  border-radius: var(--radius); padding: var(--s4);
+  display: flex; align-items: center; gap: 12px;
+  border: 2px dashed #D96A55; border-radius: var(--radius); padding: 14px 16px;
 }
-.chat-missing b { color: var(--danger); font-family: var(--mono); font-size: 0.75rem; display: block; margin-bottom: var(--s1); }
-.chat-missing p { font-size: 0.9375rem; font-weight: 700; }
-.chat-foot { margin-top: var(--s4); font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+.chat-missing b { font-family: var(--mono); font-size: 13px; font-weight: 700; color: #D96A55; white-space: nowrap; }
+.chat-missing span { font-size: 16px; color: #F2F2EC; }
+.chat-foot { margin: 18px 0 0; font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+/* ── 3사 언급률 실측 패널 ────────────────────────────────────
+   수치는 화면 예시다. 스캔 막대는 "측정 중"이라는 인상만 준다. */
+.live-panel { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--line-strong); }
+.live-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.live-label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.10em; color: #9AA4B4; }
+.live-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.10em; color: var(--accent-bright);
+}
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulseDot 1.6s ease-in-out infinite; }
+.live-rows { display: grid; gap: 12px; }
+.live-row { display: flex; align-items: center; gap: 14px; }
+.live-name { width: 78px; flex: none; font-family: var(--mono); font-size: 13px; }
+.live-gpt    { color: #3DD6AC; }
+.live-claude { color: #E89476; }
+.live-gemini { color: #7BA9F7; }
+.live-track {
+  flex: 1; height: 8px; border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08); overflow: hidden; position: relative;
+}
+.live-scan {
+  position: absolute; top: 0; left: 0; width: 32%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.85), transparent);
+  animation: trackScan 2.6s ease-in-out var(--lag, 0s) infinite;
+}
+.live-val {
+  width: 46px; flex: none; text-align: right;
+  font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--warn);
+  animation: dotBlink 2.6s ease-in-out var(--lag, 0s) infinite;
+}
+.live-note { margin: 14px 0 0; font-size: 13px; line-height: 1.7; color: var(--caption); }
+
+@keyframes pulseDot  { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(0.82); } }
+@keyframes trackScan { 0% { transform: translateX(-120%); } 100% { transform: translateX(420%); } }
+@keyframes dotBlink  { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+/* ── 흐름 띠 (시안 marquee, 42s) ────────────────────────────── */
+.marquee-band {
+  overflow: hidden; border-bottom: 1px solid var(--line);
+  background: var(--alt); padding: 16px 0;
+}
+.marquee-track { display: flex; width: max-content; animation: marquee 42s linear infinite; }
+.marquee-item {
+  font-family: var(--mono); font-size: 14px; letter-spacing: 0.06em;
+  color: var(--caption); white-space: nowrap; padding-right: 32px;
+}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ── 통계 (03) ──────────────────────────────────────────────── */
 .stat { border-top: 2px solid var(--accent); padding-top: var(--s5); }
@@ -666,8 +871,9 @@ td.is-num { font-family: var(--mono); }
     transition-duration: 0.001ms !important;
   }
   .js-on .reveal { opacity: 1 !important; transform: none !important; }
-  .globe .globe-lines { animation: none !important; }
   .floating { opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+  /* 흐름 띠·스캔 막대는 끊임없이 움직이는 것들이라 아예 세운다 */
+  .marquee-track, .live-scan, .live-val, .live-dot, .caret { animation: none !important; }
 }
 
 /* ── 인쇄 ───────────────────────────────────────────────────── */
