@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 /* ─────────────────────────────────────────────────────────────
    캠핑하이브 AEO — 스타일
 
@@ -593,30 +593,30 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 /* 시안은 이 문장을 한 줄로 붙여 뒀다. 좁은 화면에서는 넘치므로 풀어 준다. */
 @media (max-width: 1180px) { .process-lead { white-space: normal; max-width: 720px; } }
 
-.step-row { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 14px; align-items: stretch; }
-.step-card {
+.proc-row { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 14px; align-items: stretch; }
+.proc-card {
   background: var(--deep); border: 1px solid var(--line);
   border-radius: 12px; padding: 30px 24px; text-align: center;
 }
-.step-card.is-accent { border-color: var(--accent-line); }
-.step-num { font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 20px; }
-.step-icon {
+.proc-card.is-accent { border-color: var(--accent-line); }
+.proc-num { font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 20px; }
+.proc-icon {
   display: inline-flex; align-items: center; justify-content: center;
   width: 52px; height: 52px; margin-bottom: 22px; border-radius: 12px;
   background: rgba(59, 130, 246, 0.14); border: 1px solid rgba(59, 130, 246, 0.35);
   color: var(--accent-bright);
 }
-.step-card h3 { margin: 0 0 14px; font-size: 18px; font-weight: 700; color: var(--text-strong); }
-.step-en { font-size: 14px; font-weight: 500; color: var(--accent-bright); }
-.step-card p { margin: 0; font-size: 15px; line-height: 1.8; color: var(--muted); }
-.step-arrow { display: flex; align-items: center; font-family: var(--mono); font-size: 20px; color: #3B4655; }
+.proc-card h3 { margin: 0 0 14px; font-size: 18px; font-weight: 700; color: var(--text-strong); }
+.proc-en { font-size: 14px; font-weight: 500; color: var(--accent-bright); }
+.proc-card p { margin: 0; font-size: 15px; line-height: 1.8; color: var(--muted); }
+.proc-arrow { display: flex; align-items: center; font-family: var(--mono); font-size: 20px; color: #3B4655; }
 .process-foot { margin: 28px 0 0; font-size: 15px; line-height: 1.8; color: var(--caption); text-align: center; }
 
 @media (max-width: 1080px) {
-  .step-row { grid-template-columns: 1fr 1fr; }
-  .step-arrow { display: none; }
+  .proc-row { grid-template-columns: 1fr 1fr; }
+  .proc-arrow { display: none; }
 }
-@media (max-width: 620px) { .step-row { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .proc-row { grid-template-columns: 1fr; } }
 
 /* ── 흐름 띠 (시안 marquee, 42s) ────────────────────────────── */
 .marquee-band {

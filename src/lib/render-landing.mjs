@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 //  홈 랜딩 렌더러 — 16섹션
 //
 //  카피는 src/content/home.data.mjs 에 있고 여기서는 구조만 만든다.
@@ -233,20 +233,20 @@ function process(s) {
   const cards = s.steps
     .map(
       (st, i) =>
-        `<div ${rv(i, `step-card${st.accent ? ' is-accent' : ''}`)}>
-          <div class="step-num">${esc(st.n)}</div>
-          <span class="step-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${STEP_ICON[st.icon]}</svg></span>
-          <h3>${esc(st.title)} <span class="step-en">${esc(st.en)}</span></h3>
+        `<div ${rv(i, `proc-card${st.accent ? ' is-accent' : ''}`)}>
+          <div class="proc-num">${esc(st.n)}</div>
+          <span class="proc-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${STEP_ICON[st.icon]}</svg></span>
+          <h3>${esc(st.title)} <span class="proc-en">${esc(st.en)}</span></h3>
           <p>${esc(st.body)}</p>
         </div>`
     )
-    .join('\n        <div class="step-arrow" aria-hidden="true">›</div>\n        ');
+    .join('\n        <div class="proc-arrow" aria-hidden="true">›</div>\n        ');
 
   return `<section class="section process" id="process">
   <div class="wrap">
     <h2 class="process-h2">${esc(s.h2[0])}<br><span class="hl">${esc(s.h2[1])}</span></h2>
     <p class="process-lead">${esc(s.lead)}</p>
-    <div class="step-row">
+    <div class="proc-row">
         ${cards}
     </div>
     <p class="process-foot">${esc(s.foot)}</p>
@@ -485,7 +485,7 @@ function s08(s) {
       (st, i) => `<div ${rv(i, `step-row${st.featured ? ' is-featured' : ''}`)}>
       <div class="step-letter">${esc(st.letter)}</div>
       <div>
-        <span class="step-en">${esc(st.en)}</span>
+        <span class="proc-en">${esc(st.en)}</span>
         <h3>${esc(st.h3)}</h3>
         <p style="color:var(--muted);margin-top:var(--s2)">${esc(st.p)}</p>
         <p class="step-out">→ ${esc(st.out)}</p>
