@@ -1,41 +1,50 @@
-# 폰트 — 자체 호스팅 (설치 완료)
+# 폰트 — 자체 호스팅
 
-이 폴더의 파일이 그대로 사이트에 실린다. **외부 CDN을 부르지 않는다.**
+시안(`캠핑하이브 AEO 홈페이지.dc.html`)이 쓰는 3종을 그대로 쓴다.
+**CDN 링크를 넣지 않는다.** 파일이 이 저장소 안에 있다.
 
-| 파일 | 크기 | 무엇 | 라이선스 |
+| 용도 | 폰트 | 폴더 | 파일 수 |
 |---|---|---|---|
-| `PretendardVariable.woff2` | 2.0MB | 본문·한글 전체 (가변 45~920) | OFL 1.1 → `OFL-Pretendard.txt` |
-| `Archivo-Variable.woff2` | 88KB | 영문 헤딩 (가변 wdth 62.5~125 / wght 100~900) | OFL 1.1 → `OFL-Archivo.txt` |
+| 본문·제목 | Noto Sans KR (가변 wght 100~900) | `noto-sans-kr/` | 124 |
+| 강조 | Noto Serif KR (가변 wght 200~900) | `noto-serif-kr/` | 124 |
+| 수치·라벨 | JetBrains Mono (가변 wght 100~800) | `jetbrains-mono/` | 6 |
 
-둘 다 **SIL Open Font License 1.1** 이라 자체 호스팅 재배포가 허용된다.
-라이선스 전문을 같은 폴더에 함께 둔다 — OFL이 요구하는 조건이다.
+## 왜 파일이 254개인가
 
-## "Expanded" 는 별도 파일이 아니다
+한글은 글자 수가 많아 한 벌이 수 MB다. 통으로 받게 하면 첫 화면이 늦다.
+그래서 글자 범위(`unicode-range`)별로 쪼갠 조각을 두고, **브라우저가 그
+페이지에 실제로 쓰인 글자의 조각만** 내려받는다. 한 페이지가 실제로 받는
+양은 보통 5~10개, 수백 KB 수준이다.
 
-Archivo는 **자폭(wdth) 축을 가진 가변 폰트 한 개**다. 넓은 헤딩은
-`font-stretch: 125%` 로 뽑아 쓴다. `styles.css` 에서 h1·h2·브랜드·큰 숫자에
-그 값을 걸어 두었다. 별도의 `Archivo-Expanded` 파일을 찾지 않는다.
+저장소에 들어가는 총량과 방문자가 받는 양은 다르다. 파일 수를 줄이려고
+통짜 파일로 바꾸지 말 것 — 그러면 방문자가 더 많이 받는다.
 
-## 한글은 Archivo 로 그리지 않는다
+## @font-face 선언은 어디에 있나
 
-`Archivo-Variable.woff2` 는 **라틴 문자만 담긴 서브셋**이다. `@font-face` 에
-`unicode-range` 를 걸어 두었으므로 한글 헤딩은 브라우저가 자동으로
-Pretendard 로 넘긴다. 그래서 88KB로 끝난다.
+`src/fonts-noto-sans-kr.css` · `src/fonts-noto-serif-kr.css` ·
+`src/fonts-jetbrains-mono.css` 세 파일이다. 자동 생성 파일이므로 손으로
+고치지 않는다. `build.mjs` 가 이 셋을 `src/styles.css` 앞에 붙여
+`dist/styles.css` 하나로 내보낸다. `<link>` 를 하나로 유지하기 위해서다.
 
-## Pretendard 2MB가 부담이면
+## 갱신법
 
-지금은 전 글자를 담은 한 파일이다. `font-display: swap` 이라 글자는 즉시
-보이고 폰트는 나중에 바뀌므로 화면이 비는 시간은 없다.
+```bash
+powershell -ExecutionPolicy Bypass -File scripts/fetch-fonts.ps1
+```
 
-더 줄이려면 Pretendard 가 제공하는 **동적 서브셋**(unicode-range 로 쪼갠
-woff2 수백 개)으로 바꿀 수 있다. 실제로 쓰는 글자만 내려받으므로 첫 화면
-전송량이 크게 줄지만, 파일이 수백 개로 늘고 `@font-face` 선언도 그만큼
-늘어난다. **필요해지면 그때 바꾼다.** 지금 구조로도 외부 요청은 0이다.
+Google Fonts CSS2 API 에서 서브셋 woff2 를 내려받아 `url()` 만 로컬
+경로로 바꾼다. 스크립트 파일은 **UTF-8 BOM** 으로 저장해야 한다 —
+BOM 이 없으면 PowerShell 5.1 이 한글 경로를 깨뜨린다.
 
-## 출처
+## 라이선스
 
-- Pretendard — `github.com/orioncactus/pretendard` (dist/web/variable/woff2)
-- Archivo — `github.com/google/fonts` (ofl/archivo), 라틴 서브셋 woff2
+셋 다 SIL Open Font License 1.1. 원문을 이 폴더에 동봉했다.
 
-폰트를 갱신할 때는 위에서 파일을 다시 받아 같은 이름으로 덮어쓰고
-`npm run check` 를 돌린다. 파일명이 바뀌면 `styles.css` 도 함께 고친다.
+- `OFL-noto-sans-kr.txt`
+- `OFL-noto-serif-kr.txt`
+- `OFL-jetbrains-mono.txt`
+
+## 폐기 기록
+
+2026-08-15 이전에는 Pretendard Variable + Archivo 를 썼다. 시안 디자인으로
+전환하면서 걷어냈다. 되살리지 말 것 — 시안이 정본이다.

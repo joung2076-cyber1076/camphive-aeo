@@ -195,10 +195,22 @@ async function main() {
     );
   }
 
-  // styles.css = Pretendard 서브셋 @font-face 92개 + 본 스타일시트.
-  // 파일을 둘로 나눠 <link> 를 두 개 걸면 렌더 차단 요청이 하나 늘어난다.
+  // styles.css = 시안 폰트 3종의 서브셋 @font-face + 본 스타일시트.
+  // 파일을 나눠 <link> 를 여러 개 걸면 렌더 차단 요청이 그만큼 늘어난다.
   // 빌드 때 붙여 하나로 내보낸다. (반복이 많은 텍스트라 압축이 잘 먹는다)
-  const fontCss = await readFile(path.join(ROOT, 'src', 'fonts-pretendard.css'), 'utf8');
+  //
+  // 2026-08-15 — Pretendard·Archivo 를 걷어내고 시안 폰트로 갈았다.
+  //   Noto Sans KR   본문·제목 (가변 wght 100~900)
+  //   JetBrains Mono 수치·라벨
+  // 둘 다 자체 호스팅이다. CDN 링크를 넣지 말 것.
+  //
+  // Noto Serif KR 은 넣지 않는다. 시안이 <link> 로 불러오기만 하고
+  // font-family 선언이 0건이라 실사용이 없었다. 124개 파일 5.96MB 를
+  // 저장소에서 뺐다. 강조에 세리프가 필요해지면 그때 다시 받는다.
+  const FONT_FILES = ['fonts-noto-sans-kr.css', 'fonts-jetbrains-mono.css'];
+  const fontCss = (
+    await Promise.all(FONT_FILES.map((f) => readFile(path.join(ROOT, 'src', f), 'utf8')))
+  ).join('\n');
   const mainCss = await readFile(path.join(ROOT, 'src', 'styles.css'), 'utf8');
   await writeFile(path.join(DIST, 'styles.css'), `${fontCss}\n${mainCss}`, 'utf8');
   console.log(

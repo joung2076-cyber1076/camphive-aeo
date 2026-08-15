@@ -71,11 +71,13 @@ function header(page, ctx) {
     })
     .join('\n        ');
 
-  // 텍스트 로고. SVG 로고가 도착하면 이 span 을 교체한다(흰색 단색).
+  // 심볼 + 텍스트. 심볼이 안 떠도 상호는 글자로 남아야 하므로
+  // 로고를 글자 대체물로 쓰지 않는다.
   // "Korea's Number One" 류의 자칭 수식어는 넣지 않는다.
   return `<header class="site-header">
   <div class="wrap">
     <a class="brand" href="${esc(pathFor(''))}">
+      <img class="brand-mark" src="${assetPath('img/logo-mark.png')}" alt="캠핑하이브 심볼" width="32" height="32" decoding="async">
       <span class="brand-name">CAMPINGHIVE</span>
       <span class="brand-sub">Since 2014 · 전국 280곳</span>
     </a>
@@ -102,6 +104,22 @@ function footer(ctx, page) {
     { label: '캠핑하이브 회사소개서', slug: 'intro/company', status: 'PDF 준비 중' },
     { label: '캠핑장 컨설팅 안내', slug: 'intro/consulting', status: 'PDF 준비 중' },
     { label: '캠핑장 AI 마케팅 소개서', slug: 'intro/ai-marketing', status: 'PDF 준비 중' },
+  ];
+
+  // 하위 페이지 9개 — 푸터에서 전 페이지로 닿게 한다 (2026-08-15 확정).
+  //
+  // slug 만 적는다. 주소를 문자열로 박으면 하위 경로 배포(/camphive-aeo/)
+  // 에서 루트로 나가 404 가 된다. pathFor() 가 basePath 를 붙인다.
+  const siteLinks = [
+    { slug: 'service', label: 'AI 검색 노출 방법' },
+    { slug: 'measurement', label: '효과 측정' },
+    { slug: 'diagnosis', label: '무료 진단' },
+    { slug: 'faq', label: '자주 묻는 질문' },
+    { slug: 'faq/why-not-in-chatgpt', label: '챗GPT에 안 나오는 이유' },
+    { slug: 'faq/naver-blog-still-works', label: '네이버 블로그 효과' },
+    { slug: 'faq/ad-budget', label: '홍보비 배분' },
+    { slug: 'about', label: '회사 소개' },
+    { slug: 'privacy', label: '개인정보처리방침' },
   ];
 
   // 내려받기 아이콘 — 인라인 SVG. 이미지 파일·아이콘 폰트·CDN 없음.
@@ -138,14 +156,18 @@ function footer(ctx, page) {
       <!-- 브랜드 표기는 하나로 유지한다. 서브 브랜드를 나란히 놓으면
            AI가 "브랜드가 여러 개인 회사"로 읽어 관문③(식별)에서 손해다.
            "캠핑하이브 AEO"는 정본 문장 안에 이미 들어 있다. -->
-      <p class="footer-logo">CAMPINGHIVE</p>
+      <p class="footer-logo">
+        <img class="footer-mark" src="${assetPath('img/logo-mark.png')}" alt="캠핑하이브 심볼" width="28" height="28" decoding="async" loading="lazy">
+        CAMPINGHIVE
+      </p>
       <h2 class="footer-title">${esc(site.legalName)}</h2>
 
-      <!-- 정본 문장: 전 페이지 글자 단위 동일. 절대 수정 금지.
-           앞뒤에 어떤 글자도 붙이지 않는다 — 이미 완결된 한 문장이고,
+      <!-- 정본 문장은 2026-08-15 부터 화면에 노출하지 않는다.
            JSON-LD 4곳(Organization/LocalBusiness/WebSite/Service)의
-           description 과 글자 단위로 같아야 한다. -->
-      <p class="canonical-sentence">${esc(CANONICAL_SENTENCE)}</p>
+           description 에만 남긴다. 그 4곳은 글자 단위로 같아야 하고
+           verify.mjs 가 매 빌드마다 검사한다.
+           화면에 다시 꺼내지 말 것 — 푸터에서 같은 문장이 전 페이지
+           반복되면 본문 대비 상투구 비중만 올라간다. -->
 
       <table class="company-facts">
         <caption>회사 개요</caption>
@@ -180,6 +202,15 @@ function footer(ctx, page) {
           .join('\n        ')}
       </nav>
     </div>
+  </div>
+
+  <div class="wrap footer-nav-wrap">
+    <h2 class="footer-nav-title">사이트 전체 보기</h2>
+    <nav class="footer-sitemap" aria-label="사이트 전체">
+      ${siteLinks
+        .map((l) => `<a href="${esc(pathFor(l.slug))}">${esc(l.label)}</a>`)
+        .join('\n      ')}
+    </nav>
   </div>
 
   <div class="wrap footer-bottom">

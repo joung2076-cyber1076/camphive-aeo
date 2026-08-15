@@ -300,11 +300,9 @@ async function main() {
       const nodeDesc = (type) =>
         graph.find((n) => [].concat(n['@type']).includes(type))?.description;
 
+      //  2026-08-15 — 푸터 화면 노출을 없앴으므로 검사 대상은 JSON-LD 4곳이다.
+      //  화면에서 뺀 것이지 문장을 버린 것이 아니다. 아래 4곳은 그대로 검사한다.
       const spots = [
-        ['푸터 .canonical-sentence', (() => {
-          const m = raw.match(/<p class="canonical-sentence">([\s\S]*?)<\/p>/);
-          return m ? unescapeHtml(m[1]).trim() : undefined;
-        })()],
         ['Organization.description', nodeDesc('Organization')],
         ['LocalBusiness.description', nodeDesc('LocalBusiness')],
         ['WebSite.description', nodeDesc('WebSite')],
@@ -358,13 +356,33 @@ async function main() {
         (page.faq ?? []).forEach((f, i) => questions.push([`FAQ ${i + 1}`, f.q]));
       }
 
-      const polite = questions.filter(([, q]) => POLITE_ENDING.test(q));
-      check(
-        polite.length === 0,
-        `질문 ${questions.length}개 문체 — 질문은 반말이다(2026-08-14 확정)`,
-        polite.length ? '' : '존댓말 어미 0건'
-      );
-      for (const [where, q] of polite.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
+      // ── 반말 어미 검사 — 타깃 질의에만 적용한다 (2026-08-15 확정) ──
+      //
+      //  질의 3원칙은 원래 "손님이 AI 검색창에 실제로 치는 문장"을 잡기
+      //  위한 규칙이다. 손님은 검색창에 "캠핑장 AEO 뭐야?" 라고 반말로
+      //  친다. 그래서 하위 페이지의 H1·타깃 질의는 반말이어야 한다.
+      //
+      //  홈 FAQ 는 성격이 다르다. 손님이 검색창에 치는 문장이 아니라
+      //  우리가 손님에게 답하는 목록이고, 시안이 확정한 존댓말 카피다.
+      //  여기에 반말을 강제하면 시안 카피를 뜯어고쳐야 한다.
+      //
+      //  ⚠ 검사를 끈 것이 아니라 대상을 나눈 것이다. 업종어 검사는
+      //    홈 FAQ 에도 그대로 적용된다(아래). 약어 금지도 전체 유지다.
+      //    되돌리지 말 것.
+      const isLanding = page.type === 'landing';
+      if (!isLanding) {
+        const polite = questions.filter(([, q]) => POLITE_ENDING.test(q));
+        check(
+          polite.length === 0,
+          `질문 ${questions.length}개 문체 — 타깃 질의는 반말이다(2026-08-14 확정)`,
+          polite.length ? '' : '존댓말 어미 0건'
+        );
+        for (const [where, q] of polite.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
+      } else {
+        console.log(
+          `  ${C.dim('건너뜀')}  반말 어미 검사 — 홈 FAQ 는 대상이 아니다(시안 확정 존댓말 카피)`
+        );
+      }
 
       const noWord = questions.filter(([, q]) => {
         if (INDUSTRY_WORD.test(q)) return false;

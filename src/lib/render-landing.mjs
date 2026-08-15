@@ -184,6 +184,76 @@ function marquee(text) {
 </div>`;
 }
 
+/* ── 04 ai-feed — AI 답변 피드 상승 ──────────────────────────
+   시안 S00d. 우측 피드는 같은 묶음을 두 벌 이어 붙여 34초 루프를 만든다.
+   두 번째 벌은 눈속임이라 aria-hidden 이다. */
+function aiFeed(s) {
+  const turn = (t, dup) => `<div class="feed-q"><span>${esc(t.q)}</span></div>
+        <div class="feed-a">
+          <div class="feed-engine feed-${t.tone}"><span aria-hidden="true">${esc(t.glyph)}</span>${esc(t.engine)}</div>
+          <p>${esc(t.a)}</p>
+        </div>`;
+
+  const set = (dup) =>
+    s.turns.map((t) => turn(t, dup)).join('\n        ');
+
+  return `<section class="ai-feed" id="ai-feed">
+  <div class="wrap ai-feed-grid">
+    <div class="ai-feed-copy">
+      <h2 ${rv(0)}>${esc(s.h2[0])}<br><span class="hl">${esc(s.h2[1])}</span><br>${esc(s.h2[2])}</h2>
+      <p ${rv(1, 'ai-feed-lead')}>${esc(s.lead[0])}<br>${esc(s.lead[1])}</p>
+      <p ${rv(2, 'ai-feed-punch')}>${esc(s.punch)}</p>
+    </div>
+
+    <div ${rv(1, 'feed-card')}>
+      <div class="feed-window">
+        <div class="feed-track">
+        ${set(false)}
+        <div class="feed-dup" aria-hidden="true">
+        ${set(true)}
+        </div>
+        </div>
+      </div>
+      <p class="feed-foot">${esc(s.foot)}</p>
+    </div>
+  </div>
+</section>`;
+}
+
+/* 4단계 아이콘 — 시안의 SVG 를 그대로 옮겼다. 장식이므로 aria-hidden. */
+const STEP_ICON = {
+  target: '<circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path>',
+  bot: '<rect x="4" y="8" width="16" height="12" rx="3"></rect><path d="M12 4v4M8 14h.01M16 14h.01M9 17h6"></path>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L21 21M8 10.5h5M10.5 8v5"></path>',
+  rocket: '<path d="M12 3l7 18-7-4-7 4 7-18z"></path>',
+};
+
+/* ── 12 process — 분석 과정 4단계 ────────────────────────────── */
+function process(s) {
+  const cards = s.steps
+    .map(
+      (st, i) =>
+        `<div ${rv(i, `step-card${st.accent ? ' is-accent' : ''}`)}>
+          <div class="step-num">${esc(st.n)}</div>
+          <span class="step-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">${STEP_ICON[st.icon]}</svg></span>
+          <h3>${esc(st.title)} <span class="step-en">${esc(st.en)}</span></h3>
+          <p>${esc(st.body)}</p>
+        </div>`
+    )
+    .join('\n        <div class="step-arrow" aria-hidden="true">›</div>\n        ');
+
+  return `<section class="section process" id="process">
+  <div class="wrap">
+    <h2 class="process-h2">${esc(s.h2[0])}<br><span class="hl">${esc(s.h2[1])}</span></h2>
+    <p class="process-lead">${esc(s.lead)}</p>
+    <div class="step-row">
+        ${cards}
+    </div>
+    <p class="process-foot">${esc(s.foot)}</p>
+  </div>
+</section>`;
+}
+
 /* ── 앵커 목차 ─────────────────────────────────────────────── */
 function anchorNav(items) {
   return `<nav class="anchor-nav" aria-label="페이지 안내">
@@ -654,30 +724,34 @@ function answerBlock(page) {
 
 /* ── 조립 ──────────────────────────────────────────────────── */
 export function renderLanding(page, ctx) {
+  // 순서는 v11 지시문 1번 표를 따른다. id 는 시안의 실제 id 다.
+  //
+  // 폐기(2026-08-15 사장님 승인) — 되살리지 말 것:
+  //   · s10 「우리가 우리에게 먼저 적용했습니다」  = Before·After 섹션
+  //   · s13 「어느 업체를 만나든 이 6가지를 물어보세요」 — 시안에 없다
+  //   · s135 「캠핑장 운영 질문 120개」          = Q&A 허브 4카드
   return [
-    cover(L.cover),
-    hero(L.hero),
+    cover(L.cover),        // 02
+    hero(L.hero),          // 03
     marquee(L.marquee),
+    aiFeed(L.aiFeed),      // 04
     anchorNav(L.anchors),
     answerBlock(page),
-    s02(L.s02),
-    s03(L.s03),
-    s04(L.s04),
-    s05(L.s05),
+    s02(L.s02),            // 05 problem
+    s03(L.s03),            // 06 data
+    s04(L.s04),            // 07 gap
+    s05(L.s05),            // 08 concept
     ctaBand(L.cta1),
-    s06(L.s06, L.form),
-    s07(L.s07),
-    s08(L.s08),
-    s09(L.s09),
+    s06(L.s06, L.form),    // 10 demo
+    s07(L.s07),            // 11 report-preview
+    process(L.process),    // 12 process
+    s08(L.s08),            // 13 framework — CAMP-AI 5단계
+    s09(L.s09),            // 14 deliverable
     ctaBand(L.cta2),
-    s10(L.s10),
-    s11(L.s11),
-    s12(L.s12),
-    s13(L.s13),
-    ctaBand(L.cta3),
-    s135(L.s135),
-    s14(L.s14),
-    s15(L.s15, L.form),
+    s11(L.s11),            // 15 why
+    s12(L.s12),            // 16 plan
+    s14(L.s14),            // 17 faq
+    s15(L.s15, L.form),    // 18 cta
   ].join('\n\n');
 }
 
