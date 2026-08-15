@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 // ─────────────────────────────────────────────────────────────
 //  빌드 스크립트 — 의존성 0개
 //
@@ -22,6 +22,7 @@ import { renderDocument } from './src/lib/layout.mjs';
 import { renderArticle } from './src/lib/render-article.mjs';
 import { renderHome } from './src/lib/render-home.mjs';
 import { renderLanding, LANDING } from './src/lib/render-landing.mjs';
+import { loadDesign } from './src/lib/render-dc.mjs';
 import { renderDiagnosis } from './src/lib/render-diagnosis.mjs';
 import { validatePage } from './src/lib/validate.mjs';
 import { urlFor } from './src/lib/html.mjs';
@@ -157,6 +158,10 @@ async function main() {
     nav: pages.filter((p) => p.nav).sort((a, b) => (a.navOrder ?? 99) - (b.navOrder ?? 99)),
   };
 
+  // 홈은 시안(src/design/home.dc.html)을 그대로 쓴다. 우리가 다시
+  // 그리지 않는다. 디자인을 고칠 일이 있으면 그 파일을 고친다.
+  const design = await loadDesign();
+
   const written = [];
   for (const page of pages) {
     // 랜딩의 FAQ 16문항은 카피 데이터에 있다. FAQPage 스키마가 그것을 쓴다.
@@ -164,11 +169,11 @@ async function main() {
 
     const graph = buildGraph(page, ctx);
     const main =
-      page.type === 'landing' ? renderLanding(page, ctx)
+      page.type === 'landing' ? ''   // 시안 마크업이 대신한다
       : page.type === 'diagnosis' ? renderDiagnosis(page, ctx)
       : page.type === 'home' ? renderHome(page, ctx)
       : renderArticle(page, ctx);
-    const html = renderDocument(page, ctx, graph, main);
+    const html = renderDocument(page, ctx, graph, main, design);
 
     const out = outputPathFor(page.slug);
     await mkdir(path.dirname(out), { recursive: true });

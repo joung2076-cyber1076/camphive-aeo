@@ -223,11 +223,18 @@ function footer(ctx, page) {
 </footer>`;
 }
 
-/** 페이지 한 장의 완성된 HTML 문서를 만든다. */
-export function renderDocument(page, ctx, graph, main) {
+/**
+ * 페이지 한 장의 완성된 HTML 문서를 만든다.
+ *
+ * 홈(랜딩)은 시안 마크업을 그대로 쓴다. 헤더도 본문도 시안 것이므로
+ * 우리 header() 를 끼우지 않는다. design 인자가 오면 그것이 정본이다.
+ * 하위 15개 페이지는 지금까지대로 우리 셸을 쓴다.
+ */
+export function renderDocument(page, ctx, graph, main, design = null) {
   // 랜딩은 섹션마다 배경이 바뀌므로 .wrap 을 각 섹션이 직접 갖는다.
   // 문서형 페이지는 지금까지대로 main 이 폭을 잡는다.
   const isLanding = page.type === 'landing';
+  const useDesign = isLanding && design;
 
   return `<!doctype html>
 <html lang="${esc(ctx.site.lang)}">
@@ -236,10 +243,14 @@ ${head(page, ctx, graph)}
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
-${header(page, ctx)}
-<main id="main"${isLanding ? '' : ' class="wrap"'}>
+${useDesign ? design.header : header(page, ctx)}
+${
+  useDesign
+    ? design.main
+    : `<main id="main"${isLanding ? '' : ' class="wrap"'}>
 ${main}
-</main>
+</main>`
+}
 ${isLanding ? floatingButtons(LANDING.floating) : ''}
 ${footer(ctx, page)}
 <script src="${assetPath('js/enhance.js')}" defer></script>

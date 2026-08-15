@@ -103,6 +103,14 @@ function expectedStrings(page) {
     if (text && String(text).trim()) out.push({ label, text: String(text).trim() });
   };
 
+  // 홈(랜딩)은 2026-08-15 부터 시안(src/design/home.dc.html)을 그대로
+  // 출력한다. 카피의 정본이 home.data.mjs 가 아니라 시안 파일이므로,
+  // 아래 대조 대상에서 홈을 뺀다. 홈 본문이 정적으로 존재하는지는
+  // 이 함수가 아니라 5) 본문 분량 검사와 2-1) JS 제거 후 재대조가 본다.
+  //
+  // ⚠ 하위 15개 페이지는 그대로 전수 대조한다. 홈만 예외다.
+  if (page.type === 'landing') return out;
+
   add('H1 질의문', page.question ?? page.title);
   add('답변 블록', page.answer);
 

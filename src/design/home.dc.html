@@ -1,0 +1,1124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="description" content="캠핑하이브 — 캠핑장 AI 답변 최적화(AEO·GEO). ChatGPT·Claude·Gemini 3사 기준 무료 진단.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&amp;family=Noto+Serif+KR:wght@700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #0B0E13; color: #E7EBF2; font-family: 'Noto Sans KR', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #E7EBF2; text-decoration: none; }
+  a:hover { color: #60A5FA; text-decoration: underline; }
+  @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+  @keyframes pulseDot { 0%, 100% { opacity: 1 } 50% { opacity: 0.25 } }
+  @keyframes feedUp { from { transform: translateY(0) } to { transform: translateY(-50%) } }
+  @keyframes heroDrift { 0% { transform: scale(1.04) translate3d(0,0,0) } 50% { transform: scale(1.09) translate3d(-1%,-0.8%,0) } 100% { transform: scale(1.04) translate3d(0,0,0) } }
+  @keyframes heroDrift2 { 0% { transform: scale(1.09) translate3d(0.8%,0.6%,0) } 50% { transform: scale(1.04) translate3d(-0.5%,0,0) } 100% { transform: scale(1.09) translate3d(0.8%,0.6%,0) } }
+  @keyframes coverFade { 0% { opacity: 0 } 5% { opacity: 1 } 28% { opacity: 1 } 36% { opacity: 0 } 100% { opacity: 0 } }
+  @keyframes heroGlow { 0%, 100% { opacity: 0.30 } 50% { opacity: 0.85 } }
+  @keyframes sweepX { 0% { transform: translateX(-130%) skewX(-14deg); opacity: 0 } 18% { opacity: 0.45 } 82% { opacity: 0.45 } 100% { transform: translateX(130%) skewX(-14deg); opacity: 0 } }
+  @keyframes barSweep { 0% { transform: scaleX(0) } 24% { transform: scaleX(1) } 90% { transform: scaleX(1) } 100% { transform: scaleX(0) } }
+  @keyframes numFlash { 0%, 14% { opacity: 0 } 19% { opacity: 1 } 23% { opacity: 0.3 } 27% { opacity: 1 } 31% { opacity: 0.5 } 35%, 90% { opacity: 1 } 100% { opacity: 0 } }
+  @keyframes lineSlide { 0% { opacity: 0; transform: translateX(70px) } 16% { opacity: 1; transform: translateX(0) } 84% { opacity: 1; transform: translateX(0) } 97% { opacity: 0; transform: translateX(-70px) } 100% { opacity: 0; transform: translateX(70px) } }
+  @keyframes trackScan { 0% { transform: translateX(-100%) } 60%, 100% { transform: translateX(320%) } }
+  @keyframes dotBlink { 0%, 100% { opacity: 1 } 45% { opacity: 0.25 } }
+  @keyframes barGlow { 0%, 100% { box-shadow: 0 0 0 rgba(59,130,246,0) } 30% { box-shadow: 0 0 22px rgba(59,130,246,0.75) } }
+  @keyframes coverFlash { 0% { opacity: 0; transform: scale(1.06); filter: blur(7px) } 3% { opacity: 1; transform: scale(1); filter: blur(0) } 5% { opacity: 0.35 } 7% { opacity: 1 } 9% { opacity: 0.6 } 11% { opacity: 1 } 28% { opacity: 1 } 34% { opacity: 0; transform: scale(0.99) } 100% { opacity: 0 } }
+  @keyframes vignettePulse { 0%, 100% { box-shadow: inset 0 0 140px 40px rgba(8,9,12,0.85) } 50% { box-shadow: inset 0 0 200px 70px rgba(8,9,12,0.92) } }
+  @keyframes scanLine { 0% { top: -2px } 100% { top: 100% } }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
+  summary::-webkit-details-marker { display: none; }
+  @keyframes blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+  @media (max-width: 1000px) { main h2 { white-space: normal !important; text-wrap: balance; } }
+  @media (max-width: 1080px) { header nav { gap: 16px !important; } header nav a { font-size: 14px !important; } }
+  @media (max-width: 720px) { header nav a:not([data-ga]) { display: none; } }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Organization","name":"캠핑하이브","alternateName":"CampingHive","description":"캠핑장 대상 AI 답변 최적화(AEO·GEO) 서비스 및 글램핑 시공·컨설팅","parentOrganization":{"@type":"Organization","name":"캠프네트웍스"}},
+{"@type":"Service","name":"캠핑장 AI 답변 최적화 (AEO·GEO)","serviceType":"Answer Engine Optimization","provider":{"@type":"Organization","name":"캠핑하이브"},"areaServed":"KR","audience":{"@type":"Audience","audienceType":"캠핑장 운영자"},"description":"ChatGPT·Claude·Gemini 3사 답변 내 캠핑장 언급률을 측정하고, 구조화 데이터와 인용 콘텐츠를 통해 AI가 읽을 수 있는 자산을 구축합니다."},
+{"@type":"HowTo","name":"CAMP-AI 5단계","step":[
+{"@type":"HowToStep","name":"Question Capture","text":"캠핑객이 AI에 실제로 던지는 질문을 수집·분류합니다."},
+{"@type":"HowToStep","name":"AI Audit","text":"ChatGPT·Claude·Gemini 3사를 대상으로 언급률과 경쟁 대비 점유율을 측정합니다."},
+{"@type":"HowToStep","name":"Markup & Structure","text":"Schema.org / JSON-LD 적용, FAQ·시설정보·요금·이용규정을 구조화하고 llms.txt를 설치합니다."},
+{"@type":"HowToStep","name":"Proof Seeding","text":"외부 매체·커뮤니티·지도 리뷰의 브랜드 언급을 확보합니다."},
+{"@type":"HowToStep","name":"Analytics Loop","text":"월 1회 재측정 후 미노출 질문을 도출하고 콘텐츠를 보강합니다."}]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"AEO·GEO가 정확히 뭔가요?","acceptedAnswer":{"@type":"Answer","text":"AI가 답변을 만들 때 우리 캠핑장이 인용·추천되도록 정보를 정리하는 작업입니다. 검색 순위를 올리는 SEO와 달리, ChatGPT·Claude 같은 AI의 답변 안에 들어가는 것이 목표입니다."}},
+{"@type":"Question","name":"네이버 블로그 마케팅만 계속하면 안 되나요?","acceptedAnswer":{"@type":"Answer","text":"부족합니다. 네이버 블로그·카페는 robots.txt에서 AI 봇을 이름 단위로 차단하고 있습니다 (2026-08-14 원문 확인). 블로그에만 투자하면 AI로 캠핑장을 찾는 손님을 놓칠 수 있습니다."}},
+{"@type":"Question","name":"효과는 언제부터 나타나나요?","acceptedAnswer":{"@type":"Answer","text":"일반적으로 2~8주 내 첫 인용이 관측되고, 2~3개월에 걸쳐 누적됩니다. 다만 보장된 결과가 아니라 사례 기반 일반치이며, 온라인 정보량이 적은 신규 사업장은 더 오래 걸립니다."}},
+{"@type":"Question","name":"홈페이지가 없어도 되나요?","acceptedAnswer":{"@type":"Answer","text":"자사 홈페이지가 없으면 AI가 참조할 근거 자체가 없어 효과가 제한적입니다. 홈페이지가 없는 경우 구축을 먼저 권해드리며, 캠핑하이브에서 함께 진행할 수 있습니다."}},
+{"@type":"Question","name":"캠핑장을 예약 플랫폼에만 올려도 되지 않나요?","acceptedAnswer":{"@type":"Answer","text":"예약 플랫폼을 통한 예약은 수수료가 발생합니다. AI 답변에서 직접 유입되는 손님은 자사 예약 경로로 들어오기 때문에 수수료 구조가 다릅니다."}},
+{"@type":"Question","name":"성과를 보장해주시나요?","acceptedAnswer":{"@type":"Answer","text":"보장하지 않습니다. AI 답변은 각 모델의 정책·알고리즘 변경에 영향을 받습니다. 대신 측정 방법을 공개하고 월 단위로 실측치를 제공합니다."}},
+{"@type":"Question","name":"작은 캠핑장도 효과가 있나요?","acceptedAnswer":{"@type":"Answer","text":"있습니다. 오히려 대형 사업장보다 AI 노출 경쟁이 덜한 지역·조건 질문(반려동물 동반, 계곡, 노지 감성 등)에서 선점 여지가 큽니다."}},
+{"@type":"Question","name":"콘텐츠는 AI로 자동 생성하나요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 자동 생성 콘텐츠는 정보 정밀도가 낮아 AI 인용 기준을 충족하기 어렵습니다. 사업장 인터뷰와 현장 확인을 바탕으로 직접 작성합니다."}},
+{"@type":"Question","name":"기존에 쓰던 마케팅은 끊어야 하나요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 기존 채널은 그대로 두고 AI가 읽을 수 있는 자산을 추가하는 작업입니다. 기존 SEO 기반이 좋을수록 효과가 커집니다."}},
+{"@type":"Question","name":"어떤 AI를 대상으로 측정하나요?","acceptedAnswer":{"@type":"Answer","text":"ChatGPT · Claude · Gemini 3사를 대상으로 측정합니다. 측정에 사용한 질문 원문과 측정 일시를 진단서에 함께 기재합니다. 측정하지 않는 엔진은 측정한다고 적지 않습니다."}},
+{"@type":"Question","name":"비용은 얼마인가요?","acceptedAnswer":{"@type":"Answer","text":"운영 모델과 사이트 규모에 따라 달라집니다. 무료 진단 후 사업장 조건에 맞춘 견적을 드립니다."}},
+{"@type":"Question","name":"캠핑하이브에서 시설 시공도 받았는데 연계되나요?","acceptedAnswer":{"@type":"Answer","text":"네. 시공 고객에게는 개장 전 사전 최적화 프로그램과 별도 조건을 적용합니다."}},
+{"@type":"Question","name":"무료 진단은 정말 무료인가요?","acceptedAnswer":{"@type":"Answer","text":"네. 카드 등록도, 상담 예약도 필요 없습니다. 상호·홈페이지 주소·이메일 세 가지만 넣으시면 약 15초 뒤 결과가 화면에 나옵니다. 진단서만 받고 끝내셔도 됩니다."}},
+{"@type":"Question","name":"진단 결과는 얼마나 정확한가요?","acceptedAnswer":{"@type":"Answer","text":"AI에게 실제로 물어본 답변을 그대로 보여드립니다. 다만 AI는 같은 질문에도 매번 조금씩 다르게 답하므로, 진단서에 측정 일시와 질문 원문을 함께 표시합니다. 저희가 확인한 사실과 추정한 내용도 구분해 표기합니다."}},
+{"@type":"Question","name":"진단을 여러 번 받을 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"무료 진단은 이메일 기준 1회입니다. 받으신 진단서는 기록 번호로 언제든 다시 여실 수 있습니다. 정기 재측정은 유료 프로그램에 포함됩니다."}}]}
+]}
+</script>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#1C1C1A"/><path d="M100 60L136 140H64L100 60Z" fill="#3B82F6"/><rect x="60" y="148" width="80" height="7" rx="3" fill="#FAFAF7"/></svg></template>
+
+<header style="position:sticky;top:0;z-index:50;background:rgba(11,14,19,0.82);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.09)">
+  <div style="max-width:1200px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+    <a href="#hero" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <img src="assets/logo-mark.png" alt="캠핑하이브 심볼" style="height:34px;width:auto;display:block" />
+      <span style="width:1px;height:22px;background:rgba(255,255,255,0.24);display:block"></span>
+      <span style="display:flex;align-items:baseline;gap:1px;font-size:24px;font-weight:900;letter-spacing:-0.03em;line-height:1">
+        <span style="color:#FFFFFF">CAMPI</span><span style="color:#3B82F6">GHIVE</span>
+      </span>
+    </a>
+    <nav style="display:flex;align-items:center;gap:26px;flex:1 1 auto;justify-content:flex-end;min-width:0;overflow-x:auto">
+      <a href="#service" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">서비스 소개</a>
+      <a href="#data" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">실측 데이터</a>
+      <a href="#process" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">분석 과정</a>
+      <a href="#faq" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">FAQ</a>
+      <a href="#demo" data-ga="diag_hero" style="display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap;min-height:46px;padding:12px 22px;background:#3B82F6;color:#FFFFFF;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06)" style-hover="background:#2563EB">우리 캠핑장 AI검색 노출도 진단하기 <span style="font-family: &quot;JetBrains Mono&quot;, monospace;">▸</span></a>
+    </nav>
+  </div>
+</header>
+
+<main style="display:block">
+
+
+
+<section id="cover" data-screen-label="S00 커버" style="position:relative;height:96vh;min-height:760px;overflow:hidden;background:#08090C;border-bottom:1px solid rgba(255,255,255,0.09)">
+  <img src="assets/hero-ai.png" alt="AI가 키보드로 질문을 입력하는 장면" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 900ms ease-in-out;animation-name:heroDrift;animation-duration:48s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity;opacity:{{ img0 }}" />
+  <img src="assets/hero-ai-2.png" alt="AI가 최적의 답변을 탐색하는 장면" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 900ms ease-in-out;animation-name:heroDrift2;animation-duration:54s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity;opacity:{{ img1 }}" />
+  <img src="assets/hero-ai-3.png" alt="AI가 검색 버튼을 누르는 장면" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 900ms ease-in-out;animation-name:heroDrift;animation-duration:60s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity;opacity:{{ img2 }}" />
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,9,12,0.30) 0%,rgba(8,9,12,0.05) 45%,rgba(8,9,12,0.85) 100%)"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 45%,rgba(59,130,246,0.18),transparent 72%);animation:heroGlow 16s ease-in-out infinite"></div>
+  <div style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding:32px 32px 88px">
+    <div style="position:relative;width:100%;max-width:1000px;height:210px">
+      <p style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin:0;text-align:center;font-size:clamp(28px,4.4vw,58px);line-height:1.3;font-weight:900;letter-spacing:-0.03em;color:#FFFFFF;text-shadow:0 4px 30px rgba(0,0,0,0.85),0 0 40px rgba(59,130,246,0.35);transition:opacity 900ms ease,transform 900ms ease;opacity:{{ coverOpacity }};transform:{{ coverShift }}"><span>{{ coverLine1 }}</span><span>{{ coverLine2 }}</span></p>
+    </div>
+  </div>
+  <div style="position:absolute;top:0;bottom:0;left:0;width:34%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.22),transparent);animation:sweepX 34s ease-in-out infinite;will-change:transform"></div>
+  <div style="position:absolute;top:0;bottom:0;left:0;width:20%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent);animation:sweepX 34s ease-in-out 17s infinite;will-change:transform"></div>
+  <div style="position:absolute;inset:0;animation:vignettePulse 24s ease-in-out infinite"></div>
+
+  <div style="position:absolute;left:0;right:0;top:-2px;height:2px;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.55),transparent);animation:scanLine 26s linear infinite"></div>
+</section>
+
+<section id="top" data-screen-label="S00b 오프닝" style="position:relative;padding:120px 32px 128px;background:#08090C;border-bottom:1px solid rgba(255,255,255,0.09);overflow:hidden">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:64px 64px"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 42%,rgba(59,130,246,0.16),transparent 70%)"></div>
+  <div style="position:relative;max-width:900px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center">
+    <h2 style="margin:0 0 14px;font-size:clamp(28px,4.4vw,54px);line-height:1.28;font-weight:900;letter-spacing:-0.03em;color:#FFFFFF;text-shadow:0 2px 24px rgba(0,0,0,0.75);animation:riseIn 700ms cubic-bezier(0,0,0.2,1) both">손님은 더 이상 검색하지 않습니다.</h2>
+    <p style="margin:0 0 44px;font-size:clamp(20px,2.9vw,34px);line-height:1.4;font-weight:700;letter-spacing:-0.02em;color:#B6C2D2;text-shadow:0 2px 20px rgba(0,0,0,0.7);animation:riseIn 700ms cubic-bezier(0,0,0.2,1) 140ms both">AI에게 묻고 그 답변을 신뢰합니다.</p>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;min-height:44px">
+      <span style="font-size:clamp(24px,3.2vw,36px);line-height:1;color:{{ engineColor }}">{{ engineGlyph }}</span>
+      <span style="font-size:clamp(22px,3vw,34px);font-weight:900;letter-spacing:-0.02em;color:{{ engineColor }}">{{ engineName }}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;width:100%;max-width:560px;min-height:60px;padding:16px 22px;margin-bottom:28px;background:#12161D;border:1px solid rgba(255,255,255,0.12);border-radius:100px;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7C8697" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+      <span style="font-size:17px;line-height:1.5;color:#E7EBF2;text-align:left">{{ typedQ }}<span style="display:inline-block;width:2px;height:17px;background:#60A5FA;margin-left:3px;vertical-align:-3px;animation:blink 1s step-end infinite"></span></span>
+    </div>
+    <p style="margin:0 0 36px;font-size:17px;line-height:1.85;color:#8C96A6;max-width:620px">ChatGPT · Claude · Gemini에서 캠핑장을 찾는 손님에게<br />우리 캠핑장이 노출될 수 있도록 캠핑하이브가 함께하겠습니다.</p>
+    <a href="#demo" data-ga="diag_top" style="display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:16px 32px;background:#3B82F6;color:#FFFFFF;font-size:18px;font-weight:700;border-radius:100px;box-shadow:0 8px 32px rgba(59,130,246,0.35)" style-hover="background:#2563EB">우리 캠핑장 AI 노출도 진단하기 <span style="font-family:'JetBrains Mono',monospace">→</span></a>
+  </div>
+</section>
+
+<section id="service" data-screen-label="S00c 서비스 소개" style="padding:96px 32px;background:#0B0E13;border-bottom:1px solid rgba(255,255,255,0.09)">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 24px;font-size:clamp(26px,3.4vw,42px);line-height:1.35;font-weight:900;letter-spacing:-0.03em;color:#FFFFFF">우리 캠핑장이<br />AI 답변, AI 추천에서<br /><span style="color:#3B82F6">얼마나 노출되는지 아시나요?</span></h2>
+    <p style="margin:0 0 52px;font-size:17px;line-height:1.85;color:#8C96A6;max-width:none;white-space:nowrap">캠핑하이브는 ChatGPT · Claude · Gemini 3사에 직접 질문하여 캠핑장의 언급률을 산출합니다.<br />실측 데이터를 기반으로 경쟁 전략을 수립하세요.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:start">
+      <div style="display:grid;gap:32px">
+        <div style="display:flex;gap:18px">
+          <span style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M19 5L5 19"></path><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+          </span>
+          <div>
+            <h3 style="margin:0 0 8px;font-size:19px;font-weight:700;color:#FFFFFF">AI 답변 언급률(SoV) 실측</h3>
+            <p style="margin:0;font-size:16px;line-height:1.8;color:#8C96A6">ChatGPT · Claude · Gemini에 캠핑 질문을 반복 질의해 캠핑장별 등장 비율(%)을 직접 측정합니다.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:18px">
+          <span style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>
+          </span>
+          <div>
+            <h3 style="margin:0 0 8px;font-size:19px;font-weight:700;color:#FFFFFF">지역 · 조건별 맞춤형 질문</h3>
+            <p style="margin:0;font-size:16px;line-height:1.8;color:#8C96A6">캠핑장의 입지와 시설 조건(반려동물 동반, 계곡, 글램핑, 시즌)에 따라 질문을 설계하고, 그 질문을 기반으로 데이터를 수집합니다.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:18px">
+          <span style="flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 19V9l5-3 6 3 5-3v10l-5 3-6-3-5 3z"></path><path d="M9 6v10M15 9v10"></path></svg>
+          </span>
+          <div>
+            <h3 style="margin:0 0 8px;font-size:19px;font-weight:700;color:#FFFFFF">노출 격차 역전 로드맵</h3>
+            <p style="margin:0;font-size:16px;line-height:1.8;color:#8C96A6">노출 격차의 원인을 분석하고, 무엇을 어떤 순서로 고쳐야 하는지 구체적인 실행안을 제시합니다.</p>
+          </div>
+        </div>
+        <a href="#demo" data-ga="diag_service" style="display:inline-flex;align-items:center;gap:10px;width:fit-content;min-height:56px;padding:16px 30px;background:#3B82F6;color:#FFFFFF;font-size:18px;font-weight:700;border-radius:100px;box-shadow:0 8px 32px rgba(59,130,246,0.30)" style-hover="background:#2563EB">우리 캠핑장 AI 노출도 진단하기 <span style="font-family:'JetBrains Mono',monospace">→</span></a>
+      </div>
+
+      <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px">
+          <span style="display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:#E7EBF2">
+            <span style="width:9px;height:9px;border-radius:50%;background:#3B82F6;animation:pulseDot 1.6s ease-in-out infinite"></span>AI 언급률 측정 화면
+          </span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.10em;color:#4ADE80;border:1px solid rgba(74,222,128,0.45);border-radius:100px;padding:5px 11px">LIVE</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:0 8px 14px 0;font-size:13px;font-weight:500;color:#7C8697;border-bottom:1px solid rgba(255,255,255,0.09)">AI</th>
+              <th style="text-align:left;padding:0 8px 14px;font-size:13px;font-weight:500;color:#7C8697;border-bottom:1px solid rgba(255,255,255,0.09)">질문 유형</th>
+              <th style="text-align:right;padding:0 8px 14px;font-size:13px;font-weight:500;color:#7C8697;border-bottom:1px solid rgba(255,255,255,0.09)">언급률</th>
+              <th style="text-align:right;padding:0 0 14px 8px;font-size:13px;font-weight:500;color:#7C8697;border-bottom:1px solid rgba(255,255,255,0.09)">격차</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:16px 8px 16px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><span style="display:inline-flex;align-items:center;gap:7px;font-size:15px;font-weight:700;color:#3DD6AC"><span style="font-size:14px">✺</span>ChatGPT</span></td>
+              <td style="padding:16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:15px;color:#C4CCD8">지역 추천</td>
+              <td style="padding:16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#60A5FA">27.4%</td>
+              <td style="padding:16px 0 16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:right;font-family:'JetBrains Mono',monospace;font-size:14px;color:#4ADE80">↑ +3.1</td>
+            </tr>
+            <tr>
+              <td style="padding:16px 8px 16px 0;border-bottom:1px solid rgba(255,255,255,0.06)"><span style="display:inline-flex;align-items:center;gap:7px;font-size:15px;font-weight:700;color:#E89476"><span style="font-size:14px">✳</span>Claude</span></td>
+              <td style="padding:16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);font-size:15px;color:#C4CCD8">반려동물 동반</td>
+              <td style="padding:16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#60A5FA">18.9%</td>
+              <td style="padding:16px 0 16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:right;font-family:'JetBrains Mono',monospace;font-size:14px;color:#4ADE80">↑ +1.4</td>
+            </tr>
+            <tr>
+              <td style="padding:16px 8px 16px 0"><span style="display:inline-flex;align-items:center;gap:7px;font-size:15px;font-weight:700;color:#7BA9F7"><span style="font-size:14px">✦</span>Gemini</span></td>
+              <td style="padding:16px 8px;font-size:15px;color:#C4CCD8">글램핑</td>
+              <td style="padding:16px 8px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#C4CCD8">10.8%</td>
+              <td style="padding:16px 0 16px 8px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:14px;color:#7C8697">— 0</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.09);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="font-size:14px;color:#7C8697">경쟁 대비 종합 언급률 격차</span>
+          <span style="flex:1;min-width:120px;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden"><span style="display:block;width:39%;height:100%;background:#3B82F6"></span></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#60A5FA">우리 19.0% vs 경쟁 A 29.3%</span>
+        </div>
+        <p style="margin:16px 0 0;font-size:13px;line-height:1.7;color:#7C8697">※ 위 수치는 화면 예시입니다. 실제 값은 진단 시점에 측정되며, 측정 질문 원문과 측정 일시를 진단서에 함께 기재합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ai-feed" data-screen-label="S00d AI 추천 흐름" style="padding:96px 32px;background:#08090C;border-bottom:1px solid rgba(255,255,255,0.09)">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 22px;font-size:clamp(26px,3.4vw,42px);line-height:1.35;font-weight:900;letter-spacing:-0.03em;color:#FFFFFF">지금 손님은<br /><span style="color:#3B82F6">AI에게 추천받은</span><br />우리 경쟁 캠핑장을 찾아갑니다.</h2>
+      <p style="margin:0;font-size:17px;line-height:1.85;color:#8C96A6;max-width:520px">포털 광고를 일일이 비교하는 시대는 끝났습니다.<br />손님은 이제 AI가 단 3초 만에 요약해 준 ‘정답 캠핑장’으로 직행합니다.</p>
+      <p style="margin:24px 0 0;font-size:20px;line-height:1.6;font-weight:700;color:#F2C12E;max-width:520px">누구보다 먼저 AI에게 우리 캠핑장을 각인시켜야 합니다.</p>
+    </div>
+
+    <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
+      <div style="height:520px;overflow:hidden;padding:0 26px;-webkit-mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(180deg,transparent,#000 14%,#000 86%,transparent)">
+      <div style="display:flex;flex-direction:column;gap:22px;padding:26px 0;animation:feedUp 34s linear infinite">
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">가평에서 반려동물 동반 캠핑장 알려줘.</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#3DD6AC"><span>✺</span>ChatGPT</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">반려견 동반은 <strong style="color:#FFFFFF">A 캠핑장, B 글램핑, C 오토캠핑장</strong>이 개별 울타리 사이트를 갖추고 있습니다. 중형견 이상이면 사이트 간격도 함께 확인하세요.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">5살 아이랑 갈 만한 글램핑 추천해줘.</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#E89476"><span>✳</span>Claude</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">유아 동반은 침대형 글램핑과 실내 화장실 여부가 중요합니다. <strong style="color:#FFFFFF">D 글램핑, E 캠핑장</strong>이 자주 언급됩니다.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">겨울에도 운영하는 계곡 캠핑장 있어?</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#7BA9F7"><span>✦</span>Gemini</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">동계 운영은 온수·전기 용량이 관건입니다. <strong style="color:#FFFFFF">F 캠핑장, G 오토캠핑장</strong>이 겨울 운영 사례가 많습니다.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">서울 근교 노지 감성 캠핑장 알려줘.</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#3DD6AC"><span>✺</span>ChatGPT</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">노지 감성은 데크 없이 흙·잔디 사이트를 운영하는 <strong style="color:#FFFFFF">H 캠핑장, I 캠핑장</strong>이 자주 추천됩니다.</p>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">가평에서 반려동물 동반 캠핑장 알려줘.</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#3DD6AC"><span>✺</span>ChatGPT</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">반려견 동반은 <strong style="color:#FFFFFF">A 캠핑장, B 글램핑, C 오토캠핑장</strong>이 개별 울타리 사이트를 갖추고 있습니다. 중형견 이상이면 사이트 간격도 함께 확인하세요.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">5살 아이랑 갈 만한 글램핑 추천해줘.</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#E89476"><span>✳</span>Claude</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">유아 동반은 침대형 글램핑과 실내 화장실 여부가 중요합니다. <strong style="color:#FFFFFF">D 글램핑, E 캠핑장</strong>이 자주 언급됩니다.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">겨울에도 운영하는 계곡 캠핑장 있어?</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#7BA9F7"><span>✦</span>Gemini</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">동계 운영은 온수·전기 용량이 관건입니다. <strong style="color:#FFFFFF">F 캠핑장, G 오토캠핑장</strong>이 겨울 운영 사례가 많습니다.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end"><span style="max-width:78%;padding:12px 18px;border-radius:14px 14px 4px 14px;background:#2563EB;font-size:15px;line-height:1.6;color:#FFFFFF">서울 근교 노지 감성 캠핑장 알려줘.</span></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;font-size:14px;font-weight:700;color:#3DD6AC"><span>✺</span>ChatGPT</div>
+          <p style="margin:0;padding:14px 18px;border-radius:4px 14px 14px 14px;background:rgba(255,255,255,0.05);font-size:15px;line-height:1.75;color:#C4CCD8">노지 감성은 데크 없이 흙·잔디 사이트를 운영하는 <strong style="color:#FFFFFF">H 캠핑장, I 캠핑장</strong>이 자주 추천됩니다.</p>
+        </div>
+      </div>
+      </div>
+      <p style="margin:0;padding:16px 26px 20px;border-top:1px solid rgba(255,255,255,0.09);font-size:13px;line-height:1.6;color:#8C96A6;text-align:center">화면 예시 · 경쟁 캠핑장 상호는 익명 처리</p>
+    </div>
+  </div>
+</section>
+
+<section id="process" data-screen-label="S00e 분석 과정" style="padding:96px 32px;background:#0B0E13;border-bottom:1px solid rgba(255,255,255,0.09)">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 20px;font-size:clamp(26px,3.4vw,42px);line-height:1.35;font-weight:900;letter-spacing:-0.03em;color:#FFFFFF;text-align:center">우연한 추천은 없습니다.<br /><span style="color:#3B82F6">AI가 우리 캠핑장을 선택하는 공식이 있습니다.</span></h2>
+    <p style="margin:0 auto 56px;max-width:none;font-size:17px;line-height:1.85;color:#8C96A6;text-align:center;white-space:nowrap">캠핑하이브는 정밀한 데이터 진단부터 AEO · GEO 플랜 실행까지, 계산된 4단계로 AI 답변 안의 자리를 만들어 갑니다.</p>
+
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:14px;align-items:stretch">
+      <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:30px 24px;text-align:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:0.12em;color:#3B82F6;margin-bottom:20px">I</div>
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;margin-bottom:22px;border-radius:12px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+        </span>
+        <h3 style="margin:0 0 14px;font-size:18px;font-weight:700;color:#FFFFFF">맞춤형 질문 설계 <span style="font-size:14px;font-weight:500;color:#60A5FA">(Targeting)</span></h3>
+        <p style="margin:0;font-size:15px;line-height:1.8;color:#8C96A6">캠핑장의 입지와 시설 조건(지역·반려동물·글램핑·시즌)에 맞춰 손님이 실제로 AI에 던지는 검색 문장을 정밀하게 세팅합니다.</p>
+      </div>
+      <div style="display:flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:20px;color:#3B4655">›</div>
+
+      <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:30px 24px;text-align:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:0.12em;color:#3B82F6;margin-bottom:20px">II</div>
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;margin-bottom:22px;border-radius:12px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"></rect><path d="M12 4v4M8 14h.01M16 14h.01M9 17h6"></path></svg>
+        </span>
+        <h3 style="margin:0 0 14px;font-size:18px;font-weight:700;color:#FFFFFF">AI 노출률 정밀 진단 <span style="font-size:14px;font-weight:500;color:#60A5FA">(Auditing)</span></h3>
+        <p style="margin:0;font-size:15px;line-height:1.8;color:#8C96A6">설정된 질문을 ChatGPT · Claude · Gemini 3사에 동시 질의하여, 현재 우리 캠핑장의 언급 빈도와 경쟁 대비 점유율을 측정합니다.</p>
+      </div>
+      <div style="display:flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:20px;color:#3B4655">›</div>
+
+      <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:30px 24px;text-align:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:0.12em;color:#3B82F6;margin-bottom:20px">III</div>
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;margin-bottom:22px;border-radius:12px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L21 21M8 10.5h5M10.5 8v5"></path></svg>
+        </span>
+        <h3 style="margin:0 0 14px;font-size:18px;font-weight:700;color:#FFFFFF">격차 원인 분석 <span style="font-size:14px;font-weight:500;color:#60A5FA">(Diagnosing)</span></h3>
+        <p style="margin:0;font-size:15px;line-height:1.8;color:#8C96A6">경쟁 캠핑장에 비해 왜 우리가 누락되었는지, AI 크롤러 수집 경로와 데이터 구조의 취약점을 찾아 원인을 진단합니다.</p>
+      </div>
+      <div style="display:flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:20px;color:#3B4655">›</div>
+
+      <div style="background:#12161D;border:1px solid rgba(59,130,246,0.45);border-radius:12px;padding:30px 24px;text-align:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;letter-spacing:0.12em;color:#3B82F6;margin-bottom:20px">IV</div>
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;margin-bottom:22px;border-radius:12px;background:rgba(59,130,246,0.14);border:1px solid rgba(59,130,246,0.35)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3l7 18-7-4-7 4 7-18z"></path></svg>
+        </span>
+        <h3 style="margin:0 0 14px;font-size:18px;font-weight:700;color:#FFFFFF">역전 플랜 가동 <span style="font-size:14px;font-weight:500;color:#60A5FA">(Executing)</span></h3>
+        <p style="margin:0;font-size:15px;line-height:1.8;color:#8C96A6">언급률을 뒤집을 AEO · GEO 최적화를 실행하고, AI가 정답으로 인용할 캠핑장 콘텐츠를 발행합니다.</p>
+      </div>
+    </div>
+    <p style="margin:28px 0 0;font-size:15px;line-height:1.8;color:#7C8697;text-align:center">4단계는 3개월 주기로 순환합니다. 성과를 보장하지 않으며, 매 단계의 측정 방법과 실측치를 공개합니다.</p>
+  </div>
+</section>
+
+<section id="hero" data-screen-label="S01 히어로" style="padding:88px 32px 96px;border-bottom:1px solid rgba(255,255,255,0.09)">
+  
+<div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:26px">
+        <span style="width:26px;height:3px;background:#3B82F6;display:inline-block"></span>AI 답변 최적화 · 캠핑 버티컬 특화
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px">
+        <span style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid rgba(16,163,127,0.45);border-radius:100px;background:rgba(16,163,127,0.10);font-family:'JetBrains Mono',monospace;font-size:13px;color:#3DD6AC"><span style="font-size:14px;line-height:1">✺</span>ChatGPT</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid rgba(217,119,87,0.45);border-radius:100px;background:rgba(217,119,87,0.10);font-family:'JetBrains Mono',monospace;font-size:13px;color:#E89476"><span style="font-size:14px;line-height:1">✳</span>Claude</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border:1px solid rgba(66,133,244,0.45);border-radius:100px;background:rgba(66,133,244,0.10);font-family:'JetBrains Mono',monospace;font-size:13px;color:#7BA9F7"><span style="font-size:14px;line-height:1">✦</span>Gemini</span>
+        <span style="display:inline-flex;align-items:center;padding:8px 4px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#7C8697">3사 실측 기준</span>
+      </div>
+      <h1 style="margin: 0 0 24px; font-size: 45px; line-height: 1.32; font-weight: 900; letter-spacing: -0.03em; color: #FFFFFF; text-wrap: pretty">손님은 이미 AI에게<br>“캠핑장 추천해줘”라고 묻습니다</h1>
+      <p style="margin:0 0 34px;font-size:19px;line-height:1.75;color:#AFB8C6;max-width:520px;text-wrap:pretty">그 답변 안에 우리 캠핑장 이름이 없다면, 손님에게 우리는 <strong style="font-weight:700;color:#FFFFFF;box-shadow:inset 0 -10px 0 rgba(59,130,246,0.45)">존재하지 않는 것과 같습니다.</strong></p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px">
+        <a href="#demo" data-ga="diag_hero" style="display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:16px 30px;background:#3B82F6;color:#FFFFFF;font-size:18px;font-weight:700;border-radius:100px;box-shadow:0 2px 12px rgba(0,0,0,0.45)" style-hover="background:#2563EB">지금 진단하기 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
+        <a href="#report-preview" style="display:inline-flex;align-items:center;min-height:56px;padding:16px 30px;background:transparent;color:#FFFFFF;font-size:18px;font-weight:700;border:1.5px solid rgba(255,255,255,0.22);border-radius:100px" style-hover="border-color:#3B82F6;color:#60A5FA">진단서 샘플 보기</a>
+      </div><p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:14px;color:#7C8697">15초면 확인됩니다 · 무료 · 카드 등록 없음</p>
+      
+    </div>
+
+    <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:20px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.10em;color:#60A5FA">AI 대화 재현</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9A9A90">측정 {{ measuredAt }}</span>
+      </div>
+      
+      <div style="display:flex;justify-content:flex-end;margin-bottom:22px">
+        <div style="background:#2E2E2A;color:#F2F2EC;font-size:17px;padding:13px 18px;border-radius:14px 14px 4px 14px;max-width:88%">{{ typedQ }}<span style="display:inline-block;width:2px;height:17px;background:#3B82F6;margin-left:3px;vertical-align:-3px;animation:blink 1s step-end infinite"></span></div>
+      </div><div style="{{ answerStyle }}">
+        <p style="margin:0 0 14px;font-size:16px;line-height:1.7;color:#D8D8D0">{{ answerLead }}</p>
+        <div style="display:grid;gap:10px;margin-bottom:18px">
+          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA">01</span><span style="font-size:16px;color:#F2F2EC">별빛솔밭 캠핑장</span></div>
+          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA">02</span><span style="font-size:16px;color:#F2F2EC">물안개계곡 오토캠핑장</span></div>
+          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA">03</span><span style="font-size:16px;color:#F2F2EC">하늘담은 글램핑</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;border:2px dashed #D96A55;border-radius:8px;padding:14px 16px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#D96A55">✕ 미언급</span>
+          <span style="font-size:16px;color:#F2F2EC">우리 캠핑장은 이 답변에 없습니다</span>
+        </div>
+      </div>
+      <p style="margin:18px 0 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:#8B8B82">ChatGPT · 제미나이 · 클로드 · 웹검색 켬 · 1회 질의 기준<br />AI 답변은 확률 기반이라 측정할 때마다 달라집니다.</p>
+      <div style="margin-top:22px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.12)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.10em;color:#9AA4B4">3사 언급률 실측</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.10em;color:#60A5FA">
+            <span style="width:7px;height:7px;border-radius:50%;background:#3B82F6;animation:pulseDot 1.6s ease-in-out infinite"></span>LIVE
+          </span>
+        </div>
+        <div style="display:grid;gap:12px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:78px;flex:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:#3DD6AC">ChatGPT</span>
+            <span style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative"><span style="position:absolute;top:0;left:0;width:32%;height:100%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.85),transparent);animation:trackScan 2.6s ease-in-out infinite"></span></span>
+            <span style="width:46px;flex:none;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#E8A33D;animation:dotBlink 2.6s ease-in-out infinite">0/3</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:78px;flex:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:#E89476">Claude</span>
+            <span style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative"><span style="position:absolute;top:0;left:0;width:32%;height:100%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.85),transparent);animation:trackScan 2.6s ease-in-out 0.35s infinite"></span></span>
+            <span style="width:46px;flex:none;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#E8A33D;animation:dotBlink 2.6s ease-in-out 0.35s infinite">0/3</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:78px;flex:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:#7BA9F7">Gemini</span>
+            <span style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative"><span style="position:absolute;top:0;left:0;width:32%;height:100%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.85),transparent);animation:trackScan 2.6s ease-in-out 0.7s infinite"></span></span>
+            <span style="width:46px;flex:none;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#E8A33D;animation:dotBlink 2.6s ease-in-out 0.7s infinite">0/3</span>
+          </div>
+        </div>
+        <p style="margin:14px 0 0;font-size:13px;line-height:1.7;color:#7C8697">위 수치는 화면 예시입니다. 실제 값은 진단 시점에 측정됩니다.</p>
+      </div>
+    </div>
+  </div></section><div style="overflow:hidden;border-bottom:1px solid rgba(255,255,255,0.09);background:#0F1319;padding:16px 0">
+  <div style="display:flex;width:max-content;animation:marquee 42s linear infinite">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.06em;color:#7C8697;white-space:nowrap;padding-right:32px">3사 언급률 실측 · Schema.org 구조화 · llms.txt 정비 · AI 인용 콘텐츠 · 경쟁 대비 점유율 · 월간 GEO 리포트 · 직예약 비중 · 캠핑 질문 지도 · 사이트 감사 7축 ·&nbsp;</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.06em;color:#7C8697;white-space:nowrap;padding-right:32px">3사 언급률 실측 · Schema.org 구조화 · llms.txt 정비 · AI 인용 콘텐츠 · 경쟁 대비 점유율 · 월간 GEO 리포트 · 직예약 비중 · 캠핑 질문 지도 · 사이트 감사 7축 ·&nbsp;</span>
+  </div>
+</div>
+
+<section id="problem" data-screen-label="S02 지금 벌어지는 일" style="padding:96px 32px;background:#0F1319">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 48px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">캠핑장 예약이 만들어지는 경로가 통째로 바뀌었습니다</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:20px">01 · 검색</div>
+        <h3 style="margin:0 0 14px;font-size:22px;line-height:1.5;font-weight:700;color:#FFFFFF">손님은 더 이상 검색하지 않습니다</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#AFB8C6">네이버에 “가평 캠핑장”을 치는 대신, AI에게 “5살 아이랑 갈 만한 우리가족이 갈 수 있는 가평 키즈글램핑 추천해줘.”라고 문장으로 묻습니다.</p>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:20px">02 · 비교</div>
+        <h3 style="margin:0 0 14px;font-size:22px;line-height:1.5;font-weight:700;color:#FFFFFF">AI가 대신 비교하고 추천합니다</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#AFB8C6">AI가 시설·후기·가격·거리를 한 번에 요약해 3~5곳을 추려 보여줍니다. 순위표가 아니라 <strong style="font-weight:700;color:#FFFFFF">추천 문장</strong>입니다.</p>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:20px">03 · 예약</div>
+        <h3 style="margin:0 0 14px;font-size:22px;line-height:1.5;font-weight:700;color:#FFFFFF">AI가 추천한 3곳 안에서 결정합니다</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#AFB8C6">후보에 들지 못하면 검토조차 되지 않습니다. 광고비를 얼마를 쓰든 상관없습니다.</p>
+      </div>
+    </div>
+    <div style="margin-top:32px;border-left:4px solid #3B82F6;border-right:4px solid #3B82F6;background:#161B22;padding:40px 28px;border-radius:8px">
+      <div style="position:relative;height:62px">
+        <p style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;margin:0;padding:0 8px;font-size:clamp(15px,1.75vw,26px);font-weight:900;letter-spacing:-0.02em;line-height:1.45;text-wrap:balance;color:{{ flashColor }};text-shadow:{{ flashGlow }};opacity:0;animation-name:lineSlide;animation-duration:7s;animation-timing-function:ease-in-out;animation-iteration-count:infinite">{{ flashLine }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="data" data-screen-label="S03 검증 데이터" style="padding:96px 32px">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 12px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">“아직 이르지 않나요?” — 숫자는 이미 늦었다고 말합니다</h2>
+    <p style="margin:0 0 48px;font-size:17px;color:#8C96A6">아래 수치는 모두 출처를 함께 표기합니다.</p>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-top:3px solid #3B82F6;border-radius:8px;padding:28px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;color:#60A5FA;margin-bottom:12px">{{ stat0 }}</div>
+        <div style="font-size:17px;font-weight:700;line-height:1.6;color:#E7EBF2;margin-bottom:12px">한국 가계 생성형 AI 사용률</div>
+        <div style="font-size:14px;line-height:1.7;color:#8C96A6;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · 한국은행 BOK 이슈노트 2025-22호 (2025.08)</div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-top:3px solid #3B82F6;border-radius:8px;padding:28px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;color:#60A5FA;margin-bottom:12px">{{ stat1 }}</div>
+        <div style="font-size:17px;font-weight:700;line-height:1.6;color:#E7EBF2;margin-bottom:12px">최근 3개월 ChatGPT 이용률</div>
+        <div style="font-size:14px;line-height:1.7;color:#8C96A6;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · 오픈서베이 AI 검색 트렌드 리포트 (2026.01)</div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-top:3px solid #3B82F6;border-radius:8px;padding:28px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;color:#60A5FA;margin-bottom:12px">{{ stat2 }}</div>
+        <div style="font-size:17px;font-weight:700;line-height:1.6;color:#E7EBF2;margin-bottom:12px">AI 답변이 불만족스러워도 검색으로 돌아가지 않고 AI 안에서 재질문</div>
+        <div style="font-size:14px;line-height:1.7;color:#8C96A6;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · 오픈서베이 (2026.01)</div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-top:3px solid #3B82F6;border-radius:8px;padding:28px 24px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;color:#60A5FA;margin-bottom:12px">{{ stat3 }}</div>
+        <div style="font-size:17px;font-weight:700;line-height:1.6;color:#E7EBF2;margin-bottom:12px">AI 요약 노출 시 검색 1위 콘텐츠의 클릭률 하락</div>
+        <div style="font-size:14px;line-height:1.7;color:#8C96A6;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · Ahrefs (2026.02)</div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;background:#12161D;border-radius:8px;padding:36px 40px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#60A5FA;margin-bottom:26px">전환율 대비</div>
+      <div style="display:grid;gap:18px;max-width:760px">
+        <div style="display:flex;align-items:center;gap:18px">
+          <span style="width:180px;flex:none;font-size:17px;color:#F2F2EC">AI 검색 유입 전환율</span>
+          <span style="height:22px;width:100%;max-width:420px;background:#3B82F6;border-radius:3px;transform-origin:left center;animation:barSweep 5s cubic-bezier(0,0,0.2,1) infinite,barGlow 5s ease-in-out infinite"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#60A5FA;animation:numFlash 5s linear infinite">14.2%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:18px">
+          <span style="width:180px;flex:none;font-size:17px;color:#F2F2EC">일반 검색 전환율</span>
+          <span style="height:22px;width:100%;max-width:83px;background:repeating-linear-gradient(45deg,#6E6E64,#6E6E64 5px,#54544C 5px,#54544C 10px);border-radius:3px;transform-origin:left center;animation:barSweep 5s cubic-bezier(0,0,0.2,1) 0.45s infinite"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#C9C9BF;animation:numFlash 5s linear 0.45s infinite">2.8%</span>
+        </div>
+      </div>
+      <p style="margin:26px 0 0;font-size:14px;line-height:1.8;color:#A5A59B;max-width:820px;border-top:1px solid rgba(255,255,255,0.14);padding-top:18px">※ 위 전환율은 북미·호주·영국 IT/테크 서비스 기업 312개 표본 기준(Opollo 2026 AI Search Benchmark Report)이며, 국내 캠핑 업종에 그대로 적용되지 않습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section id="gap" data-screen-label="S04 네이버 함정" style="padding:96px 32px;background:#12161D">
+  <div style="max-width:1200px;margin:0 auto">
+    <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#60A5FA;margin-bottom:24px"><span style="width:26px;height:3px;background:#3B82F6;display:inline-block"></span>핵심 구조</div>
+    <h2 style="margin:0 0 52px;font-size:clamp(20px,3.2vw,40px);line-height:1.45;font-weight:900;letter-spacing:-0.025em;color:#FAFAF7;white-space:nowrap">캠핑장 홍보비의 대부분은 AI가 읽을 수 없는 곳에 쓰이고 있습니다</h2>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:32px;align-items:center">
+      <div style="border:2px dashed #C9903F;border-radius:8px;padding:34px">
+        <div style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#C9903F;border:1px solid #C9903F;border-radius:4px;padding:5px 10px;margin-bottom:22px">△ AI 최적화 미흡</div>
+        <p style="margin:0 0 18px;font-size:22px;font-weight:700;line-height:1.5;color:#FAFAF7">네이버 블로그 · 카페</p>
+        <p style="margin:0 0 18px;font-size:17px;line-height:1.8;color:#C9C9BF">네이버 블로그 · 카페는 robots.txt 정책상 ChatGPT · Claude · Gemini 등 글로벌 AI 3사가 읽어 가기에 최적화되어 있지 않습니다.</p>
+        <div style="border-top:1px dashed rgba(201,144,63,0.5);padding-top:18px;font-size:17px;line-height:1.8;color:#C9C9BF">체험단 20건, 블로그 광고 300만 원<br><strong style="color:#C9903F;font-weight:700">→ AI 답변 기여도 0</strong></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:32px;color:#60A5FA">→</div>
+      <div style="border:2px solid #3B82F6;border-radius:8px;padding:34px;background:rgba(59,130,246,0.08)">
+        <div style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#60A5FA;border:1px solid #3B82F6;border-radius:4px;padding:5px 10px;margin-bottom:22px">✓ AI가 실제로 읽는 곳</div>
+        <ul style="margin:0 0 18px;padding:0;list-style:none;display:grid;gap:12px">
+          <li style="display:flex;gap:12px;font-size:17px;line-height:1.7;color:#FAFAF7"><span style="color:#60A5FA">✓</span>자사 홈페이지 (구조화된 정보)</li>
+          <li style="display:flex;gap:12px;font-size:17px;line-height:1.7;color:#FAFAF7"><span style="color:#60A5FA">✓</span>구글에 색인되는 콘텐츠</li>
+          <li style="display:flex;gap:12px;font-size:17px;line-height:1.7;color:#FAFAF7"><span style="color:#60A5FA">✓</span>외부 매체 · 커뮤니티 언급</li>
+          <li style="display:flex;gap:12px;font-size:17px;line-height:1.7;color:#FAFAF7"><span style="color:#60A5FA">✓</span>지도 · 리뷰 데이터</li>
+        </ul>
+        <div style="border-top:1px solid rgba(59,130,246,0.4);padding-top:18px;font-size:17px;font-weight:700;color:#60A5FA">↓ 캠핑하이브가 다루는 영역</div>
+      </div>
+    </div>
+    <p style="margin:44px 0 0;font-size:22px;line-height:1.65;font-weight:700;color:#FAFAF7;max-width:900px;text-wrap:pretty">블로그를 끊으라는 말이 아닙니다. <span style="box-shadow:inset 0 -12px 0 rgba(59,130,246,0.40)">AI가 읽을 수 있는 자산이 하나도 없다는 것이 문제</span>입니다.</p>
+  </div>
+</section>
+
+<section id="concept" data-screen-label="S05 개념 정리" style="padding:96px 32px">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 52px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">검색 최적화는 3단계로 진화했습니다</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:end">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:30px;margin-bottom:56px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:16px">STEP 01 · SEO</div>
+        <h3 style="margin:0 0 20px;font-size:24px;font-weight:900;color:#FFFFFF">발견되는 단계</h3>
+        <dl style="margin:0;display:grid;gap:12px">
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#7C8697">대상</dt><dd style="margin:0;font-size:17px;line-height:1.6;color:#C4CCD8">네이버·구글</dd></div>
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#7C8697">목표</dt><dd style="margin:0;font-size:17px;line-height:1.6;color:#C4CCD8">검색결과 상위 노출</dd></div>
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#7C8697">예</dt><dd style="margin:0;font-size:16px;line-height:1.6;color:#8C96A6">“가평 캠핑장” 검색 시 홈페이지 노출</dd></div>
+        </dl>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:30px;margin-bottom:28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:16px">STEP 02 · AEO</div>
+        <h3 style="margin:0 0 20px;font-size:24px;font-weight:900;color:#FFFFFF">채택되는 단계</h3>
+        <dl style="margin:0;display:grid;gap:12px">
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#7C8697">대상</dt><dd style="margin:0;font-size:17px;line-height:1.6;color:#C4CCD8">답변엔진</dd></div>
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#7C8697">목표</dt><dd style="margin:0;font-size:17px;line-height:1.6;color:#C4CCD8">신뢰할 만한 출처로 인식</dd></div>
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#7C8697">예</dt><dd style="margin:0;font-size:16px;line-height:1.6;color:#8C96A6">“야영장 예약 취소 규정은?” 질문에 우리 안내가 답으로 채택</dd></div>
+        </dl>
+      </div>
+      <div style="background:#12161D;border:2px solid #3B82F6;border-radius:8px;padding:30px;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#60A5FA">STEP 03 · GEO</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;color:#FFFFFF;background:#3B82F6;border-radius:4px;padding:4px 8px">← 지금</span>
+        </div>
+        <h3 style="margin:0 0 20px;font-size:24px;font-weight:900;color:#FAFAF7">추천되는 단계</h3>
+        <dl style="margin:0;display:grid;gap:12px">
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#9A9A90">대상</dt><dd style="margin:0;font-size:17px;line-height:1.6;color:#F2F2EC">생성형 AI</dd></div>
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#9A9A90">목표</dt><dd style="margin:0;font-size:17px;line-height:1.6;color:#F2F2EC">AI 답변 안에서 인용·추천</dd></div>
+          <div style="display:flex;gap:12px"><dt style="width:52px;flex:none;font-size:15px;color:#9A9A90">예</dt><dd style="margin:0;font-size:16px;line-height:1.6;color:#C9C9BF">“아이랑 갈 만한 글램핑 추천” 답변에 우리 상호가 등장</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p style="margin:36px 0 0;font-size:19px;line-height:1.7;color:#C4CCD8">세 가지는 대체 관계가 아니라 <strong style="font-weight:700;color:#FFFFFF">쌓아 올리는 관계</strong>입니다. SEO 기반이 튼튼할수록 GEO 효과가 커집니다.</p>
+  </div>
+</section>
+
+<section id="demo" data-screen-label="S06 직접 물어봤습니다" style="padding:96px 32px;background:#0F1319">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 52px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">직접 물어봤습니다. 그리고 지금, 직접 해보실 수 있습니다.</h2>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;align-items:stretch">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:30px;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:20px">실제 측정 결과</div>
+        <div style="border:1px solid rgba(255,255,255,0.12);border-radius:8px;background:#1B212B;padding:20px;margin-bottom:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.09)">
+            <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#3DD6AC"><span>✺</span>ChatGPT</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7C8697">웹검색 켬 · 2026.08.10 14:20</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><span style="max-width:82%;padding:10px 14px;border-radius:12px 12px 3px 12px;background:#2563EB;font-size:14px;line-height:1.6;color:#FFFFFF">우리가족이 갈 수 있는 가평 키즈글램핑 추천해줘.</span></div>
+          <p style="margin:0 0 12px;font-size:14px;line-height:1.7;color:#C4CCD8">가평 지역 글램핑은 계곡 접근성과 실내 화장실 유무로 갈립니다. 아래 세 곳이 자주 추천됩니다.</p>
+          <div style="display:grid;gap:8px;margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border-radius:6px;padding:9px 12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#60A5FA">01</span><span style="font-size:14px;color:#E7EBF2">별빛솔밭 캠핑장</span></div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border-radius:6px;padding:9px 12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#60A5FA">02</span><span style="font-size:14px;color:#E7EBF2">물안개계곡 오토캠핑장</span></div>
+            <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border-radius:6px;padding:9px 12px"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#60A5FA">03</span><span style="font-size:14px;color:#E7EBF2">하늘담은 글램핑</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;border:1px dashed #E8A33D;border-radius:6px;padding:10px 12px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#E8A33D">✕ 미언급</span>
+            <span style="font-size:14px;color:#C4CCD8">의뢰 캠핑장은 세 곳 안에 없습니다</span>
+          </div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:18px">
+          <tbody>
+            <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.09);font-size:16px;color:#8C96A6;width:96px">질문</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.09);font-size:17px;color:#FFFFFF">“우리가족이 갈 수 있는 가평 키즈글램핑 추천해줘.”</td></tr>
+            <tr><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.09);font-size:16px;color:#8C96A6">AI 답변</td><td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.09);font-size:17px;color:#FFFFFF">별빛솔밭 · 물안개계곡 · 하늘담은 3곳 언급</td></tr>
+            <tr><td style="padding:12px 0;font-size:16px;color:#8C96A6"></td><td style="padding:12px 0;font-size:17px;font-weight:700;color:#E8A33D">의뢰 캠핑장 언급 0회</td></tr>
+          </tbody>
+        </table>
+        <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;color:#8C96A6;border-top:1px dashed rgba(255,255,255,0.14);padding-top:16px">측정 일시 {{ measuredAt }} · 측정 엔진 ChatGPT · Claude · Gemini · 질의 횟수 9회 (3질문 × 3사)<br />※ 화면은 진단 결과 예시이며, 캠핑장 상호는 실존하지 않습니다.</p>
+      </div>
+
+      <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
+        <h3 style="margin:0 0 8px;font-size:26px;font-weight:900;color:#FAFAF7">우리 캠핑장은 어떨까요?</h3>
+        <p style="margin:0 0 28px;font-size:16px;line-height:1.7;color:#A5A59B">세 가지만 넣으시면 약 15초 뒤 결과가 화면에 나옵니다.</p>
+        <form onSubmit="{{ onSubmitDemo }}" style="display:grid;gap:14px">
+          <label style="display:grid;gap:8px">
+            <span style="font-size:15px;font-weight:500;color:#C9C9BF">캠핑장 이름</span>
+            <input type="text" required="required" placeholder="예) ○○글램핑" style="width:100%;min-height:52px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.20);border-radius:8px;padding:14px 16px;font-size:17px;color:#FAFAF7;font-family:'Noto Sans KR',sans-serif">
+          </label>
+          <label style="display:grid;gap:8px">
+            <span style="font-size:15px;font-weight:500;color:#C9C9BF">홈페이지 주소</span>
+            <input type="url" required="required" placeholder="https://" style="width:100%;min-height:52px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.20);border-radius:8px;padding:14px 16px;font-size:17px;color:#FAFAF7;font-family:'Noto Sans KR',sans-serif">
+          </label>
+          <label style="display:grid;gap:8px">
+            <span style="font-size:15px;font-weight:500;color:#C9C9BF">이메일</span>
+            <input type="email" required="required" placeholder="result@example.com" style="width:100%;min-height:52px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.20);border-radius:8px;padding:14px 16px;font-size:17px;color:#FAFAF7;font-family:'Noto Sans KR',sans-serif">
+          </label>
+          <button type="submit" data-ga="diag_demo" style="width:100%;min-height:58px;margin-top:10px;background:#3B82F6;color:#FFFFFF;border:none;border-radius:100px;font-size:19px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer" style-hover="background:#2563EB" style-active="transform:scale(0.98)">지금 진단하기</button>
+        </form>
+        <p style="margin:16px 0 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#A5A59B;text-align:center">15초 · 무료 · 오늘 12건 남음</p>
+        <p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#7E7E75;text-align:center">※ 잔여 건수는 예시 값이며, 서버 조회 실제 값으로 연동 예정</p>
+        <sc-if value="{{ submittedDemo }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:16px 0 0;padding:14px;border:1px solid #3B82F6;border-radius:8px;font-size:15px;color:#60A5FA;text-align:center">진단 도구로 연결되는 자리입니다 (시안)</p>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="report-preview" data-screen-label="S07 진단서 미리보기" style="padding:96px 32px">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 12px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">15초 뒤 이런 진단서를 받으십니다</h2>
+    <p style="margin:0 0 44px;font-size:17px;color:#8C96A6">아래 8개 블록은 실제 진단 결과 화면입니다. 썸네일 안의 수치는 화면 예시이며, 실제 값은 진단 시점에 측정됩니다.</p>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px">
+          <div style="display:flex;align-items:baseline;gap:4px"><span style="font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:700;line-height:1;color:#60A5FA">31</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#7C8697">/100</span></div>
+          <div style="width:100%;max-width:150px;height:7px;border-radius:4px;background:rgba(255,255,255,0.09);overflow:hidden"><span style="display:block;width:31%;height:100%;background:#3B82F6"></span></div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#7C8697">CAMPINGHIVE SCORE</span>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 01</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">캠핑하이브 스코어</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6">100점 만점. <strong style="font-weight:700;color:#FFFFFF">점수를 어떻게 냈는지 산식까지 공개합니다</strong></p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;justify-content:center;gap:9px;padding:16px 18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#3DD6AC"><span style="font-size:11px">✺</span>ChatGPT</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#E8A33D">0/3</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#E89476"><span style="font-size:11px">✳</span>Claude</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#E8A33D">0/3</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#7BA9F7"><span style="font-size:11px">✦</span>Gemini</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ADE80">1/3</span></div>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 02</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">AI 세 곳의 답변 요약</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6;overflow-wrap:anywhere">ChatGPT·Claude·Gemini가 각각 뭐라고 했는지</p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;justify-content:center;gap:8px;padding:16px 18px">
+          <span style="align-self:flex-end;max-width:88%;padding:6px 10px;border-radius:10px 10px 3px 10px;background:#2563EB;font-size:11px;line-height:1.5;color:#FFFFFF">우리가족이 갈 수 있는 가평 키즈글램핑 추천해줘.</span>
+          <span style="max-width:94%;padding:7px 10px;border-radius:3px 10px 10px 10px;background:rgba(255,255,255,0.06);font-size:11px;line-height:1.6;color:#C4CCD8">가평 지역 글램핑 중에서는 A · B · C를 추천드려요.</span>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 03</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">질문별 답변 원문</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6">요약이 아니라 <strong style="font-weight:700;color:#FFFFFF">AI가 실제로 쓴 문장 그대로</strong></p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;justify-content:center;gap:7px;padding:16px 18px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#E7EBF2"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#60A5FA">01</span>A 캠핑장 <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7C8697">확정</span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#E7EBF2"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#60A5FA">02</span>B 캠핑장 <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7C8697">확정</span></div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8C96A6"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#60A5FA">03</span>C 캠핑장 <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#E8A33D">추정</span></div>
+          <div style="margin-top:2px;font-size:11px;color:#E8A33D">✕ 우리 캠핑장 미언급</div>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 04</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">대신 추천된 캠핑장</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6">손님이 우리 대신 소개받은 곳들</p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;align-content:center;padding:16px 18px">
+          <span style="font-size:11px;color:#C4CCD8">✓ 구조화 데이터</span>
+          <span style="font-size:11px;color:#E8A33D">✕ FAQ 마크업</span>
+          <span style="font-size:11px;color:#C4CCD8">✓ 요금 정보</span>
+          <span style="font-size:11px;color:#E8A33D">✕ llms.txt</span>
+          <span style="font-size:11px;color:#E8A33D">✕ 이용규정</span>
+          <span style="font-size:11px;color:#C4CCD8">✓ 오시는길</span>
+          <span style="font-size:11px;color:#E8A33D">✕ 색인 상태</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7C8697">3/7 통과</span>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 05</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">왜 안 나오는가</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6">홈페이지를 7가지 기준으로 점검한 결과</p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;justify-content:center;gap:10px;padding:16px 18px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-size:11px;color:#8C96A6">사이트 수</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#E7EBF2">28면</span></div>
+          <div style="position:relative;height:6px;border-radius:4px;background:rgba(255,255,255,0.09)"><span style="position:absolute;left:0;top:0;height:100%;width:58%;border-radius:4px;background:#3B82F6"></span><span style="position:absolute;left:58%;top:-4px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#60A5FA;border:2px solid #12161D"></span></div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px"><span style="font-size:11px;color:#8C96A6">연 환산</span><span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#60A5FA">₩ ______</span></div>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 06</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">AI 검색 활성화 시 예상 매출 진단하기</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6"><strong style="font-weight:700;color:#FFFFFF">슬라이더를 직접 움직여 계산</strong>해 보실 수 있습니다</p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;justify-content:center;gap:9px;padding:16px 18px">
+          <div style="display:flex;align-items:center;gap:9px"><span style="flex:none;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:#3B82F6;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#FFFFFF">1</span><span style="font-size:11px;color:#E7EBF2">FAQ 30문항 구축</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="flex:none;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:rgba(59,130,246,0.25);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#60A5FA">2</span><span style="font-size:11px;color:#C4CCD8">구조화 데이터 적용</span></div>
+          <div style="display:flex;align-items:center;gap:9px"><span style="flex:none;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:rgba(255,255,255,0.09);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#8C96A6">3</span><span style="font-size:11px;color:#8C96A6">외부 언급 확보</span></div>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 07</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">무엇부터 고칠까</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6">우선순위 순서대로</p></div>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.45)">
+        <div style="height:120px;background:#1B212B;border-bottom:1px solid rgba(255,255,255,0.09);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:16px 18px">
+          <span style="width:100%;text-align:center;padding:9px 10px;border-radius:100px;background:#3B82F6;font-size:11px;font-weight:700;color:#FFFFFF">맡기고 보고받기</span>
+          <span style="width:100%;text-align:center;padding:9px 10px;border-radius:100px;border:1px solid rgba(255,255,255,0.22);font-size:11px;font-weight:700;color:#C4CCD8">가이드 받아 직접 하기</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7C8697">A · B · C 3개 운영 모델</span>
+        </div>
+        <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7C8697;margin-bottom:8px">BLOCK 08</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#FFFFFF">AI 검색 최적화 작업 캠핑하이브에서 대신 해드립니다</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#AFB8C6">직접 하실지, 맡기실지</p></div>
+      </div>
+    </div>
+    <p style="margin:32px 0 0;font-size:19px;line-height:1.7;color:#FFFFFF;border-left:4px solid #3B82F6;padding-left:20px">진단서는 계약 여부와 관계없이 드립니다. 받아만 보고 끝내셔도 됩니다. 기록 번호로 언제든 다시 여실 수 있습니다.</p>
+  </div>
+</section>
+
+<section id="framework" data-screen-label="S08 CAMP-AI" style="padding:96px 32px;background:#0F1319">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 12px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">캠핑장을 AI에 각인시키는 5단계</h2>
+    <p style="margin:0 0 44px;font-size:18px;line-height:1.7;color:#AFB8C6;max-width:760px">진단 → 설계 → 구축 → 축적 → 측정. 한 번 만들고 끝나는 작업이 아니라 반복 운영되는 구조입니다.</p>
+    <div style="display:grid;gap:12px">
+      <div style="display:grid;grid-template-columns:88px 1fr 1.4fr 1fr;gap:24px;align-items:center;background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:#60A5FA;line-height:1">C</div>
+        <div><div style="font-size:19px;font-weight:700;color:#FFFFFF">Question Capture</div><div style="font-size:16px;color:#8C96A6;margin-top:4px">질문 수집</div></div>
+        <p style="margin:0;font-size:17px;line-height:1.75;color:#C4CCD8">캠핑객이 AI에 실제로 던지는 질문을 수집·분류 (지역/동반자/시설/시즌/반려동물 등)</p>
+        <div style="font-size:16px;line-height:1.6;color:#C4CCD8;border-left:2px solid #3B82F6;padding-left:14px">캠핑장 AI 질문 지도</div>
+      </div>
+      <div style="display:grid;grid-template-columns:88px 1fr 1.4fr 1fr;gap:24px;align-items:center;background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:#60A5FA;line-height:1">A</div>
+        <div><div style="font-size:19px;font-weight:700;color:#FFFFFF">AI Audit</div><div style="font-size:16px;color:#8C96A6;margin-top:4px">현황 진단</div></div>
+        <p style="margin:0;font-size:17px;line-height:1.75;color:#C4CCD8"><strong style="font-weight:700;color:#FFFFFF">ChatGPT · Claude · Gemini 3사</strong>를 대상으로 우리 캠핑장 언급률·경쟁 대비 점유율 측정</p>
+        <div style="font-size:16px;line-height:1.6;color:#C4CCD8;border-left:2px solid #3B82F6;padding-left:14px">AI 가시성 진단 리포트</div>
+      </div>
+      <div style="display:grid;grid-template-columns:88px 1fr 1.4fr 1fr;gap:24px;align-items:center;background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:#60A5FA;line-height:1">M</div>
+        <div><div style="font-size:19px;font-weight:700;color:#FFFFFF">Markup &amp; Structure</div><div style="font-size:16px;color:#8C96A6;margin-top:4px">구조 설계</div></div>
+        <p style="margin:0;font-size:17px;line-height:1.75;color:#C4CCD8">Schema.org / JSON-LD 적용, FAQ·시설정보·요금·이용규정 구조화, llms.txt 설치</p>
+        <div style="font-size:16px;line-height:1.6;color:#C4CCD8;border-left:2px solid #3B82F6;padding-left:14px">구조화 데이터 적용 웹</div>
+      </div>
+      <div style="display:grid;grid-template-columns:88px 1fr 1.4fr 1fr;gap:24px;align-items:center;background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:#60A5FA;line-height:1">P</div>
+        <div><div style="font-size:19px;font-weight:700;color:#FFFFFF">Proof Seeding</div><div style="font-size:16px;color:#8C96A6;margin-top:4px">신뢰 축적</div></div>
+        <p style="margin:0;font-size:17px;line-height:1.75;color:#C4CCD8">외부 매체·커뮤니티·지도 리뷰의 브랜드 언급 확보, E-E-A-T 신호 배치</p>
+        <div style="font-size:16px;line-height:1.6;color:#C4CCD8;border-left:2px solid #3B82F6;padding-left:14px">외부 언급 확보 리스트</div>
+      </div>
+      <div style="display:grid;grid-template-columns:88px 1fr 1.4fr 1fr;gap:24px;align-items:center;background:#12161D;border:1px solid #1C1C1A;border-radius:8px;padding:26px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:700;color:#60A5FA;line-height:1">AI</div>
+        <div><div style="font-size:19px;font-weight:700;color:#FAFAF7">Analytics Loop</div><div style="font-size:16px;color:#A5A59B;margin-top:4px">측정·재설계</div></div>
+        <p style="margin:0;font-size:17px;line-height:1.75;color:#E4E4DC">월 1회 재측정 → 미노출 질문 도출 → 콘텐츠 보강</p>
+        <div style="font-size:16px;line-height:1.6;color:#E4E4DC;border-left:2px solid #3B82F6;padding-left:14px">월간 GEO 리포트</div>
+      </div>
+    </div>
+    <p style="margin:28px 0 0;font-size:18px;line-height:1.7;color:#C4CCD8"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA">↺</span> 4~5단계는 3개월 주기로 순환합니다. AI 인용은 한 번의 성과가 아니라 <strong style="font-weight:700;color:#FFFFFF">누적되는 자산</strong>입니다.</p>
+  </div>
+</section>
+
+<section id="deliverable" data-screen-label="S09 산출물" style="padding:96px 32px">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 48px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">3개월 후 남는 것</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.06em;background:#3B82F6;color:#FFFFFF;border-radius:4px;padding:5px 10px">즉시</span>
+          <h3 style="margin:0;font-size:21px;font-weight:700;color:#FFFFFF">① AI 가시성 진단 리포트</h3>
+        </div>
+        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px">
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>3사(ChatGPT·Claude·Gemini) 답변 내 우리 캠핑장 등장 여부</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>대신 추천받은 캠핑장 목록 (확정·추정·미확인 구분)</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>홈페이지 사이트 감사 7축 결과</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>우선 개선 과제</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>캠핑하이브 스코어 (산식 공개)</li>
+        </ul>
+        <p style="margin:18px 0 0;font-size:15px;line-height:1.7;color:#8C96A6;border-top:1px dashed rgba(255,255,255,0.14);padding-top:14px">※ 무료 진단은 질문 3개 × 3사 = 9회 측정 기준입니다.</p>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.06em;background:#12161D;color:#60A5FA;border-radius:4px;padding:5px 10px">6주</span>
+          <h3 style="margin:0;font-size:21px;font-weight:700;color:#FFFFFF">② AI 최적화 홈페이지 구조</h3>
+        </div>
+        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px">
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>Schema.org 구조화 데이터 전면 적용 (LodgingBusiness / FAQPage / Offer / Review)</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>AI 인용용 FAQ 30문항 구축</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>시설·요금·이용규정·오시는길 정보 구조 재정비</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>llms.txt · robots.txt 정비</li>
+        </ul>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.06em;background:#12161D;color:#60A5FA;border-radius:4px;padding:5px 10px">10주</span>
+          <h3 style="margin:0;font-size:21px;font-weight:700;color:#FFFFFF">③ AI 인용 콘텐츠 세트</h3>
+        </div>
+        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px">
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>캠핑객 질문 기반 콘텐츠 12편</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>두괄식·정답형 구조 (첫 200자 내 핵심 답변 배치)</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>계절·시즌 대응 콘텐츠 4편 포함</li>
+        </ul>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:0.06em;background:#12161D;color:#60A5FA;border-radius:4px;padding:5px 10px">매월</span>
+          <h3 style="margin:0;font-size:21px;font-weight:700;color:#FFFFFF">④ 월간 성과 리포트</h3>
+        </div>
+        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px">
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>AI 언급률 추이</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>경쟁 대비 점유율</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>신규 인용 질문</li>
+          <li style="display:flex;gap:10px;font-size:17px;line-height:1.7;color:#C4CCD8"><span style="color:#60A5FA">✓</span>다음 달 실행안</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why" data-screen-label="S11 왜 캠핑하이브인가" style="padding:96px 32px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 12px"><div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 12px"><h2 style="margin: 0 0 48px; font-size: clamp(20px,3.2vw,40px); line-height: 1.4; font-weight: 900; letter-spacing: -0.025em; color: #FFFFFF; white-space: nowrap">마케팅 회사가 아니라, 캠핑장을 만들어 온 회사입니다</h2></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:14px">01</div>
+        <h3 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#FFFFFF">캠핑 버티컬 특화</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#C4CCD8">범용 GEO 대행사는 보험·의료·금융을 다룹니다. 캠핑객이 AI에 어떤 문장으로 묻는지, 어떤 조건으로 캠핑장을 고르는지는 <strong style="font-weight:700;color:#FFFFFF">캠핑장을 지어 본 회사만 압니다.</strong></p>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:14px">02</div>
+        <h3 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#FFFFFF">현장을 아는 콘텐츠</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#C4CCD8">AI가 인용하는 것은 예쁜 문장, 예쁜 사진이 아니라 <strong style="font-weight:700;color:#FFFFFF">정확한 정보</strong>입니다. 시설, 환경, 접근성 이 3가지 외 홈페이지에서 확인할 수 있는 정확한 정보를 통해서 AI는 판단합니다.</p>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:14px">03</div>
+        <h3 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#FFFFFF">수수료가 아니라 직예약</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#C4CCD8">예약 플랫폼 예약이 늘어도 수수료로 빠져나갑니다. AI 답변에서 직접 유입되는 손님은 <strong style="font-weight:700;color:#FFFFFF">자사 예약 페이지로 바로 들어옵니다.</strong> 목표는 노출이 아니라 <strong style="font-weight:700;color:#FFFFFF">직예약 비중</strong>입니다.</p>
+      </div>
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:14px">04</div>
+        <h3 style="margin:0 0 14px;font-size:22px;font-weight:700;color:#FFFFFF">캠핑장에 최적화된 AI 시스템 개발</h3>
+        <p style="margin:0;font-size:17px;line-height:1.8;color:#C4CCD8"><strong style="font-weight:700;color:#FFFFFF">우리는 캠핑장 AI 진단 도구를 직접 만들어 운영합니다.</strong> 그래서 15초 만에 그 자리에서 결과를 보여드릴 수 있고, 어떤 질문으로 몇 번 측정했는지 화면에 그대로 공개합니다.</p>
+      </div>
+    </div>
+    <div style="margin-top:28px;background:#12161D;border-radius:8px;padding:32px 40px;display:flex;flex-wrap:wrap;align-items:center;gap:28px">
+      <span style="font-size:20px;font-weight:700;color:#FAFAF7">전국 캠핑장 시공 실적 <span style="font-family:'JetBrains Mono',monospace;color:#60A5FA">280곳</span></span>
+      <span style="width:1px;height:24px;background:rgba(255,255,255,0.24)"></span>
+      <span style="font-size:20px;font-weight:700;color:#FAFAF7"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA">2014년</span> 2014년부터 전국 280곳을 지어 온 캠핑장 컨설팅·시공 전문 업체입니다.</span>
+    </div>
+  </div>
+</section>
+
+<section id="plan" data-screen-label="S12 운영 모델" style="padding:96px 32px;background:#0F1319">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 style="margin:0 0 48px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">캠핑장 규모와 여력에 맞춰 고르세요</h2>
+    <div style="display:grid;grid-template-columns:1fr 1.08fr 1fr;gap:20px;align-items:start">
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:10px">PLAN A</div>
+        <h3 style="margin:0 0 8px;font-size:24px;font-weight:900;color:#FFFFFF">셀프형</h3>
+        <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#8C96A6">20면 미만 / 직접 운영 여력 있음</p>
+        <dl style="margin:0 0 24px;display:grid;gap:0">
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">진단·리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">홈페이지 구조 작업</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브 (1회)</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">콘텐츠 작성</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑주 직접 (가이드 제공)</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">외부 언급 확보</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">옵션</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">월간 리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">분기 1회</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09);border-bottom:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">계약 단위</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">3개월</dd></div>
+        </dl>
+        <a href="상담문의.dc.html" style="display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 24px;border:1.5px solid rgba(255,255,255,0.30);border-radius:100px;font-size:18px;font-weight:700;color:#FFFFFF;text-decoration:none" style-hover="background:#3B82F6;border-color:#3B82F6;color:#FFFFFF">상담 문의 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
+      </div>
+
+      <div style="background:#161B22;border:2px solid #3B82F6;border-radius:8px;padding:36px 30px;box-shadow:0 8px 32px rgba(0,0,0,0.5)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697">PLAN B</span>
+          <span style="font-size:13px;font-weight:700;background:#3B82F6;color:#FFFFFF;border-radius:100px;padding:5px 12px">★ 추천</span>
+        </div>
+        <h3 style="margin:0 0 8px;font-size:26px;font-weight:900;color:#FFFFFF">반위탁형</h3>
+        <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#8C96A6">20~50면 / 대표가 직접 챙기는 곳</p>
+        <dl style="margin:0 0 24px;display:grid;gap:0">
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">진단·리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">홈페이지 구조 작업</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">콘텐츠 작성</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑주 초안 → 구조 변환</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">외부 언급 확보</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">포함</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">월간 리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">월 1회</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09);border-bottom:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">계약 단위</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">6개월</dd></div>
+        </dl>
+        <a href="상담문의.dc.html" style="display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 24px;border:1.5px solid rgba(255,255,255,0.30);border-radius:100px;font-size:18px;font-weight:700;color:#FFFFFF;text-decoration:none" style-hover="background:#3B82F6;border-color:#3B82F6;color:#FFFFFF">상담 문의 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
+      </div>
+
+      <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:32px 28px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:10px">PLAN C</div>
+        <h3 style="margin:0 0 8px;font-size:24px;font-weight:900;color:#FFFFFF">전담형</h3>
+        <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#8C96A6">50면 이상 / 다지점</p>
+        <dl style="margin:0 0 24px;display:grid;gap:0">
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">진단·리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">홈페이지 구조 작업</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">콘텐츠 작성</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">캠핑하이브 전담</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">외부 언급 확보</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">포함</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">월간 리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">월 1회 + 전략 미팅</dd></div>
+          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,0.09);border-bottom:1px solid rgba(255,255,255,0.09)"><dt style="font-size:15px;color:#8C96A6">계약 단위</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#FFFFFF;text-align:right">12개월</dd></div>
+        </dl>
+        <a href="상담문의.dc.html" style="display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 24px;border:1.5px solid rgba(255,255,255,0.30);border-radius:100px;font-size:18px;font-weight:700;color:#FFFFFF;text-decoration:none" style-hover="background:#3B82F6;border-color:#3B82F6;color:#FFFFFF">상담 문의 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
+      </div>
+    </div>
+    <p style="margin:28px 0 0;font-size:18px;line-height:1.7;color:#C4CCD8">애매하다면 <strong style="font-weight:700;color:#FFFFFF">반위탁형 6개월</strong>로 시작하고, 이후 전환하실 수 있습니다.</p>
+  </div>
+</section>
+
+<section id="faq" data-screen-label="S14 FAQ" style="padding:96px 32px;background:#0F1319">
+  <div style="max-width:900px;margin:0 auto">
+    <h2 style="margin:0 0 44px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">자주 묻는 질문</h2>
+    <div style="display:grid;gap:10px">
+      <details open="open" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q1</span>AEO·GEO가 정확히 뭔가요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">AI가 답변을 만들 때 우리 캠핑장이 인용·추천되도록 정보를 정리하는 작업입니다. 검색 순위를 올리는 SEO와 달리, ChatGPT·Claude 같은 AI의 답변 안에 들어가는 것이 목표입니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q2</span>네이버 블로그 마케팅만 계속하면 안 되나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">부족합니다. 네이버 블로그·카페는 robots.txt에서 AI 봇을 이름 단위로 차단하고 있습니다 (2026-08-14 원문 확인). 블로그에만 투자하면 AI로 캠핑장을 찾는 손님을 놓칠 수 있습니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q3</span>효과는 언제부터 나타나나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">일반적으로 2~8주 내 첫 인용이 관측되고, 2~3개월에 걸쳐 누적됩니다. 다만 보장된 결과가 아니라 사례 기반 일반치이며, 온라인 정보량이 적은 신규 사업장은 더 오래 걸립니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q4</span>홈페이지가 없어도 되나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">자사 홈페이지가 없으면 AI가 참조할 근거 자체가 없어 효과가 제한적입니다. 홈페이지가 없는 경우 구축을 먼저 권해드리며, 캠핑하이브에서 함께 진행할 수 있습니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q5</span>캠핑장을 예약 플랫폼에만 올려도 되지 않나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">예약 플랫폼을 통한 예약은 수수료가 발생합니다. AI 답변에서 직접 유입되는 손님은 자사 예약 경로로 들어오기 때문에 수수료 구조가 다릅니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q6</span>성과를 보장해주시나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">보장하지 않습니다. AI 답변은 각 모델의 정책·알고리즘 변경에 영향을 받습니다. 대신 측정 방법을 공개하고 월 단위로 실측치를 제공합니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q7</span>작은 캠핑장도 효과가 있나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">있습니다. 오히려 대형 사업장보다 AI 노출 경쟁이 덜한 지역·조건 질문(반려동물 동반, 계곡, 노지 감성 등)에서 선점 여지가 큽니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q8</span>콘텐츠는 AI로 자동 생성하나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">아닙니다. 자동 생성 콘텐츠는 정보 정밀도가 낮아 AI 인용 기준을 충족하기 어렵습니다. 사업장 인터뷰와 현장 확인을 바탕으로 직접 작성합니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q9</span>기존에 쓰던 마케팅은 끊어야 하나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">아닙니다. 기존 채널은 그대로 두고 AI가 읽을 수 있는 자산을 추가하는 작업입니다. 기존 SEO 기반이 좋을수록 효과가 커집니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q10</span>어떤 AI를 대상으로 측정하나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">ChatGPT · Claude · Gemini 3사를 대상으로 측정합니다. 측정에 사용한 질문 원문과 측정 일시를 진단서에 함께 기재합니다. 측정하지 않는 엔진은 측정한다고 적지 않습니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q11</span>비용은 얼마인가요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">운영 모델과 사이트 규모에 따라 달라집니다. 무료 진단 후 사업장 조건에 맞춘 견적을 드립니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q12</span>캠핑하이브에서 시설 시공도 받았는데 연계되나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">네. 시공 고객에게는 개장 전 사전 최적화 프로그램과 별도 조건을 적용합니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q13</span>무료 진단은 정말 무료인가요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">네. 카드 등록도, 상담 예약도 필요 없습니다. 상호·홈페이지 주소·이메일 세 가지만 넣으시면 약 15초 뒤 결과가 화면에 나옵니다. 진단서만 받고 끝내셔도 됩니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q14</span>진단 결과는 얼마나 정확한가요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">AI에게 실제로 물어본 답변을 그대로 보여드립니다. 다만 AI는 같은 질문에도 매번 조금씩 다르게 답하므로, 진단서에 측정 일시와 질문 원문을 함께 표시합니다. 저희가 확인한 사실과 추정한 내용도 구분해 표기합니다.</p>
+      </details>
+      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+        <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q15</span>진단을 여러 번 받을 수 있나요?</summary>
+        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">무료 진단은 이메일 기준 1회입니다. 받으신 진단서는 기록 번호로 언제든 다시 여실 수 있습니다. 정기 재측정은 유료 프로그램에 포함됩니다.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-screen-label="S15 최종 CTA" style="padding:96px 32px;background:#12161D">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
+    <div>
+      <h2 style="margin:0 0 20px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FAFAF7;white-space:nowrap">지금 우리 캠핑장은 AI 답변에 있을까요?</h2>
+      <p style="margin:0 0 32px;font-size:19px;line-height:1.8;color:#C9C9BF">15초면 확인됩니다. 진단은 무료이며, 결과는 계약 여부와 관계없이 드립니다.</p>
+      <div style="border-top:1px solid rgba(255,255,255,0.14);padding-top:24px;display:grid;gap:12px">
+        <p style="margin:0;font-size:16px;line-height:1.7;color:#A5A59B">진단 결과만 받고 종료하셔도 됩니다. 영업 전화는 1회만 드립니다.</p>
+        <a href="#cta" style="display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:14px 26px;width:fit-content;border:1.5px solid rgba(255,255,255,0.30);border-radius:100px;color:#FAFAF7;font-size:17px;font-weight:700" style-hover="border-color:#3B82F6;color:#60A5FA">카카오톡으로 바로 문의</a>
+      </div>
+    </div>
+    <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
+      <form onSubmit="{{ onSubmitFinal }}" style="display:grid;gap:16px">
+        <label style="display:grid;gap:8px">
+          <span style="font-size:16px;font-weight:700;color:#FFFFFF">캠핑장 이름 <span style="font-size:14px;font-weight:400;color:#7C8697">(필수)</span></span>
+          <input type="text" required="required" placeholder="상호를 정확히 넣어 주세요" style="width:100%;min-height:54px;background:#0B0E13;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:14px 16px;font-size:17px;color:#FFFFFF;font-family:'Noto Sans KR',sans-serif">
+        </label>
+        <label style="display:grid;gap:8px">
+          <span style="font-size:16px;font-weight:700;color:#FFFFFF">홈페이지 주소 <span style="font-size:14px;font-weight:400;color:#7C8697">(필수)</span></span>
+          <input type="url" required="required" placeholder="홈페이지가 없으면 네이버 플레이스 주소도 됩니다" style="width:100%;min-height:54px;background:#0B0E13;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:14px 16px;font-size:17px;color:#FFFFFF;font-family:'Noto Sans KR',sans-serif">
+        </label>
+        <label style="display:grid;gap:8px">
+          <span style="font-size:16px;font-weight:700;color:#FFFFFF">결과 받으실 이메일 <span style="font-size:14px;font-weight:400;color:#7C8697">(필수)</span></span>
+          <input type="email" required="required" placeholder="진단서를 다시 여실 때 쓰입니다" style="width:100%;min-height:54px;background:#0B0E13;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:14px 16px;font-size:17px;color:#FFFFFF;font-family:'Noto Sans KR',sans-serif">
+        </label>
+        <label style="display:flex;align-items:center;gap:12px;min-height:44px;font-size:16px;color:#C4CCD8">
+          <input type="checkbox" required="required" style="width:22px;height:22px;accent-color:#3B82F6">
+          <span>개인정보 수집·이용에 동의합니다 <a href="#cta" style="color:#60A5FA;text-decoration:underline">약관 보기</a></span>
+        </label>
+        <button type="submit" data-ga="diag_final" style="width:100%;min-height:60px;margin-top:6px;background:#3B82F6;color:#FFFFFF;border:none;border-radius:100px;font-size:20px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer" style-hover="background:#2563EB" style-active="transform:scale(0.98)">지금 진단하기</button>
+      </form>
+      <p style="margin:16px 0 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:#8C96A6;text-align:center">15초 · 무료 · 오늘 12건 남음</p>
+      <sc-if value="{{ submittedFinal }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:14px 0 0;padding:14px;border:1px solid #3B82F6;background:rgba(59,130,246,0.10);border-radius:8px;font-size:15px;color:#60A5FA;text-align:center">진단 도구로 연결되는 자리입니다 (시안)</p>
+      </sc-if>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer style="padding:48px 32px;background:#070910">
+  <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/logo-mark.png" alt="캠핑하이브 심볼" style="height:28px;width:auto;display:block" />
+      <span style="width:1px;height:18px;background:rgba(255,255,255,0.24);display:block"></span>
+      <span style="display:flex;align-items:baseline;gap:1px;font-size:20px;font-weight:900;letter-spacing:-0.03em;line-height:1">
+        <span style="color:#FFFFFF">CAMPI</span><span style="color:#3B82F6">GHIVE</span>
+      </span>
+      <span style="font-size:15px;color:#8C96A6;border-left:1px solid rgba(255,255,255,0.18);padding-left:12px">주식회사 캠핑하이브</span>
+    </div>
+    <p style="margin:0;font-size:14px;line-height:1.8;color:#8B8B82;max-width:620px">측정 대상 AI 엔진은 ChatGPT · Claude · Gemini 3사입니다. 성과를 보장하지 않으며, 화면의 모든 수치는 측정 시점 기준입니다.</p>
+  </div>
+</footer>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;typingSpeed&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:95,&quot;min&quot;:30,&quot;max&quot;:200,&quot;step&quot;:5,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;히어로&quot;},&quot;measuredAt&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2026.08.10 14:20&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;히어로&quot;}}">
+class Component extends DCLogic {
+  state = { typed: '', done: false, engineIdx: 0, lineIdx: 0, coverIdx: 0, coverOn: true, statP: 0, submittedDemo: false, submittedFinal: false };
+
+  componentDidMount() {
+    this.q = '가평에 애견 동반 글램핑 추천해줘. 어린이 2명포함 4인 가족이야. ';
+    this.qa = [
+      { q: '가평에 애견 동반 글램핑 추천해줘. 어린이 2명 포함 4인 가족이야.', lead: '가평 지역 애견 동반 글램핑 중에서는 다음 세 곳을 추천드려요.' },
+      { q: '서울에서 1시간 안에 갈 만한 계곡 캠핑장 알려줘.', lead: '서울에서 1시간 거리 계곡 캠핑장은 다음 세 곳이 있습니다.' },
+      { q: '12월에도 운영하는 온수 잘 나오는 오토캠핑장 있어?', lead: '12월에도 운영하는 오토캠핑장은 다음 세 곳입니다.' }
+    ];
+    this.qi = 0;
+    this.i = 0;
+    const speed = this.props.typingSpeed ?? 95;
+    const type = () => {
+      const q = this.qa[this.qi].q;
+      this.i += 1;
+      this.setState({ typed: q.slice(0, this.i) });
+      if (this.i < q.length) { this.timer = setTimeout(type, speed); return; }
+      this.timer = setTimeout(() => this.setState({ done: true }), 400);
+      this.hold = setTimeout(erase, 5200);
+    };
+    const erase = () => {
+      if (this.i > 0) {
+        this.i = Math.max(0, this.i - 2);
+        this.setState({ typed: this.qa[this.qi].q.slice(0, this.i) });
+        this.timer = setTimeout(erase, 26);
+        return;
+      }
+      this.qi = (this.qi + 1) % this.qa.length;
+      this.setState({ done: false, qi: this.qi });
+      this.timer = setTimeout(type, 420);
+    };
+    this.timer = setTimeout(type, 500);
+    const el = document.getElementById('data');
+    if (el && 'IntersectionObserver' in window) {
+      this.io = new IntersectionObserver((entries) => {
+        if (entries.some(e => e.isIntersecting)) {
+          this.io.disconnect();
+          const t0 = performance.now();
+          const tick = (now) => {
+            const p = Math.min(1, (now - t0) / 1600);
+            this.setState({ statP: 1 - Math.pow(1 - p, 3) });
+            if (p < 1) this.raf = requestAnimationFrame(tick);
+          };
+          this.raf = requestAnimationFrame(tick);
+        }
+      }, { threshold: 0.35 });
+      this.io.observe(el);
+    } else {
+      this.setState({ statP: 1 });
+    }
+    this.cover = [
+      ['손님이 고르지 않습니다.', 'AI가 먼저 고릅니다.'],
+      ['우리 캠핑장은 이제', 'AI가 선택하고 결정합니다.'],
+      ['AI 답변 안에 없으면,', '손님의 선택지에도 없습니다.']
+    ];
+    this.coverTimer = setInterval(() => {
+      this.setState({ coverOn: false });
+      this.coverSwap = setTimeout(() => {
+        this.setState(s => ({ coverIdx: (s.coverIdx + 1) % 3, coverOn: true }));
+      }, 900);
+    }, 7000);
+    this.lines = [
+      'AI가 3곳을 골라주는 흐름에 “블로그 상위노출”은 낄 자리가 없습니다.',
+      '블로그 광고 300만 원을 써도 AI가 못 읽으면 답변엔 한 줄도 안 남습니다.',
+      '손님이 보는 건 검색 결과 열 개가 아니라 AI가 고른 세 곳입니다.'
+    ];
+    this.lineTimer = setTimeout(() => {
+      this.setState(s => ({ lineIdx: (s.lineIdx + 1) % 3 }));
+      this.lineTimer = setInterval(() => {
+        this.setState(s => ({ lineIdx: (s.lineIdx + 1) % 3 }));
+      }, 7000);
+    }, 6900);
+    this.engines = [
+      { name: 'ChatGPT', color: '#10A37F', glyph: '✺' },
+      { name: 'Claude', color: '#D97757', glyph: '✳' },
+      { name: 'Gemini', color: '#4285F4', glyph: '✦' }
+    ];
+    this.rotor = setInterval(() => {
+      this.setState(s => ({ engineIdx: (s.engineIdx + 1) % 3 }));
+    }, 2600);
+  }
+
+  componentWillUnmount() { clearTimeout(this.timer); clearTimeout(this.hold); clearInterval(this.rotor); clearTimeout(this.lineTimer); clearInterval(this.lineTimer); clearInterval(this.coverTimer); clearTimeout(this.coverSwap); if (this.io) this.io.disconnect(); if (this.raf) cancelAnimationFrame(this.raf); }
+
+  renderVals() {
+    const d = this.state.done;
+    const p = this.state.statP;
+    const cvs = this.cover || [['손님이 고르지 않습니다.', 'AI가 먼저 고릅니다.']];
+    const cv = cvs[this.state.coverIdx] || cvs[0];
+    const list = this.engines || [{ name: 'ChatGPT', color: '#10A37F', glyph: '✺' }];
+    const e = list[this.state.engineIdx] || list[0];
+    return {
+      typedQ: this.state.typed || '\u00a0',
+      answerLead: (this.qa && this.qa[this.qi] ? this.qa[this.qi].lead : '가평 지역 글램핑 중에서는 다음 세 곳을 추천드려요.'),
+      flashLine: (this.lines || [''])[this.state.lineIdx] || '',
+      flashColor: '#60A5FA',
+      flashGlow: '0 0 34px rgba(59,130,246,0.45)',
+      stat0: (63.5 * p).toFixed(1) + '%',
+      stat1: (54.5 * p).toFixed(1) + '%',
+      stat2: (77.2 * p).toFixed(1) + '%',
+      stat3: Math.round(58 * p) + '%↓',
+      img0: this.state.coverIdx === 0 ? 1 : 0,
+      img1: this.state.coverIdx === 1 ? 1 : 0,
+      img2: this.state.coverIdx === 2 ? 1 : 0,
+      coverLine1: cv[0],
+      coverLine2: cv[1],
+      coverOpacity: this.state.coverOn ? 1 : 0,
+      coverShift: this.state.coverOn ? 'translateY(0)' : 'translateY(14px)',
+      engineName: e.name,
+      engineColor: e.color,
+      engineGlyph: e.glyph,
+      measuredAt: this.props.measuredAt ?? '2026.08.10 14:20',
+      answerStyle: {
+        opacity: d ? 1 : 0,
+        transform: d ? 'translateY(0)' : 'translateY(10px)',
+        transition: 'opacity 400ms cubic-bezier(0,0,0.2,1), transform 400ms cubic-bezier(0,0,0.2,1)'
+      },
+      submittedDemo: this.state.submittedDemo,
+      submittedFinal: this.state.submittedFinal,
+      onSubmitDemo: (e) => { e.preventDefault(); this.setState({ submittedDemo: true }); },
+      onSubmitFinal: (e) => { e.preventDefault(); this.setState({ submittedFinal: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
