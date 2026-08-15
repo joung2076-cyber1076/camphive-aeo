@@ -114,13 +114,27 @@ function slice(html, startTag, endTag) {
 
 let cache = null;
 
-/** 시안의 <header> 와 <main> 을 정적 HTML 로 돌려준다. */
+/**
+ * 시안의 <style> · <header> · <main> · <footer> 를 통째로 돌려준다.
+ *
+ * ⚠ <style> 을 반드시 함께 내보내야 한다. 시안의 @keyframes 22개
+ *   (marquee · feedUp · heroDrift · sweepX · blink · pulseDot ·
+ *    trackScan · lineSlide · riseIn · coverFlash · vignettePulse ·
+ *    scanLine …) 가 전부 이 블록에 있다. 빠뜨리면 인라인 style 의
+ *   animation 선언이 가리킬 대상이 없어져 화면이 통째로 정지한다.
+ *   2026-08-15 에 실제로 그렇게 배포됐다. 되풀이하지 말 것.
+ *
+ * 푸터도 시안 것을 쓴다. 우리 footer() 를 붙이면 시안에 없는 블록이
+ * 하나 더 생긴다.
+ */
 export async function loadDesign() {
   if (cache) return cache;
   const raw = await readFile(DC, 'utf8');
   cache = {
+    style: slice(raw, '<style>', '</style>'),
     header: transform(slice(raw, '<header', '</header>')),
     main: transform(slice(raw, '<main', '</main>')),
+    footer: transform(slice(raw, '<footer', '</footer>')),
   };
   return cache;
 }

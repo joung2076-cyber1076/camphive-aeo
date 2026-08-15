@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 //  HTML 셸 (head / header / footer)
 //
 //  결과물에는 <script type="application/ld+json"> 외에 실행 스크립트가
@@ -54,7 +54,7 @@ ${page.published ? `<meta property="article:published_time" content="${esc(page.
 <!-- 방문 가능한 곳(포천 전시장) 기준. 공장이 아니다. -->
 <meta name="geo.placename" content="${esc((org.showroom ?? org.address).locality)}">
 
-<link rel="stylesheet" href="${assetPath('styles.css')}">
+<link rel="stylesheet" href="${assetPath(page.type === 'landing' ? 'home.css' : 'styles.css')}">
 <link rel="sitemap" type="application/xml" href="${assetPath('sitemap.xml')}">
 <link rel="icon" href="${assetPath('favicon.svg')}" type="image/svg+xml">
 
@@ -243,6 +243,7 @@ ${head(page, ctx, graph)}
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
+${useDesign ? design.style : ''}
 ${useDesign ? design.header : header(page, ctx)}
 ${
   useDesign
@@ -251,9 +252,9 @@ ${
 ${main}
 </main>`
 }
-${isLanding ? floatingButtons(LANDING.floating) : ''}
-${footer(ctx, page)}
-<script src="${assetPath('js/enhance.js')}" defer></script>
+${useDesign ? '' : isLanding ? floatingButtons(LANDING.floating) : ''}
+${useDesign ? design.footer : footer(ctx, page)}
+${useDesign ? '' : `<script src="${assetPath('js/enhance.js')}" defer></script>`}
 </body>
 </html>
 `;

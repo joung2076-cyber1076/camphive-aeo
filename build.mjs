@@ -218,6 +218,13 @@ async function main() {
   ).join('\n');
   const mainCss = await readFile(path.join(ROOT, 'src', 'styles.css'), 'utf8');
   await writeFile(path.join(DIST, 'styles.css'), `${fontCss}\n${mainCss}`, 'utf8');
+
+  // 홈 전용 — 폰트 선언만. 시안은 스타일을 전부 인라인 style 과 자체
+  // <style> 블록에 담고 있어서, 여기에 우리 styles.css 를 얹으면
+  // h1/h2/p/section 같은 요소 선택자가 시안 위에 덧칠된다.
+  // "디자인 그대로"를 지키려면 홈에는 폰트만 준다.
+  await writeFile(path.join(DIST, 'home.css'), fontCss, 'utf8');
+  console.log(`  ${C.ok('생성')}  home.css  ${C.dim(`폰트 선언만 ${(fontCss.length / 1024).toFixed(1)}KB — 홈은 시안 스타일을 쓴다`)}`);
   console.log(
     `  ${C.ok('생성')}  styles.css  ${C.dim(
       `본문 ${(mainCss.length / 1024).toFixed(1)}KB + 폰트 선언 ${(fontCss.length / 1024).toFixed(1)}KB`
