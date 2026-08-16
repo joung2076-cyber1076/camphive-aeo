@@ -330,6 +330,63 @@ async function main() {
       }
     }
 
+    // 4-3) 화면 FAQ ↔ JSON-LD FAQPage 일치 (신설 2026-08-16)
+    //
+    //  Google 구조화 데이터 정책 — "Don't mark up content that is not visible
+    //  to readers of the page." 화면과 JSON-LD 가 어긋나면 AI 는 우리 페이지에
+    //  없는 문장을 우리 것으로 인용한다.
+    //
+    //  실제로 새 나갔던 것: 화면에 없는 유령 문항 1개, 질문 13건의 접두어 차이,
+    //  화면에 없는 답변 문장 2건. 검사 26종이 전부 통과인 상태에서 새고 있었다.
+    //  원인은 화면(시안 마크업)과 JSON-LD(데이터 파일)의 소스가 갈린 것이다.
+    //  경고가 아니라 실패로 처리한다 — 배포를 막아야 한다.
+    if (graph) {
+      const details = raw.match(/<details[\s\S]*?<\/details>/g) ?? [];
+      if (details.length) {
+        const flat = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        const screen = details.map((d) => {
+          const sm = d.match(/<summary[\s\S]*?>([\s\S]*?)<\/summary>/);
+          return {
+            // 번호 배지(Q1…)는 표기용이라 질문 본문에서 뺀다
+            q: flat(sm ? sm[1] : '').replace(/^Q\d+\s*/, ''),
+            a: flat(d.replace(/<summary[\s\S]*?<\/summary>/, '')),
+          };
+        });
+        const faqNode = graph.find((n) => [].concat(n['@type']).includes('FAQPage'));
+        const items = (faqNode?.mainEntity ?? []).map((e) => ({
+          q: flat(String(e.name ?? '')),
+          a: flat(String(e.acceptedAnswer?.text ?? '')),
+        }));
+
+        const sameCount = items.length === screen.length;
+        check(sameCount, '화면 FAQ ↔ JSON-LD 개수 일치', `화면·JSON-LD 각 ${screen.length}개`);
+        if (!sameCount) {
+          console.log(C.err(`         화면 <details> ${screen.length}개 · mainEntity ${items.length}개`));
+          const extra = items.slice(screen.length);
+          for (const e of extra.slice(0, 3)) console.log(C.err(`         JSON-LD 에만: "${e.q}"`));
+        }
+
+        const n = Math.min(items.length, screen.length);
+        const qBad = [];
+        const aBad = [];
+        for (let i = 0; i < n; i += 1) {
+          if (items[i].q !== screen[i].q) qBad.push(i + 1);
+          if (items[i].a !== screen[i].a) aBad.push(i + 1);
+        }
+        check(qBad.length === 0, '화면 FAQ ↔ JSON-LD 질문 일치', qBad.length ? '' : `${n}개 글자 단위 일치`);
+        for (const i of qBad.slice(0, 5)) {
+          console.log(C.err(`         [${i}] 화면   : "${screen[i - 1].q}"`));
+          console.log(C.err(`             JSON-LD: "${items[i - 1].q}"`));
+        }
+        check(aBad.length === 0, '화면 FAQ ↔ JSON-LD 답변 일치', aBad.length ? '' : `${n}개 글자 단위 일치`);
+        for (const i of aBad.slice(0, 5)) {
+          console.log(C.err(`         [${i}] 화면 ${screen[i - 1].a.length}자 / JSON-LD ${items[i - 1].a.length}자`));
+          console.log(C.err(`             화면   : "${screen[i - 1].a.slice(0, 70)}…"`));
+          console.log(C.err(`             JSON-LD: "${items[i - 1].a.slice(0, 70)}…"`));
+        }
+      }
+    }
+
     // 5) 소스 대비 실제 텍스트 비중 — 낮으면 껍데기 페이지라는 뜻
     const textOnly = raw
       .replace(/<script[\s\S]*?<\/script>/gi, '')
@@ -398,7 +455,7 @@ async function main() {
       });
       check(
         noWord.length === 0,
-        `질문 ${questions.length}개 업종어 — 질문에 업종어가 없다(질의 3원칙 ①)`,
+        `질문 ${questions.length}개 업종어 — 모든 질문에 업종어(캠핑장·글램핑)가 있다(질의 3원칙 ①)`,
         noWord.length ? '' : '캠핑장·글램핑 포함'
       );
       for (const [where, q] of noWord.slice(0, 5)) console.log(C.err(`         ${where}: "${q}"`));
