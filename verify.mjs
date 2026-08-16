@@ -33,6 +33,8 @@ try {
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const DIST = path.join(ROOT, 'dist');
 const CONTENT_DIR = path.join(ROOT, 'src', 'content');
+// 홈 카피의 정본. 홈 본문 존재 검사의 기대값을 여기서 뽑는다.
+const DESIGN_FILE = path.join(ROOT, 'src', 'design', 'home.dc.html');
 
 const C = {
   ok: (s) => `\x1b[32m${s}\x1b[0m`,
@@ -128,41 +130,45 @@ function htmlPathFor(slug) {
 }
 
 /** 페이지에서 "소스에 반드시 있어야 하는" 문자열들을 뽑아낸다. */
-function expectedStrings(page) {
+async function expectedStrings(page) {
   const out = [];
   const add = (label, text) => {
     if (text && String(text).trim()) out.push({ label, text: String(text).trim() });
   };
 
   // 홈(랜딩)은 2026-08-15 부터 시안(src/design/home.dc.html)을 그대로
-  // 출력한다. 카피의 정본이 home.data.mjs 가 아니라 시안 파일이므로,
-  // 아래 대조 대상에서 홈을 뺀다. 홈 본문이 정적으로 존재하는지는
-  // 이 함수가 아니라 5) 본문 분량 검사와 2-1) JS 제거 후 재대조가 본다.
+  // 출력한다. 카피의 정본이 home.data.mjs 가 아니라 시안 파일이다.
   //
-  // ⚠ 하위 15개 페이지는 그대로 전수 대조한다. 홈만 예외다.
-  if (page.type === 'landing') return out;
+  // 2026-08-16 — 예전에는 여기서 홈을 통째로 빼고 그 아래 LANDING 순회
+  // 코드를 두었는데, early return 때문에 그 코드가 한 번도 실행되지
+  // 않았다(죽은 코드). 홈만 관문 ②의 기본 검사를 안 받고 있었다.
+  //
+  // 기대값을 시안 **원문**(transform 전)에서 뽑아 되살린다.
+  //   잡는 것 — transform() 이 문장을 삼키거나, 문서 조립에서 <main> 이
+  //   누락되거나, 자리표시자 치환이 본문을 지우는 경우.
+  //   못 잡는 것 — 시안 자체에 문장이 없는 경우(그건 디자인 문제다).
+  // 시안 원문과 산출물 사이에 변환 단계가 있으므로 "같은 파일을 복사해
+  // 자동 통과"가 아니다. 실제로 그 사이에서 텍스트가 사라질 수 있다.
+  if (page.type === 'landing') {
+    const dcRaw = await readFile(DESIGN_FILE, 'utf8');
+    const mainRaw = dcRaw.match(/<main[\s\S]*?<\/main>/)?.[0] ?? '';
+    // <sc-if> 는 "제출 뒤" 상태라 첫 화면이 아니다. transform() 이 통째로
+    // 지우므로 기대값에서도 뺀다(render-dc.mjs 93행과 같은 규칙).
+    const cleaned = mainRaw.replace(/<sc-if\b[^>]*>[\s\S]*?<\/sc-if>/gi, '');
+    const seen = new Set();
+    for (const m of cleaned.matchAll(/>([^<>{}]{12,})</g)) {
+      // 산출물은 unescapeHtml 을 거친 뒤 비교되므로 기대값도 같은 기준으로 편다
+      const s = unescapeHtml(m[1]).replace(/\s+/g, ' ').trim();
+      if (!s || s.includes('{{') || /^[\s·|—-]+$/.test(s)) continue;
+      if (seen.has(s)) continue;
+      seen.add(s);
+      out.push({ label: `시안 본문 ${seen.size}`, text: s });
+    }
+    return out;
+  }
 
   add('H1 질의문', page.question ?? page.title);
   add('답변 블록', page.answer);
-
-  // 랜딩은 카피가 데이터 모듈에 있다. 그 안의 모든 문자열이 소스에 그대로
-  // 나오는지 본다. 하나라도 빠지면 그 문장은 AI에게 존재하지 않는 문장이다.
-  if (page.type === 'landing' && LANDING) {
-    const walk = (node, trail) => {
-      if (typeof node === 'string') {
-        // 자리표시자 표기(【…】)와 주소·경로는 대조 대상에서 뺀다
-        if (node.trim() && !/^[/#]/.test(node)) add(`랜딩 ${trail}`, node);
-      } else if (Array.isArray(node)) {
-        node.forEach((n, i) => walk(n, `${trail}[${i}]`));
-      } else if (node && typeof node === 'object') {
-        for (const [k, v] of Object.entries(node)) {
-          if (k === 'href' || k === 'id' || k === 'icon') continue;
-          walk(v, trail ? `${trail}.${k}` : k);
-        }
-      }
-    };
-    walk(LANDING, '');
-  }
 
   (page.tables ?? []).forEach((t, i) => {
     add(`표${i + 1} 제목`, t.caption);
@@ -239,7 +245,7 @@ async function main() {
     //    ("**굵게**" 를 쓰면 A<strong>B</strong>C 가 되어 "ABC" 로는 못 찾는다)
     //    사람이 소스를 읽을 때는 태그가 보이지 않으므로, 태그를 걷어낸
     //    평문에서도 한 번 더 찾는다. 둘 중 하나만 걸리면 통과다.
-    const expected = expectedStrings(page);
+    const expected = await expectedStrings(page);
     const plain = norm(source.replace(/<[^>]+>/g, ''));
     const missing = expected.filter(
       (e) => !source.includes(e.text) && !plain.includes(norm(e.text))
