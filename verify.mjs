@@ -64,6 +64,37 @@ function warn(label, detail = '') {
 //  검사 대상은 "질문"뿐이다. 물음표로 끝나지 않는 H2("지금 할 수 있는
 //  3단계" 등)는 질문이 아니므로 건드리지 않는다.
 //  기업정보·자료실 페이지는 질의를 노리는 문서가 아니라 제외한다.
+/**
+ * 검사는 소스가 아니라 배포 산출물(dist)을 본다.
+ * AI가 읽는 것은 산출물이다.
+ * 2026-08-16 FAQ 이중 소스 사고의 재발 방지. 지침 6.3.6.4
+ *
+ * 아래 두 함수가 그 원칙의 도구다. 질문·FAQ 를 데이터 파일이 아니라
+ * 빌드된 HTML 에서 뽑는다.
+ */
+const flatText = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+/** 산출물의 <details>/<summary> 에서 FAQ 를 뽑는다. */
+function faqFromHtml(html) {
+  return (html.match(/<details[\s\S]*?<\/details>/g) ?? []).map((d) => {
+    const sm = d.match(/<summary[\s\S]*?>([\s\S]*?)<\/summary>/);
+    return {
+      q: flatText(sm ? sm[1] : '').replace(/^Q\d+\s*/, ''),
+      a: flatText(d.replace(/<summary[\s\S]*?<\/summary>/, '')),
+    };
+  });
+}
+
+/** 산출물의 <main> 안 제목을 단계별로 뽑는다. 헤더·푸터는 제외한다. */
+function headingsFromHtml(html) {
+  const main = html.match(/<main[\s\S]*?<\/main>/)?.[0] ?? html;
+  const grab = (tag) =>
+    [...main.matchAll(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'g'))]
+      .map((m) => flatText(m[1]))
+      .filter(Boolean);
+  return { h1: grab('h1'), h2: grab('h2'), h3: grab('h3') };
+}
+
 const CORPORATE_SLUGS = new Set([
   'about', 'contact', 'privacy',
   'intro/company', 'intro/consulting', 'intro/ai-marketing',
@@ -409,16 +440,20 @@ async function main() {
     // ── 7) 질의 3원칙 — 문체·업종어 ──────────────────────
     const slugKey = String(page.slug ?? '').replace(/^\/+|\/+$/g, '');
     if (!page.template && !CORPORATE_SLUGS.has(slugKey)) {
+      // 질문을 산출물에서 뽑는다 (2026-08-16 전환 · 지침 6.3.6.4).
+      // 소스 데이터를 보면 "데이터에는 있고 화면에는 없는" 상태를 통과시킨다.
+      // 실제로 업종어 검사가 그렇게 통과했다.
       const questions = [];
       if (page.type === 'landing') {
         // 랜딩은 FAQ만 대상이다. 섹션 H2는 시안 확정 카피라 질의가 아니다.
-        (LANDING?.s14?.items ?? []).forEach((f, i) => questions.push([`홈 FAQ ${i + 1}`, f.q]));
+        faqFromHtml(raw).forEach((f, i) => questions.push([`홈 FAQ ${i + 1}`, f.q]));
       } else {
-        if (page.question) questions.push(['H1', page.question]);
-        (page.sections ?? []).forEach((s, i) => {
-          if (/\?\s*$/.test(s.h2 ?? '')) questions.push([`H2 ${i + 1}`, s.h2]);
-        });
-        (page.faq ?? []).forEach((f, i) => questions.push([`FAQ ${i + 1}`, f.q]));
+        headingsFromHtml(raw).h1.forEach((h) => questions.push(['H1', h]));
+        headingsFromHtml(raw)
+          .h2.filter((h) => /\?\s*$/.test(h))
+          .forEach((h, i) => questions.push([`H2 ${i + 1}`, h]));
+        headingsFromHtml(raw).h3.filter((h) => /\?\s*$/.test(h))
+          .forEach((h, i) => questions.push([`FAQ ${i + 1}`, h]));
       }
 
       // ── 반말 어미 검사 — 타깃 질의에만 적용한다 (2026-08-15 확정) ──
@@ -593,10 +628,20 @@ async function main() {
     return inter / (A.size + B.size - inter);
   };
 
-  const homeFaq = (LANDING?.s14?.items ?? []).map((f) => f.q);
-  const subH1 = pages
-    .filter((p) => p.question && p.type !== 'landing' && !p.template && !CORPORATE_SLUGS.has(String(p.slug ?? '').replace(/^\/+|\/+$/g, '')))
-    .map((p) => ({ slug: p.slug, q: p.question }));
+  // 양쪽 다 산출물에서 읽는다 (2026-08-16 전환 · 지침 6.3.6.4).
+  const homeHtmlPath = htmlPathFor('');
+  const homeFaq = existsSync(homeHtmlPath)
+    ? faqFromHtml(await readFile(homeHtmlPath, 'utf8')).map((f) => f.q)
+    : [];
+  const subH1 = [];
+  for (const p of pages) {
+    if (!p.question || p.type === 'landing' || p.template) continue;
+    if (CORPORATE_SLUGS.has(String(p.slug ?? '').replace(/^\/+|\/+$/g, ''))) continue;
+    const f = htmlPathFor(p.slug);
+    if (!existsSync(f)) continue;
+    const [h1] = headingsFromHtml(await readFile(f, 'utf8')).h1;
+    if (h1) subH1.push({ slug: p.slug, q: h1 });
+  }
 
   const collisions = [];
   for (const [i, hq] of homeFaq.entries()) {

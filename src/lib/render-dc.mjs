@@ -127,14 +127,62 @@ let cache = null;
  * 푸터도 시안 것을 쓴다. 우리 footer() 를 붙이면 시안에 없는 블록이
  * 하나 더 생긴다.
  */
+/**
+ * 홈 FAQ 를 화면 마크업에서 그대로 뽑는다.
+ *
+ *  2026-08-16 — 화면은 이 시안 파일에서, JSON-LD 는 home.data.mjs 의
+ *  s14.items 에서 나오던 시절이 있었다. 시안을 갈아끼울 때 한쪽만 바뀌어
+ *  화면에 없는 문항 1개와 문장 2건이 JSON-LD 로 나갔다(Google 구조화
+ *  데이터 정책 위반). 검사 26종이 전부 통과인 채로 새고 있었다.
+ *
+ *  그래서 출처를 하나로 만든다. 화면이 정본이고 JSON-LD 는 그 파생물이다.
+ *  transform() 을 거친 뒤의 main 에서 뽑아야 실제 출력과 같다.
+ */
+function parseFaq(mainHtml) {
+  const flat = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return (mainHtml.match(/<details[\s\S]*?<\/details>/g) ?? []).map((d) => {
+    const sm = d.match(/<summary[\s\S]*?>([\s\S]*?)<\/summary>/);
+    return {
+      // 번호 배지(Q1…)는 표기용이라 질문 본문에서 뺀다
+      q: flat(sm ? sm[1] : '').replace(/^Q\d+\s*/, ''),
+      a: flat(d.replace(/<summary[\s\S]*?<\/summary>/, '')),
+    };
+  });
+}
+
+//  홈 FAQ 최소 문항 수 — 이보다 적으면 빌드를 세운다.
+//  0개 검사만 두면 "16개가 15개로 줄어든 경우"를 못 잡는다. 그때는
+//  화면·JSON-LD 가 둘 다 15개라 일치 검사도 통과해 버린다.
+//  ⚠ 문항을 의도적으로 늘릴 때만 이 값을 올린다.
+const MIN_HOME_FAQ = 16;
+
 export async function loadDesign() {
   if (cache) return cache;
   const raw = await readFile(DC, 'utf8');
+  const main = transform(slice(raw, '<main', '</main>'));
+  const faq = parseFaq(main);
+
+  if (faq.length === 0) {
+    throw new Error(
+      '홈 FAQ 를 하나도 파싱하지 못했습니다. src/design/home.dc.html 의 ' +
+        '<details>/<summary> 구조가 바뀌었는지 확인하십시오. ' +
+        'JSON-LD FAQPage 가 통째로 비어 나갑니다.'
+    );
+  }
+  if (faq.length < MIN_HOME_FAQ) {
+    throw new Error(
+      `홈 FAQ 가 ${faq.length}개입니다. 최소 ${MIN_HOME_FAQ}개여야 합니다. ` +
+        '문항이 사라졌는지, 파싱이 일부만 잡았는지 확인하십시오. ' +
+        `의도적으로 줄인 것이라면 render-dc.mjs 의 MIN_HOME_FAQ 를 함께 내리십시오.`
+    );
+  }
+
   cache = {
     style: slice(raw, '<style>', '</style>'),
     header: transform(slice(raw, '<header', '</header>')),
-    main: transform(slice(raw, '<main', '</main>')),
+    main,
     footer: transform(slice(raw, '<footer', '</footer>')),
+    faq,
   };
   return cache;
 }

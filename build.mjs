@@ -164,8 +164,13 @@ async function main() {
 
   const written = [];
   for (const page of pages) {
-    // 랜딩의 FAQ 16문항은 카피 데이터에 있다. FAQPage 스키마가 그것을 쓴다.
-    if (page.type === 'landing') page.faq = LANDING.s14.items;
+    // 랜딩의 FAQ 는 화면 마크업에서 뽑은 것을 쓴다.
+    //
+    // 전에는 LANDING.s14.items(데이터 파일)를 썼다. 화면은 시안에서,
+    // JSON-LD 는 데이터에서 나오니 시안을 갈아끼울 때 한쪽만 바뀌어
+    // 화면에 없는 문항·문장이 JSON-LD 로 나갔다(2026-08-16).
+    // 이제 화면이 정본이고 JSON-LD 는 그 파생물이다.
+    if (page.type === 'landing') page.faq = design.faq;
 
     const graph = buildGraph(page, ctx);
     const main =
