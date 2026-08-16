@@ -705,6 +705,13 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 
 /* ── 표 ─────────────────────────────────────────────────────── */
 .table-wrap { overflow-x: auto; margin-block: var(--s6); }
+/* renderTable() 은 figure.data-table 로 감싸는데 여기 규칙이 없어
+   좁은 화면에서 표가 화면을 밀고 있었다(/measurement/ 377px).
+   칸 수를 줄이는 대신 표 안에서 가로로 민다 — 열을 접으면 행/열 구조가
+   깨져 AI가 수치를 못 읽는다. 지금은 자리표시자라 2px 지만
+   본문이 채워지면 확실히 넘친다. */
+.data-table { overflow-x: auto; margin-block: var(--s6); }
+.table-source, .table-note { margin-top: var(--s3); font-size: 0.875rem; color: var(--muted); }
 table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
 caption {
   text-align: left; font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
