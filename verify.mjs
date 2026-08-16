@@ -155,14 +155,24 @@ async function expectedStrings(page) {
     // <sc-if> 는 "제출 뒤" 상태라 첫 화면이 아니다. transform() 이 통째로
     // 지우므로 기대값에서도 뺀다(render-dc.mjs 93행과 같은 규칙).
     const cleaned = mainRaw.replace(/<sc-if\b[^>]*>[\s\S]*?<\/sc-if>/gi, '');
-    const seen = new Set();
+
+    // 존재 여부가 아니라 **출현 횟수**를 센다 (2026-08-16 강화).
+    //
+    //  존재 여부만 보면 같은 문장이 두 곳에 있을 때 한 곳이 사라져도
+    //  다른 곳에서 매칭돼 통과한다. 실제로 커버에 두 번 나오는
+    //  「손님이 고르지…」가 그렇게 빠져나갔다.
+    //  시안 원문에서 N번 나오면 산출물에서도 N번이어야 한다.
+    const counts = new Map();
     for (const m of cleaned.matchAll(/>([^<>{}]{12,})</g)) {
       // 산출물은 unescapeHtml 을 거친 뒤 비교되므로 기대값도 같은 기준으로 편다
       const s = unescapeHtml(m[1]).replace(/\s+/g, ' ').trim();
       if (!s || s.includes('{{') || /^[\s·|—-]+$/.test(s)) continue;
-      if (seen.has(s)) continue;
-      seen.add(s);
-      out.push({ label: `시안 본문 ${seen.size}`, text: s });
+      counts.set(s, (counts.get(s) ?? 0) + 1);
+    }
+    let n = 0;
+    for (const [text, expect] of counts) {
+      n += 1;
+      out.push({ label: `시안 본문 ${n}${expect > 1 ? ` (${expect}회)` : ''}`, text, expect });
     }
     return out;
   }
@@ -247,15 +257,35 @@ async function main() {
     //    평문에서도 한 번 더 찾는다. 둘 중 하나만 걸리면 통과다.
     const expected = await expectedStrings(page);
     const plain = norm(source.replace(/<[^>]+>/g, ''));
-    const missing = expected.filter(
-      (e) => !source.includes(e.text) && !plain.includes(norm(e.text))
-    );
+
+    // expect 가 붙은 항목(홈)은 횟수까지 맞아야 한다.
+    // 산출물 쪽도 <main> 안에서만 센다 — JSON-LD 에 같은 문장이 있으면
+    // 화면과 무관하게 횟수가 늘어 오탐이 난다.
+    // 산출물 쪽도 기대값과 **똑같은 방식**으로 뽑아 센다. 단순 부분 문자열
+    // 카운트는 짧은 문장이 긴 문장 안에 포함될 때 더 세어져 오탐이 난다.
+    const mainOut = source.match(/<main[\s\S]*?<\/main>/)?.[0] ?? source;
+    const outCounts = new Map();
+    for (const m of mainOut.matchAll(/>([^<>{}]{12,})</g)) {
+      const s = unescapeHtml(m[1]).replace(/\s+/g, ' ').trim();
+      if (!s) continue;
+      outCounts.set(s, (outCounts.get(s) ?? 0) + 1);
+    }
+    const missing = [];
+    for (const e of expected) {
+      if (e.expect) {
+        const got = outCounts.get(e.text) ?? 0;
+        if (got !== e.expect) missing.push({ ...e, got });
+      } else if (!source.includes(e.text) && !plain.includes(norm(e.text))) {
+        missing.push(e);
+      }
+    }
     check(
       missing.length === 0,
       `본문 텍스트가 소스에 존재 (${expected.length - missing.length}/${expected.length} 항목)`
     );
     for (const m of missing.slice(0, 5)) {
-      console.log(C.err(`         누락 → ${m.label}: "${m.text.slice(0, 50)}…"`));
+      const how = m.expect ? ` [${m.expect}회 있어야 하는데 ${m.got}회]` : '';
+      console.log(C.err(`         누락 → ${m.label}${how}: "${m.text.slice(0, 46)}…"`));
     }
 
     // 2) JS가 본문을 그리지 않는가
