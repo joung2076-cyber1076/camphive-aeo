@@ -254,7 +254,18 @@ ${main}
 }
 ${useDesign ? '' : isLanding ? floatingButtons(LANDING.floating) : ''}
 ${useDesign ? design.footer : footer(ctx, page)}
-${useDesign ? '' : `<script src="${assetPath('js/enhance.js')}" defer></script>`}
+${/*
+  enhance.js 는 홈에도 붙인다.
+
+  2026-08-16 — 전에는 useDesign(홈)일 때 빼고 있었다. 시안이 자체 React 로
+  움직인다고 보았기 때문인데, 그 스크립트는 transform() 이 걷어내므로
+  홈에는 JS 가 한 줄도 없었다. 엔진 배지·질문 로테이션이 마크업만 들어가고
+  영원히 첫 벌에 멈춰 있던 원인이다.
+
+  홈 마크업에 없는 것(.reveal · .site-header · .floating)을 겨냥한 코드는
+  querySelector 가 빈 결과를 돌려주어 그냥 지나간다. 이 파일은 장식 전용이라
+  통째로 실패해도 본문은 그대로다.
+*/ ''}<script src="${assetPath('js/enhance.js')}" defer></script>
 </body>
 </html>
 `;
