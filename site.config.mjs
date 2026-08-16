@@ -89,7 +89,7 @@ export const org = {
   founder: '정용택',
   telephone: '031-584-0636',
   fax: '031-622-9368',
-  email: 'joung1076@naver.com',
+  email: 'joung2076@gmail.com',
   businessNumber: '829-88-03202',
 
   // 상담 가능 시간이 확정되면 채운다. 비어 있으면 JSON-LD에 나오지 않는다.

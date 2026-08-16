@@ -12,10 +12,20 @@ import path from 'node:path';
 import { parseFrontMatter } from './frontmatter.mjs';
 import { parseMarkdown } from './markdown.mjs';
 
+/**
+ * 배포에서 빼는 파일 — 이름이 밑줄로 시작하는 것.
+ *
+ * _template.md 는 콘텐츠 구조 견본이라 실제 페이지가 아니다. 지금은
+ * 전역 noindex 라 문제가 없지만, 색인을 여는 날 견본까지 함께 열린다.
+ * 소스는 남겨 두고 산출물에서만 뺀다.
+ */
+const isDraft = (name) => name.startsWith('_');
+
 /** src/content 아래의 .md 파일을 하위 폴더까지 훑는다. */
 async function findMarkdown(dir, rel = '') {
   const found = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
+    if (isDraft(entry.name)) continue;
     const full = path.join(dir, entry.name);
     const relPath = path.posix.join(rel, entry.name);
     if (entry.isDirectory()) found.push(...(await findMarkdown(full, relPath)));

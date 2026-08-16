@@ -419,7 +419,9 @@ export function diagnosisForm(f, { id, title, lead } = {}) {
         </label>
         <label>
           <input type="checkbox" name="marketing">
-          <span>${esc(f.consentOptional)}
+          <!-- 선택 동의도 개인정보 이용(마케팅 수신)이므로 정보주체가
+               방침을 열람할 경로가 있어야 한다. 필수 항목과 같은 형태로 건다. -->
+          <span>${esc(f.consentOptional)} <a href="${esc(pathFor(f.consentLinkSlug))}">${esc(f.consentRequiredLink)}</a>
             <span class="opt-note">${esc(f.consentOptionalNote)}</span>
           </span>
         </label>
