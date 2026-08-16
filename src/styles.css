@@ -949,6 +949,23 @@ td.is-num { font-family: var(--mono); }
 .doc-icon { flex: none; color: var(--muted); }
 .doc-card:hover .doc-icon { color: var(--accent); }
 
+/* ── 사이트 전체 보기 (하위 9개 경로) ───────────────────────────
+   마크업(.footer-nav-wrap / .footer-sitemap)은 전부터 있었으나 이 파일에
+   규칙이 없어 기본 인라인 링크로 흘러 있었다(높이 21px). 규칙을 신설한다.
+   손가락으로 누르는 자리라 터치 표적을 44px 확보한다.
+   기존 푸터 링크(.footer-docs · .footer-links)는 건드리지 않는다. */
+.footer-nav-wrap { margin-top: var(--s10); padding-top: var(--s6); border-top: 1px solid var(--line); }
+.footer-nav-title {
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.06em; color: var(--muted); margin: 0 0 var(--s2);
+}
+.footer-sitemap { display: flex; flex-wrap: wrap; gap: 0 var(--s6); }
+.footer-sitemap a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: 0.9375rem; color: var(--muted); transition: color 0.15s ease;
+}
+.footer-sitemap a:hover, .footer-sitemap a[aria-current='page'] { color: var(--text); }
+
 .footer-bottom { margin-top: var(--s16); padding-top: var(--s8); border-top: 1px solid var(--line); }
 .footer-links { list-style: none; display: flex; gap: var(--s5); flex-wrap: wrap; margin-bottom: var(--s4); }
 .copyright { font-size: 0.8125rem; color: var(--muted); }
