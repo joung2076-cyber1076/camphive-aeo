@@ -42,6 +42,44 @@
      enhance.js 가 is-on 만 옮긴다(커버 이미지·문구와 같은 방식).
      JS 가 없거나 prefers-reduced-motion 이면 첫 벌(ChatGPT)이 그대로 보인다.
      부모가 display:flex; gap:12px 이므로 한 벌 안에서도 같은 간격을 준다. */
+  /* 본문 바로가기 — 키보드로 탐색할 때만 나타나는 숨은 링크다.
+     홈은 styles.css 를 쓰지 않아 그 숨김 규칙이 없었고, 그래서 화면
+     맨 위에 글자가 그대로 노출돼 있었다(2026-08-16 발견). */
+  .skip {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: #3B82F6; color: #FFFFFF; padding: 12px 20px; font-weight: 700;
+  }
+  .skip:focus { left: 16px; top: 16px; }
+
+  /* 헤더 CTA — 폰에서는 짧은 문구로 바꾼다.
+     긴 문구(274px)와 로고(209px)를 합치면 483px 이라 375px 화면에서
+     버튼이 로고를 172px 덮었다. 버튼은 크기가 줄지도(flex:none),
+     줄바꿈되지도(nowrap) 않아 제 크기를 지키며 밀고 들어온다.
+     자리·색·모양은 그대로 두고 글자만 바꾼다. */
+  .cta-short { display: none; }
+  @media (max-width: 720px) {
+    .cta-long { display: none; }
+    .cta-short { display: inline; }
+    /* 글자를 줄여도 375px 에서 35px 이 모자랐다.
+       헤더 안쪽 여백 32px×2 와 사이 간격 24px 이 88px 을 먹어
+       쓸 수 있는 폭이 311px 뿐이었기 때문이다(로고 209 + 버튼 119 = 328).
+       폰에서만 여백을 좁혀 자리를 만든다. */
+    header > div { padding-left: 14px !important; padding-right: 14px !important; gap: 10px !important; }
+  }
+  /* 360px 급 작은 폰 — 위 조정으로도 14px 이 모자란다.
+     회사명을 줄이지 않고 글자 크기와 심볼만 한 단계 낮춘다.
+     상호는 AI 가 회사를 식별하는 근거라 글자를 빼지 않는다. */
+  @media (max-width: 380px) {
+    header a[href="#hero"] > span:last-child { font-size: 20px !important; }
+    header a[href="#hero"] > img { height: 28px !important; }
+  }
+  /* 320px 급 구형 폰 — 버튼 여백과 글자만 한 단계 더 낮춘다.
+     터치 표적 높이(min-height)는 건드리지 않는다. */
+  @media (max-width: 340px) {
+    header > div { padding-left: 10px !important; padding-right: 10px !important; gap: 6px !important; }
+    header a[data-ga="diag_hero"] { padding-left: 14px !important; padding-right: 14px !important; font-size: 14px !important; }
+  }
+
   .engine-set { display: none; align-items: center; gap: 12px; }
   .engine-set.is-on { display: flex; }
 
@@ -151,7 +189,7 @@
       <img src="assets/logo-mark.png" alt="캠핑하이브 심볼" style="height:34px;width:auto;display:block" />
       <span style="width:1px;height:22px;background:rgba(255,255,255,0.24);display:block"></span>
       <span style="display:flex;align-items:baseline;gap:1px;font-size:24px;font-weight:900;letter-spacing:-0.03em;line-height:1">
-        <span style="color:#FFFFFF">CAMPI</span><span style="color:#3B82F6">GHIVE</span>
+        <span style="color:#FFFFFF">CAMPING</span><span style="color:#3B82F6">HIVE</span>
       </span>
     </a>
     <nav style="display:flex;align-items:center;gap:26px;flex:1 1 auto;justify-content:flex-end;min-width:0;overflow-x:auto">
@@ -159,7 +197,7 @@
       <a href="#data" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">실측 데이터</a>
       <a href="#process" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">분석 과정</a>
       <a href="#faq" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">FAQ</a>
-      <a href="#demo" data-ga="diag_hero" style="display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap;min-height:46px;padding:12px 22px;background:#3B82F6;color:#FFFFFF;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06)" style-hover="background:#2563EB">우리 캠핑장 AI검색 노출도 진단하기 <span style="font-family: &quot;JetBrains Mono&quot;, monospace;">▸</span></a>
+      <a href="#demo" data-ga="diag_hero" style="display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap;min-height:46px;padding:12px 22px;background:#3B82F6;color:#FFFFFF;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06)" style-hover="background:#2563EB"><span class="cta-long">우리 캠핑장 AI검색 노출도 진단하기</span><span class="cta-short">무료 진단</span> <span style="font-family: &quot;JetBrains Mono&quot;, monospace;">▸</span></a>
     </nav>
   </div>
 </header>
@@ -1062,7 +1100,7 @@
       <img src="assets/logo-mark.png" alt="캠핑하이브 심볼" style="height:28px;width:auto;display:block" />
       <span style="width:1px;height:18px;background:rgba(255,255,255,0.24);display:block"></span>
       <span style="display:flex;align-items:baseline;gap:1px;font-size:20px;font-weight:900;letter-spacing:-0.03em;line-height:1">
-        <span style="color:#FFFFFF">CAMPI</span><span style="color:#3B82F6">GHIVE</span>
+        <span style="color:#FFFFFF">CAMPING</span><span style="color:#3B82F6">HIVE</span>
       </span>
       <span style="font-size:15px;color:#8C96A6;border-left:1px solid rgba(255,255,255,0.18);padding-left:12px">주식회사 캠핑하이브</span>
     </div>
