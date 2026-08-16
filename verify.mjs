@@ -424,6 +424,57 @@ async function main() {
       }
     }
 
+    // 4-4) JSON-LD 텍스트 ↔ 화면 본문 전역 대조 (신설 2026-08-16)
+    //
+    //  /privacy/ 프론트매터 요약문이 본문 5번(위탁 없음)과 정반대인 채로
+    //  JSON-LD 에 나간 적이 있다. FAQ 일치 검사(4-3)는 FAQ 만 본다.
+    //  같은 유형을 넓게 잡으려면 JSON-LD 의 사람이 읽는 문장이 그 페이지
+    //  본문에도 있는지 봐야 한다.
+    //
+    //  ⚠ 지금은 경고다. 예외 목록이 채워지기 전에 실패로 걸면 빌드가 선다.
+    //     색인 해제(noindexAll = false) 전까지 실패로 승격한다.
+    //     색인 해제 점검표 항목이다. 경고인 채로 열지 말 것.
+    if (graph) {
+      // 문장형 필드만 본다. 식별자·연락처·URL 은 본문에 없는 것이 정상이다.
+      const TEXT_KEYS = new Set(['description', 'headline', 'text', 'name']);
+      const offenders = [];
+      const visit = (node, type) => {
+        if (!node || typeof node !== 'object') return;
+        const t = [].concat(node['@type'] ?? type ?? []).join('/');
+        for (const [k, v] of Object.entries(node)) {
+          if (Array.isArray(v)) { v.forEach((x) => visit(x, t)); continue; }
+          if (v && typeof v === 'object') { visit(v, t); continue; }
+          if (typeof v !== 'string' || !TEXT_KEYS.has(k)) continue;
+          const s = norm(v);
+          if (s.length < 12) continue;
+
+          // ── 예외 3종 — 사유 없이 지우지 말 것 ──────────────────
+          //  ① 정본 문장 — 푸터 화면 노출을 없앤 결정(대장 I1, 2026-08-15).
+          //     본문에 없는 것이 정상이다. 되돌리지 말 것.
+          if (s === norm(CANONICAL_SENTENCE)) continue;
+          //  ② WebPage.description — 메타 설명문. 본문에 없는 것이 정상.
+          if (k === 'description' && t.includes('WebPage')) continue;
+          //  ③ BreadcrumbList 항목명 — 화면 표기와 다를 수 있음.
+          if (t.includes('BreadcrumbList') || t.includes('ListItem')) continue;
+          //  Organization·LocalBusiness·WebSite 의 name 은 상호다.
+          //  푸터 표기와 형태가 달라 본문 대조 대상이 아니다.
+          if (k === 'name' && /Organization|LocalBusiness|WebSite|Service/.test(t)) continue;
+
+          if (!plain.includes(s)) offenders.push({ where: `${t}.${k}`, text: s });
+        }
+      };
+      graph.forEach((n) => visit(n, null));
+
+      if (offenders.length) {
+        warn(`JSON-LD 문장이 본문에 없음 ${offenders.length}건 (색인 해제 전 실패로 승격)`);
+        for (const o of offenders.slice(0, 5)) {
+          console.log(C.dim(`         ${o.where}: "${o.text.slice(0, 60)}…"`));
+        }
+      } else {
+        check(true, 'JSON-LD 문장이 전부 본문에 있음', `${graph.length}개 노드 검사`);
+      }
+    }
+
     // 5) 소스 대비 실제 텍스트 비중 — 낮으면 껍데기 페이지라는 뜻
     const textOnly = raw
       .replace(/<script[\s\S]*?<\/script>/gi, '')
