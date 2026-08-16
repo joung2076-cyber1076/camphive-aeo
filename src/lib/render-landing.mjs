@@ -1,4 +1,4 @@
-﻿// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
 //  홈 랜딩 렌더러 — 16섹션
 //
 //  카피는 src/content/home.data.mjs 에 있고 여기서는 구조만 만든다.
@@ -649,36 +649,6 @@ function s135(s) {
   return section({ h2: s.h2, sub: s.sub, body });
 }
 
-/* ── 14 FAQ — 접지 않는다 ──────────────────────────────────── */
-function s14(s) {
-  // 답변 안의 페이지명을 내부 링크로 바꾼다.
-  // 먼저 통째로 이스케이프한 뒤 링크 문구만 앵커로 교체한다 —
-  // 순서를 바꾸면 앵커까지 이스케이프되어 글자로 보인다.
-  // JSON-LD FAQPage 에는 평문 f.a 가 그대로 들어간다(링크 없음).
-  const answerHtml = (f) => {
-    const plain = esc(f.a);
-    if (!f.link?.slug || !f.link?.text) return plain;
-    const needle = esc(f.link.text);
-    if (!plain.includes(needle)) return plain;
-    const anchor = `<a href="${esc(pathFor(f.link.slug))}">${needle}</a>`;
-    return plain.replace(needle, anchor);
-  };
-
-  const body = `<div class="faq-list">
-      ${s.items
-        .map(
-          (f, i) => `<div ${rv(Math.min(i, 6), 'faq-item')}>
-        <span class="num">Q${i + 1}</span>
-        <div>
-          <h3>${esc(f.q)}</h3>
-          <p>${answerHtml(f)}</p>
-        </div>
-      </div>`
-        )
-        .join('\n      ')}
-    </div>`;
-  return section({ id: s.id, h2: s.h2, body });
-}
 
 /* ── 15 ────────────────────────────────────────────────────── */
 function s15(s, f) {
@@ -752,7 +722,6 @@ export function renderLanding(page, ctx) {
     ctaBand(L.cta2),
     s11(L.s11),            // 15 why
     s12(L.s12),            // 16 plan
-    s14(L.s14),            // 17 faq
     s15(L.s15, L.form),    // 18 cta
   ].join('\n\n');
 }
