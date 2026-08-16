@@ -197,6 +197,35 @@
       }, 2600);
     }
 
+    /* 4-3) 손님 질문 세 벌 — 커버 검색창과 데모 대화가 함께 돈다
+     *
+     * 질문(.demo-ask)과 답변 첫 줄(.demo-lead)은 짝이라 같은 번호를 켠다.
+     * 어긋나면 "계곡 캠핑장" 질문에 "애견 동반" 답이 붙는다.
+     * 여기서도 is-on 만 옮긴다. 글자는 이미 셋 다 마크업에 있다.
+     *
+     * 6초 — 시안은 타이핑(약 5초)+유지(5.2초)로 한 바퀴가 길지만,
+     * 타이핑을 재현하지 않으므로 읽을 만한 간격으로 줄였다.
+     */
+    var askGroups = [
+      document.querySelectorAll('.ask-set'),
+      document.querySelectorAll('.demo-ask'),
+      document.querySelectorAll('.demo-lead'),
+    ].filter(function (g) { return g.length > 1; });
+
+    if (askGroups.length && !reduced) {
+      var qAt = 0;
+      var qLen = askGroups[0].length;
+      window.setInterval(function () {
+        var qNext = (qAt + 1) % qLen;
+        for (var g = 0; g < askGroups.length; g++) {
+          var set = askGroups[g];
+          if (set[qAt]) set[qAt].classList.remove('is-on');
+          if (set[qNext]) set[qNext].classList.add('is-on');
+        }
+        qAt = qNext;
+      }, 6000);
+    }
+
     /* 5) 전환율 바 — 0에서 목표 %까지. % 숫자 자체는 정적 텍스트다 */
     var bars = document.querySelectorAll('.conv-fill');
     if (!reduced && 'IntersectionObserver' in window) {

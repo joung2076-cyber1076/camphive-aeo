@@ -45,6 +45,14 @@
   .engine-set { display: none; align-items: center; gap: 12px; }
   .engine-set.is-on { display: flex; }
 
+  /* 손님이 AI 에게 치는 질문 세 벌 — 커버 검색창과 데모 대화가 같이 돈다.
+     질문(demo-ask)과 답변 첫 줄(demo-lead)은 짝이라 같은 번호가 함께 켜진다.
+     시안은 타이핑으로 글자를 만들지만 여기서는 완성 문장을 바꿔 넣는다. */
+  .ask-set { display: none; }
+  .ask-set.is-on { display: inline; }
+  .demo-ask, .demo-lead { display: none; }
+  .demo-ask.is-on, .demo-lead.is-on { display: block; }
+
   @media (max-width: 1000px) { main h2 { white-space: normal !important; text-wrap: balance; } }
   /* 시안의 인라인 white-space:nowrap 은 넓은 화면에서 문장을 한 줄로 앉히려고
      넣은 것이다. 좁은 화면에서는 그대로 두면 문장이 화면 밖으로 뻗는다.

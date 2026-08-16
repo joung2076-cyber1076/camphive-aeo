@@ -115,11 +115,75 @@ function expandEngines(html) {
   );
 }
 
+/**
+ * 손님이 AI 에게 치는 질문 — 시안은 셋을 타이핑·삭제로 돌린다.
+ *
+ * 시안 JS 의 this.qa 와 같은 값이다. q 는 검색창에, lead 는 데모 답변의
+ * 첫 줄에 들어가며 둘은 짝이다. 짝이 어긋나면 "계곡 캠핑장" 질문에
+ * "애견 동반" 답이 붙는다.
+ *
+ * 타이핑 효과는 재현하지 않는다. 글자를 한 자씩 만드는 일이라
+ * enhance.js 의 "텍스트를 생성하지 않는다" 규칙과 부딪힌다.
+ * 완성된 문장 셋을 두고 표시만 바꾼다 — AI 는 질문 셋을 다 읽는다.
+ */
+const ASKS = [
+  {
+    q: '가평에 애견 동반 글램핑 추천해줘. 어린이 2명 포함 4인 가족이야.',
+    lead: '가평 지역 애견 동반 글램핑 중에서는 다음 세 곳을 추천드려요.',
+  },
+  {
+    q: '서울에서 1시간 안에 갈 만한 계곡 캠핑장 알려줘.',
+    lead: '서울에서 1시간 거리 계곡 캠핑장은 다음 세 곳이 있습니다.',
+  },
+  {
+    q: '12월에도 운영하는 온수 잘 나오는 오토캠핑장 있어?',
+    lead: '12월에도 운영하는 오토캠핑장은 다음 세 곳입니다.',
+  },
+];
+
+/** {{ typedQ }} · {{ answerLead }} 를 세 벌로 편다. 자리표시자 치환보다 먼저. */
+function expandAsks(html) {
+  let out = html;
+
+  // ① 커버 검색창 — <span …>{{ typedQ }}<캐럿></span>
+  out = out.replace(
+    /<span style="(font-size:17px;line-height:1\.5;[^"]*)">\{\{\s*typedQ\s*\}\}(<span style="display:inline-block;width:2px[^"]*"><\/span>)<\/span>/,
+    (m, style, caret) =>
+      ASKS.map(
+        (a, i) =>
+          `<span class="ask-set${i === 0 ? ' is-on' : ''}" style="${style}">${a.q}${caret}</span>`
+      ).join('')
+  );
+
+  // ② 데모 대화의 질문 말풍선 — <div …>{{ typedQ }}<캐럿></div>
+  out = out.replace(
+    /<div style="(background:#2E2E2A;[^"]*)">\{\{\s*typedQ\s*\}\}(<span style="display:inline-block;width:2px[^"]*"><\/span>)<\/div>/,
+    (m, style, caret) =>
+      ASKS.map(
+        (a, i) =>
+          `<div class="demo-ask${i === 0 ? ' is-on' : ''}" style="${style}">${a.q}${caret}</div>`
+      ).join('')
+  );
+
+  // ③ 데모 답변 첫 줄 — 질문과 짝이다
+  out = out.replace(
+    /<p style="(margin:0 0 14px;font-size:16px;[^"]*)">\{\{\s*answerLead\s*\}\}<\/p>/,
+    (m, style) =>
+      ASKS.map(
+        (a, i) =>
+          `<p class="demo-lead${i === 0 ? ' is-on' : ''}" style="${style}">${a.lead}</p>`
+      ).join('')
+  );
+
+  return out;
+}
+
 function transform(html) {
   let out = html;
 
-  // ⓪ 엔진 배지 3벌 전개 — 자리표시자 치환보다 먼저
+  // ⓪ 엔진 배지·질문 3벌 전개 — 자리표시자 치환보다 먼저
   out = expandEngines(out);
+  out = expandAsks(out);
 
   // ① 자리표시자
   out = out.replace(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g, (m, key) =>
