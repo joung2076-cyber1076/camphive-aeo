@@ -62,11 +62,13 @@
     main [style*="grid-template-columns:1fr 1.05fr"],
     main [style*="grid-template-columns:1.05fr 0.95fr"],
     main [style*="grid-template-columns:1fr 1fr"],
+    main [style*="grid-template-columns:1fr 1.1fr"],
+    main [style*="grid-template-columns:repeat(2,minmax(0,1fr))"],
     main [style*="grid-template-columns:repeat(3,1fr)"],
     main [style*="grid-template-columns:repeat(3,minmax(0,1fr))"] {
       grid-template-columns: 1fr !important;
     }
-    /* 숫자 카드 4칸만 2×2 로 남긴다. 4칸이면 한 칸이 78px 이라
+    /* 4칸 카드는 태블릿 폭에서 2×2 로 남긴다. 4칸이면 한 칸이 78px 이라
        한글이 글자마다 줄이 바뀌어 오히려 못 읽는다. */
     main [style*="grid-template-columns:repeat(4,minmax(0,1fr))"] {
       grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -77,6 +79,15 @@
     main [style*="grid-template-columns:1fr auto 1fr"] > :nth-child(even) {
       transform: rotate(90deg);
       justify-content: center;
+    }
+  }
+  /* 폰 폭에서는 4칸 카드도 한 줄로 내린다. 2×2 로 두면 한 칸이 145px 이고
+     그 안의 항목 글이 79px 까지 눌려 두세 글자마다 줄이 바뀐다.
+     진단서 카드와 숫자 카드가 같은 선언을 써서 CSS 로는 구분할 수 없어
+     (:has() 는 구형 폰 브라우저에서 못 믿는다) 폭으로 나눈다. */
+  @media (max-width: 480px) {
+    main [style*="grid-template-columns:repeat(4,minmax(0,1fr))"] {
+      grid-template-columns: 1fr !important;
     }
   }
   /* 문장 3개가 옆에서 바뀌어 들어오는 배너. 전환 중 문장이 상자 밖으로
