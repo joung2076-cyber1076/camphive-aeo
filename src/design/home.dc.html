@@ -39,6 +39,12 @@
   summary::-webkit-details-marker { display: none; }
   @keyframes blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
   @media (max-width: 1000px) { main h2 { white-space: normal !important; text-wrap: balance; } }
+  /* 시안의 인라인 white-space:nowrap 은 넓은 화면에서 문장을 한 줄로 앉히려고
+     넣은 것이다. 좁은 화면에서는 그대로 두면 문장이 화면 밖으로 뻗는다.
+     인라인 선언이라 별도 규칙으로는 못 이기므로 여기서 !important 로 푼다.
+     마크업은 시안 그대로 두고 좁은 화면에서만 해제하므로 PC 모양은 그대로다.
+     흐르는 배너(span)의 nowrap 은 의도된 가로 흐름이라 건드리지 않는다. */
+  @media (max-width: 1000px) { main p { white-space: normal !important; } }
   @media (max-width: 1080px) { header nav { gap: 16px !important; } header nav a { font-size: 14px !important; } }
   @media (max-width: 720px) { header nav a:not([data-ga]) { display: none; } }
 </style>
