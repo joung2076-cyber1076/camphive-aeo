@@ -43,8 +43,10 @@ const FILL = {
   coverLine1: '손님이 고르지 않습니다.',
   coverLine2: 'AI가 먼저 고릅니다.',
 
-  // 오프닝 — AI 엔진명 로테이션의 첫 값
-  engineColor: '#3DD6AC',
+  // 오프닝 — AI 엔진명 로테이션의 첫 값.
+  // 아래 ENGINES[0] 과 같아야 한다. 전개가 실패해 자리표시자로 남는
+  // 경우의 대비값이라, 여기만 다른 색이면 그때 시안과 어긋난 색이 뜬다.
+  engineColor: '#10A37F',
   engineGlyph: '✺',
   engineName: 'ChatGPT',
 
@@ -79,8 +81,45 @@ const ASSET_MAP = {
   'assets/logo-dark.png': 'img/logo-dark.png',
 };
 
+/**
+ * 오프닝의 AI 엔진 배지 — 시안은 2.6초마다 셋을 갈아끼운다.
+ *
+ * 시안 JS 의 this.engines 와 같은 값이다. 여기서 바꾸면 시안과 어긋난다.
+ * 커버 이미지·문구가 3벌을 다 마크업에 두고 is-on 으로만 바꾸는 것과
+ * 같은 방식으로 만든다. 그래야 JS 없이도 3사 이름이 소스에 남는다.
+ */
+const ENGINES = [
+  { name: 'ChatGPT', color: '#10A37F', glyph: '✺' },
+  { name: 'Claude', color: '#D97757', glyph: '✳' },
+  { name: 'Gemini', color: '#4285F4', glyph: '✦' },
+];
+
+/**
+ * {{ engineGlyph }} · {{ engineName }} 한 벌을 세 벌로 편다.
+ *
+ * 자리표시자 치환보다 **먼저** 돌아야 한다. 치환이 끝나면 ChatGPT 한 벌만
+ * 남아 무엇을 펴야 할지 알 수 없다.
+ * 시안 마크업의 인라인 style 은 그대로 옮기고 색만 엔진별 값으로 바꾼다.
+ */
+function expandEngines(html) {
+  const RE =
+    /<span style="([^"]*?)color:\{\{\s*engineColor\s*\}\}">\{\{\s*engineGlyph\s*\}\}<\/span>\s*<span style="([^"]*?)color:\{\{\s*engineColor\s*\}\}">\{\{\s*engineName\s*\}\}<\/span>/;
+  return html.replace(RE, (m, glyphStyle, nameStyle) =>
+    ENGINES.map(
+      (e, i) =>
+        `<span class="engine-set${i === 0 ? ' is-on' : ''}">` +
+        `<span style="${glyphStyle}color:${e.color}">${e.glyph}</span>` +
+        `<span style="${nameStyle}color:${e.color}">${e.name}</span>` +
+        `</span>`
+    ).join('')
+  );
+}
+
 function transform(html) {
   let out = html;
+
+  // ⓪ 엔진 배지 3벌 전개 — 자리표시자 치환보다 먼저
+  out = expandEngines(out);
 
   // ① 자리표시자
   out = out.replace(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g, (m, key) =>

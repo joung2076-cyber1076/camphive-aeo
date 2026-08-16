@@ -38,6 +38,13 @@
   @keyframes riseIn { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
   summary::-webkit-details-marker { display: none; }
   @keyframes blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
+  /* 오프닝 AI 엔진 배지 — ChatGPT · Claude · Gemini 세 벌이 마크업에 다 있고
+     enhance.js 가 is-on 만 옮긴다(커버 이미지·문구와 같은 방식).
+     JS 가 없거나 prefers-reduced-motion 이면 첫 벌(ChatGPT)이 그대로 보인다.
+     부모가 display:flex; gap:12px 이므로 한 벌 안에서도 같은 간격을 준다. */
+  .engine-set { display: none; align-items: center; gap: 12px; }
+  .engine-set.is-on { display: flex; }
+
   @media (max-width: 1000px) { main h2 { white-space: normal !important; text-wrap: balance; } }
   /* 시안의 인라인 white-space:nowrap 은 넓은 화면에서 문장을 한 줄로 앉히려고
      넣은 것이다. 좁은 화면에서는 그대로 두면 문장이 화면 밖으로 뻗는다.

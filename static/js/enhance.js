@@ -180,6 +180,23 @@
       }
     }
 
+    /* 4-2) 오프닝 AI 엔진 배지 — ChatGPT · Claude · Gemini 2.6초 순환
+     *
+     * 세 벌이 이미 마크업에 있다. 여기서는 is-on 을 옮길 뿐이고
+     * 글자·색을 만들지 않는다. JS 가 죽으면 첫 벌(ChatGPT)이 그대로 남는다.
+     * 간격은 시안 JS 의 2600ms 를 그대로 쓴다.
+     */
+    var engineSets = document.querySelectorAll('.engine-set');
+    if (engineSets.length > 1 && !reduced) {
+      var eAt = 0;
+      window.setInterval(function () {
+        var eNext = (eAt + 1) % engineSets.length;
+        engineSets[eAt].classList.remove('is-on');
+        engineSets[eNext].classList.add('is-on');
+        eAt = eNext;
+      }, 2600);
+    }
+
     /* 5) 전환율 바 — 0에서 목표 %까지. % 숫자 자체는 정적 텍스트다 */
     var bars = document.querySelectorAll('.conv-fill');
     if (!reduced && 'IntersectionObserver' in window) {
