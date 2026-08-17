@@ -114,7 +114,10 @@ function footer(ctx, page) {
     { slug: 'service', label: 'AI 검색 노출 방법' },
     { slug: 'measurement', label: '효과 측정' },
     { slug: 'diagnosis', label: '무료 진단' },
-    { slug: 'faq', label: '자주 묻는 질문' },
+    // 「자주 묻는 질문」은 어느 사이트에나 붙는 말이라 무엇에 대한 질문인지
+    // 알려주지 않는다. 앵커 문구는 링크 대상을 가리키는 단서이므로 업종어를
+    // 넣는다(질의 3원칙 ①). 홈은 시안 푸터를 써서 이 목록의 영향을 받지 않는다.
+    { slug: 'faq', label: '캠핑장 운영 질문 22개' },
     { slug: 'faq/why-not-in-chatgpt', label: '챗GPT에 안 나오는 이유' },
     { slug: 'faq/naver-blog-still-works', label: '네이버 블로그 효과' },
     { slug: 'faq/ad-budget', label: '홍보비 배분' },

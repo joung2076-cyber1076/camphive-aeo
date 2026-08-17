@@ -32,6 +32,9 @@ related:
   - slug: diagnosis
     label: 우리 캠핑장이 AI 답변에 나오는지 어떻게 확인해?
     note: 하루 20곳 무료 진단
+  - slug: faq
+    label: 캠핑장 운영하면서 생기는 질문, 어디서 답 찾아?
+    note: 질문 22개를 네 갈래로
 ---
 
 ## 캠핑장 AI 마케팅은 검색 광고랑 뭐가 달라?

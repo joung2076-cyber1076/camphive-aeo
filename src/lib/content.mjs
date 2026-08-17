@@ -37,6 +37,32 @@ async function findMarkdown(dir, rel = '') {
 /** front matter 값 정리 — 문자열로 온 boolean 등을 정돈한다. */
 const bool = (v) => v === true || v === 'true';
 
+/**
+ * 허브 페이지의 본문에서 FAQ 문항을 뽑는다.
+ *
+ * 본문 구조는 「## 구획 → ### 질문 → 문단·표」다. ### 하나가 문항 하나이고,
+ * 답변은 그 아래 다음 ### 전까지의 문단을 잇는다. 표는 넣지 않는다 —
+ * acceptedAnswer 는 문장이어야 하고, 표는 화면에서 읽는 자리다.
+ *
+ * 화면(render-article)이 그리는 것도 같은 sections 다. 소스가 하나라
+ * 둘이 어긋날 수 없다(6.3.6.2).
+ */
+function faqFromSections(sections) {
+  const out = [];
+  for (const section of sections ?? []) {
+    let cur = null;
+    for (const block of section.body ?? []) {
+      if (block?.h3) {
+        cur = { q: block.h3, parts: [] };
+        out.push(cur);
+      } else if (cur && block?.p) {
+        cur.parts.push(block.p.text ?? '');
+      }
+    }
+  }
+  return out.map(({ q, parts }) => ({ q, a: parts.join(' ').replace(/\s+/g, ' ').trim() }));
+}
+
 export async function loadPages(contentDir) {
   const files = await findMarkdown(contentDir);
   const pages = [];
@@ -86,7 +112,17 @@ export async function loadPages(contentDir) {
       tables,
       sections,
 
-      faq: Array.isArray(data.faq) ? data.faq : [],
+      // 질문 허브 표시. 질문 여러 개를 한 페이지에 모으는 구조라
+      // 「질문 하나에 답하는 문서」 규격의 상한에서 빠진다(validate.mjs 5·6번).
+      hub: bool(data.hub),
+
+      //  FAQ 문항.
+      //
+      //  허브(hub: true)는 본문에서 뽑는다. 프론트매터에 같은 질문·답변을
+      //  또 적으면 화면과 JSON-LD 가 두 소스가 되고, 한쪽만 고치는 날
+      //  둘이 어긋난다 — 지침 6.3.6.2 가 경고한 그 구조다. 본문 한 곳만
+      //  고치면 화면도 FAQPage 도 같이 따라오게 만든다.
+      faq: bool(data.hub) ? faqFromSections(sections) : Array.isArray(data.faq) ? data.faq : [],
       related: Array.isArray(data.related) ? data.related : [],
     });
   }

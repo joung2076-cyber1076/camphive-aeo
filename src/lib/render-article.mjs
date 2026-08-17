@@ -70,7 +70,10 @@ export function renderArticle(page, ctx) {
 
   // ── 6. FAQ 4문항 ────────────────────────────────────────
   // dl 이 아니라 h3 + p 로 쓴다. AI는 질문을 헤딩으로 인식할 때 더 잘 뽑는다.
-  if (page.faq?.length) {
+  //  허브는 이 블록을 그리지 않는다. 문항이 이미 본문 5번에 다 있어서,
+  //  여기서 또 그리면 같은 질문 22개가 화면에 두 번 나온다. page.faq 는
+  //  그 본문에서 뽑아낸 값이라 JSON-LD 쪽만 쓰면 된다(content.mjs).
+  if (page.faq?.length && !page.hub) {
     parts.push(`<section class="faq" id="faq">
   <h2>자주 묻는 질문</h2>
   ${page.faq

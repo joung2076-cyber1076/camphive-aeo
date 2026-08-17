@@ -224,9 +224,13 @@ async function expectedStrings(page) {
     blockText(`H2 ${i + 1}`, s.body);
   });
 
+  //  허브의 FAQ 는 본문에서 뽑은 값이라 위의 H2 검사에 이미 다 들어 있다.
+  //  답변은 문단 여러 개를 이어붙인 문자열이어서, 화면에는 <p> 로 나뉘어
+  //  있고 통째로는 존재하지 않는다. 여기서 또 기대하면 있지도 않은 누락이
+  //  20건 잡힌다. 질문은 ### 로 화면에 있으므로 그것만 본다. (2026-08-17)
   (page.faq ?? []).forEach((f, i) => {
     add(`FAQ${i + 1} 질문`, f.q);
-    add(`FAQ${i + 1} 답변`, f.a);
+    if (!page.hub) add(`FAQ${i + 1} 답변`, f.a);
   });
 
   (page.related ?? []).forEach((r, i) => add(`관련문서${i + 1}`, r.label));
@@ -417,18 +421,42 @@ async function main() {
     //  화면에 없는 답변 문장 2건. 검사 26종이 전부 통과인 상태에서 새고 있었다.
     //  원인은 화면(시안 마크업)과 JSON-LD(데이터 파일)의 소스가 갈린 것이다.
     //  경고가 아니라 실패로 처리한다 — 배포를 막아야 한다.
+    //  화면 FAQ 를 읽는 방법이 두 가지다. 홈과 몇몇 페이지는 <details>/<summary>
+    //  로 접히는 형태고, 질문 허브는 ### 질문 + 문단이 본문에 그대로 펼쳐진다.
+    //  종전 검사는 <details> 만 찾아서, 허브에서는 조용히 건너뛰었다. 문항이
+    //  22개인 페이지가 대조 없이 나가는 상태였다. (2026-08-17, E-3)
     if (graph) {
+      const flatFaq = (s) => unescapeHtml(s.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
       const details = raw.match(/<details[\s\S]*?<\/details>/g) ?? [];
-      if (details.length) {
-        const flat = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-        const screen = details.map((d) => {
+      //  허브: <section class="section"> 안에서 <h3> 하나가 문항 하나다.
+      //  답변은 다음 <h3> 전까지의 <p> 를 잇는다. 표는 넣지 않는다 —
+      //  content.mjs 가 JSON-LD 쪽을 만들 때 쓴 기준과 같아야 대조가 성립한다.
+      //
+      //  한 문단 안의 태그는 공백 없이 뗀다. <strong> 을 공백으로 바꾸면
+      //  「문의로」가 「문의 로」가 되어 없는 어긋남이 생긴다. 문단 사이만
+      //  공백으로 잇는다 — content.mjs 가 문단을 잇는 방식과 같다.
+      const flatOne = (s) => unescapeHtml(s.replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim();
+      const hubFaq = [];
+      for (const sec of raw.match(/<section class="section"[\s\S]*?<\/section>/g) ?? []) {
+        for (const chunk of sec.split(/<h3[^>]*>/).slice(1)) {
+          const q = flatOne(chunk.slice(0, chunk.indexOf('</h3>')));
+          const rest = chunk.slice(chunk.indexOf('</h3>') + 5);
+          const a = (rest.match(/<p>[\s\S]*?<\/p>/g) ?? []).map(flatOne).filter(Boolean).join(' ');
+          hubFaq.push({ q, a });
+        }
+      }
+      if (details.length || hubFaq.length) {
+        const flat = flatFaq;
+        const screen = details.length
+          ? details.map((d) => {
           const sm = d.match(/<summary[\s\S]*?>([\s\S]*?)<\/summary>/);
           return {
             // 번호 배지(Q1…)는 표기용이라 질문 본문에서 뺀다
             q: flat(sm ? sm[1] : '').replace(/^Q\d+\s*/, ''),
             a: flat(d.replace(/<summary[\s\S]*?<\/summary>/, '')),
           };
-        });
+            })
+          : hubFaq;
         const faqNode = graph.find((n) => [].concat(n['@type']).includes('FAQPage'));
         const items = (faqNode?.mainEntity ?? []).map((e) => ({
           q: flat(String(e.name ?? '')),

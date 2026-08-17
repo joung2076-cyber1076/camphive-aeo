@@ -35,6 +35,9 @@ related:
   - slug: intro/consulting
     label: 캠핑장 컨설팅은 뭘 해주는 거야?
     note: 개발·인허가 컨설팅
+  - slug: faq
+    label: 캠핑장 운영하면서 생기는 질문, 어디서 답 찾아?
+    note: 질문 22개를 네 갈래로
 ---
 
 ## 캠핑장을 지어 본 게 AI 마케팅이랑 무슨 상관이야?

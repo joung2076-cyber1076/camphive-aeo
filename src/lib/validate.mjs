@@ -10,14 +10,15 @@
 import { wordCount } from './html.mjs';
 import { site } from '../../site.config.mjs';
 
+//  각 값 옆의 항목 번호는 그 값의 근거다. 근거 없는 값을 넣으면
+//  지침을 지킨 원고가 실패한다 — tablesMax: 3 이 그랬다(2026-08-17 제거).
 const RULES = {
-  answerMin: 40,
-  answerMax: 60,
-  tablesMin: 2,
-  tablesMax: 3,
-  sectionsMin: 5,
-  sectionsMax: 8,
-  faq: 4,
+  answerMin: 40, // 지침 7.1 — 답변 블록 40~60단어
+  answerMax: 60, // 지침 7.1
+  tablesMin: 2, // 지침 7.1 — 「데이터표 2개 이상」. 상한은 지침에 없다.
+  sectionsMin: 5, // 지침 7.1 — H2 5~8개
+  sectionsMax: 8, // 지침 7.1
+  faq: 4, // 지침 7.1 — 질문 하나에 답하는 문서의 FAQ 4문항
 };
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -116,12 +117,19 @@ export function validatePage(page) {
     (s.body ?? []).filter((b) => b && b.table).map((b) => b.table)
   );
   const tables = [...topTables, ...sectionTables];
+  //  상한을 두지 않는다. 지침 7.1 은 「데이터표 2개 이상」이고 상한이 없다.
+  //  종전의 tablesMax: 3 은 지침·대장 어디에도 근거가 없는 값이었고, 표가
+  //  많다는 이유로 지침을 지킨 원고 3편을 실패시키고 있었다. 표는 AI 가 가장
+  //  잘 인용하는 형태이므로(6.1.3·7.2) 상한은 우리 강점을 깎는다. (2026-08-17)
   need(
-    tables.length >= RULES.tablesMin && tables.length <= RULES.tablesMax,
-    `데이터표가 ${tables.length}개입니다. ${RULES.tablesMin}~${RULES.tablesMax}개여야 합니다.`
+    tables.length >= RULES.tablesMin,
+    `데이터표가 ${tables.length}개입니다. ${RULES.tablesMin}개 이상이어야 합니다.`
   );
   tables.forEach((t, i) => {
-    need(Boolean(t.caption), `표 ${i + 1}: caption(표 제목)이 없습니다.`);
+    //  허브는 표 제목을 요구하지 않는다. 표가 ### 질문 바로 아래에 붙어
+    //  있어서 그 질문이 곧 표의 이름이다. caption 을 또 달면 화면에 같은
+    //  문장이 두 번 나온다. 허브 밖의 문서는 종전대로 요구한다.
+    if (!page.hub) need(Boolean(t.caption), `표 ${i + 1}: caption(표 제목)이 없습니다.`);
     need((t.columns ?? []).length > 0, `표 ${i + 1}: columns(열 이름)가 없습니다.`);
     need((t.rows ?? []).length > 0, `표 ${i + 1}: rows(데이터 행)가 없습니다.`);
     (t.rows ?? []).forEach((row, r) => {
@@ -133,19 +141,37 @@ export function validatePage(page) {
   });
 
   // 5. H2 본문 5~8개
+  //
+  //  질문 허브(hub: true)는 상한에서 뺀다. 지침 7.1 의 5~8개는 「질문 하나에
+  //  답하는 문서」 규격이다. 허브는 질문 여러 개를 한 자리에 모으는 페이지라
+  //  같은 잣대를 대면 구조를 오히려 망가뜨린다 — 랜딩을 뺀 것과 같은 이유다.
+  //  하한 5개는 허브에도 적용한다. (2026-08-17, E-8)
+  //  허브는 H2 개수로 재지 않는다. 허브의 H2 는 문항을 담는 구획이라
+  //  개수가 내용의 양을 뜻하지 않는다 — 구획 4개에 문항 22개일 수도 있다.
+  //  허브의 분량은 아래 6번의 FAQ 문항 수로 본다.
   const sections = page.sections ?? [];
-  need(
-    sections.length >= RULES.sectionsMin && sections.length <= RULES.sectionsMax,
-    `H2 섹션이 ${sections.length}개입니다. ${RULES.sectionsMin}~${RULES.sectionsMax}개여야 합니다.`
-  );
+  if (page.hub) {
+    need(sections.length >= 1, 'H2 구획이 하나도 없습니다.');
+  } else {
+    need(
+      sections.length >= RULES.sectionsMin && sections.length <= RULES.sectionsMax,
+      `H2 섹션이 ${sections.length}개입니다. ${RULES.sectionsMin}~${RULES.sectionsMax}개여야 합니다.`
+    );
+  }
   sections.forEach((s, i) => {
     need(Boolean(s.h2), `섹션 ${i + 1}: h2 제목이 없습니다.`);
     need((s.body ?? []).length > 0, `섹션 ${i + 1}("${s.h2 ?? ''}"): 본문이 비어 있습니다.`);
   });
 
   // 6. FAQ 4문항
+  //
+  //  허브는 문항 수가 곧 페이지의 내용이라 고정할 수 없다. 대신 하한 4문항은
+  //  지킨다 — 그 아래면 허브라고 부를 것이 없다. (2026-08-17, E-8)
   const faq = page.faq ?? [];
-  need(faq.length === RULES.faq, `FAQ가 ${faq.length}문항입니다. 정확히 ${RULES.faq}문항이어야 합니다.`);
+  need(
+    page.hub ? faq.length >= RULES.faq : faq.length === RULES.faq,
+    `FAQ가 ${faq.length}문항입니다. ${page.hub ? `${RULES.faq}문항 이상이어야` : `정확히 ${RULES.faq}문항이어야`} 합니다.`
+  );
   faq.forEach((f, i) => {
     need(Boolean(f.q), `FAQ ${i + 1}: 질문이 없습니다.`);
     need(Boolean(f.a), `FAQ ${i + 1}: 답변이 없습니다.`);
