@@ -141,6 +141,51 @@ const ASKS = [
   },
 ];
 
+/**
+ * 커버 카피 3벌 — 시안 JS 의 this.cover 와 같은 값이다.
+ *
+ * 시안은 7초마다 이미지와 카피를 함께 넘긴다(900ms 페이드). 정적 변환에서
+ * 그 동작이 빠져 첫 장에 멈춰 있었다. 이미지 3장은 이미 마크업에 있고
+ * 카피만 한 벌이라 세 벌로 편다.
+ */
+const COVERS = [
+  ['손님이 고르지 않습니다.', 'AI가 먼저 고릅니다.'],
+  ['우리 캠핑장은 이제', 'AI가 선택하고 결정합니다.'],
+  ['AI 답변 안에 없으면,', '손님의 선택지에도 없습니다.'],
+];
+
+/**
+ * 커버에 회전용 표식을 붙인다. 자리표시자 치환보다 먼저.
+ *
+ *  ① <section id="cover"> 에 data-cover — enhance.js 가 이걸로 커버를 찾는다
+ *  ② 이미지 3장에 class="cover-img" — 인라인 opacity({{ img0 }}=1, 나머지 0)는
+ *     그대로 둔다. JS 가 없으면 첫 장이 그대로 보여야 한다.
+ *  ③ 카피 <p> 한 벌을 세 벌로. 첫 벌만 opacity 1, 나머지는 0.
+ *     세 벌 모두 소스에 남으므로 AI 는 카피 3벌을 다 읽는다(관문 ②).
+ */
+function expandCover(html) {
+  let out = html;
+
+  out = out.replace('<section id="cover" ', '<section id="cover" data-cover ');
+
+  out = out.replace(
+    /<img src="assets\/hero-ai(-[23])?\.png"/g,
+    (m) => m.replace('<img ', '<img class="cover-img" ')
+  );
+
+  out = out.replace(
+    /<p style="(position:absolute;inset:0;display:flex;flex-direction:column[^"]*?)opacity:\{\{\s*coverOpacity\s*\}\};transform:\{\{\s*coverShift\s*\}\}"><span>\{\{\s*coverLine1\s*\}\}<\/span><span>\{\{\s*coverLine2\s*\}\}<\/span><\/p>/,
+    (m, style) =>
+      COVERS.map(
+        ([a, b], i) =>
+          `<p class="cover-line" style="${style}opacity:${i === 0 ? 1 : 0};transform:none">` +
+          `<span>${a}</span><span>${b}</span></p>`
+      ).join('')
+  );
+
+  return out;
+}
+
 /** {{ typedQ }} · {{ answerLead }} 를 세 벌로 편다. 자리표시자 치환보다 먼저. */
 function expandAsks(html) {
   let out = html;
@@ -181,9 +226,10 @@ function expandAsks(html) {
 function transform(html) {
   let out = html;
 
-  // ⓪ 엔진 배지·질문 3벌 전개 — 자리표시자 치환보다 먼저
+  // ⓪ 엔진 배지·질문·커버 3벌 전개 — 자리표시자 치환보다 먼저
   out = expandEngines(out);
   out = expandAsks(out);
+  out = expandCover(out);
 
   // ① 자리표시자
   out = out.replace(/\{\{\s*([A-Za-z0-9_]+)\s*\}\}/g, (m, key) =>

@@ -160,19 +160,22 @@
       var slides = Math.min(cImgs.length, cLines.length);
 
       if (slides > 1) {
+        // 초기 상태는 마크업의 인라인 opacity 가 정한다(첫 장 1, 나머지 0).
+        // JS 가 없거나 reduced-motion 이면 그 상태로 멈춰 첫 장이 보인다.
+        // 인라인 값은 클래스로 못 이기므로 여기서도 style 을 직접 바꾼다.
         var at = 0;
         window.setInterval(function () {
           var next = (at + 1) % slides;
 
-          // 이미지 — 교차 페이드
-          cImgs[at].classList.remove('is-on');
-          cImgs[next].classList.add('is-on');
+          // 이미지 — 교차 페이드 (transition 900ms 는 마크업에 있다)
+          cImgs[at].style.opacity = '0';
+          cImgs[next].style.opacity = '1';
 
-          // 카피 — 사라진 뒤에 다음 것을 올린다
-          cLines[at].classList.remove('is-on');
+          // 카피 — 사라진 뒤에 다음 것을 올린다 (시안과 같은 순서)
+          cLines[at].style.opacity = '0';
           var show = next;
           window.setTimeout(function () {
-            cLines[show].classList.add('is-on');
+            cLines[show].style.opacity = '1';
           }, 900);
 
           at = next;
