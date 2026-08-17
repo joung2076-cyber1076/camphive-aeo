@@ -217,18 +217,35 @@ async function main() {
   // Noto Serif KR 은 넣지 않는다. 시안이 <link> 로 불러오기만 하고
   // font-family 선언이 0건이라 실사용이 없었다. 124개 파일 5.96MB 를
   // 저장소에서 뺐다. 강조에 세리프가 필요해지면 그때 다시 받는다.
+  // ⚠ 이어붙이기 전에 BOM 과 @charset 을 떼어낸다.
+  //
+  //   2026-08-17 — 소스 CSS 세 개가 저마다 BOM 으로 시작한다. 그대로 이으면
+  //   BOM 이 파일 **중간**에 들어가고, CSS 파서는 중간 BOM(U+FEFF)을 만나면
+  //   그 지점의 규칙을 버린다. 실제로 :root 블록이 통째로 죽어 있었다 —
+  //   --s1~--s32, --bg, --muted, --wrap 등 변수 전부가 빈 값이 되어
+  //   하위 15페이지의 색과 간격이 폴백으로 그려지고 있었다.
+  //   (푸터 사이트맵 링크가 gap 없이 붙어 보이던 것이 그 증상이다)
+  //
+  //   @charset 도 같다. 파일 맨 앞에서만 유효하고 중간에 있으면 무효인데,
+  //   앞의 BOM 과 겹쳐 파서를 더 흔든다. 합칠 때는 떼고, 최종 결과의
+  //   맨 앞에 한 번만 붙인다.
+  const stripCssHead = (s) => s.replace(/^﻿/, '').replace(/^\s*@charset\s+["'][^"']*["'];\s*/i, '');
+
   const FONT_FILES = ['fonts-noto-sans-kr.css', 'fonts-jetbrains-mono.css'];
   const fontCss = (
     await Promise.all(FONT_FILES.map((f) => readFile(path.join(ROOT, 'src', f), 'utf8')))
-  ).join('\n');
-  const mainCss = await readFile(path.join(ROOT, 'src', 'styles.css'), 'utf8');
-  await writeFile(path.join(DIST, 'styles.css'), `${fontCss}\n${mainCss}`, 'utf8');
+  )
+    .map(stripCssHead)
+    .join('\n');
+  const mainCss = stripCssHead(await readFile(path.join(ROOT, 'src', 'styles.css'), 'utf8'));
+  await writeFile(path.join(DIST, 'styles.css'), `@charset "utf-8";\n${fontCss}\n${mainCss}`, 'utf8');
 
   // 홈 전용 — 폰트 선언만. 시안은 스타일을 전부 인라인 style 과 자체
   // <style> 블록에 담고 있어서, 여기에 우리 styles.css 를 얹으면
   // h1/h2/p/section 같은 요소 선택자가 시안 위에 덧칠된다.
   // "디자인 그대로"를 지키려면 홈에는 폰트만 준다.
-  await writeFile(path.join(DIST, 'home.css'), fontCss, 'utf8');
+  // 홈도 같은 이유로 맨 앞에 한 번만 붙인다(위 stripCssHead 설명 참조).
+  await writeFile(path.join(DIST, 'home.css'), `@charset "utf-8";\n${fontCss}`, 'utf8');
   console.log(`  ${C.ok('생성')}  home.css  ${C.dim(`폰트 선언만 ${(fontCss.length / 1024).toFixed(1)}KB — 홈은 시안 스타일을 쓴다`)}`);
   console.log(
     `  ${C.ok('생성')}  styles.css  ${C.dim(
