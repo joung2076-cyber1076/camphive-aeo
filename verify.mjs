@@ -747,6 +747,49 @@ async function main() {
     check(true, `중복 질의 없음 (홈 FAQ ${homeFaq.length} × 하위 H1 ${subH1.length} 대조)`, '유사도 60% 이상 0쌍');
   }
 
+  // ── 12-3) D12 색 토큰 대조 (2026-08-16 고정 · D26 해소) ──────
+  //
+  //  전에는 「실측 상위 빈도 13개」를 그때그때 뽑아 썼다. 그러면 회차마다
+  //  목록이 바뀌어 전·후 대조가 성립하지 않는다. D12 13종을 배열로 못 박고
+  //  이 배열만 대조 대상으로 쓴다. 0회여도 목록에서 빼지 않는다 —
+  //  「사라졌다」는 사실 자체가 신호이기 때문이다.
+  //
+  //  대상 파일은 둘이다. D24 는 홈 렌더링의 전후 대조이므로 산출물이
+  //  기준이지만, 시안 원문 쪽 값도 함께 내어 어느 단계에서 달라졌는지
+  //  보이게 한다. 어느 쪽을 기준으로 삼을지는 아키가 정한다.
+  const D12_TOKENS = [
+    '#0b0e13', '#0f1319', '#12161d', '#161b22', '#1b212b',
+    '#c4ccd8', '#8c96a6', '#3b82f6', '#60a5fa', '#2563eb',
+    '#e8a33d', '#3dd6ac', '#e89476',
+  ];
+  {
+    const designPath = DESIGN_FILE;
+    const homeOut = htmlPathFor('');
+    const countTokens = async (file) => {
+      if (!existsSync(file)) return null;
+      const t = await readFile(file, 'utf8');
+      // 대소문자를 구분하지 않는다. 파일 표기는 대문자지만 규칙은 소문자다.
+      return D12_TOKENS.map((tok) => [tok, (t.match(new RegExp(tok, 'gi')) ?? []).length]);
+    };
+    const inDesign = await countTokens(designPath);
+    const inDist = await countTokens(homeOut);
+    if (inDesign && inDist) {
+      const zero = inDesign.filter(([, n], i) => n === 0 && inDist[i][1] === 0);
+      check(
+        true,
+        `D12 색 토큰 ${D12_TOKENS.length}종 대조`,
+        `시안·산출물 양쪽 집계 · 양쪽 0인 토큰 ${zero.length}종`
+      );
+      for (let i = 0; i < D12_TOKENS.length; i += 1) {
+        const [tok, a] = inDesign[i];
+        const b = inDist[i][1];
+        console.log(C.dim(`         ${tok}  시안 ${String(a).padStart(3)}  산출물 ${String(b).padStart(3)}`));
+      }
+    } else {
+      warn('D12 색 토큰 대조 — 대상 파일 없음', `${designPath} 또는 ${homeOut}`);
+    }
+  }
+
   // ── 12-2) 금칙어 검사 ────────────────────────────────────
   //
   //  자칭 수식어와 성과 약속, 쓰지 않기로 한 옛 명칭. 산출물에 하나라도
