@@ -35,18 +35,22 @@ jobs:
         with:
           node-version: '22'
 
-      # BASE_PATH — github.io 임시 주소는 /저장소이름/ 하위에서 열린다.
-      # 이 값을 넣어야 CSS와 내부 링크가 깨지지 않는다.
-      # aicampingmarketing.co.kr 도메인이 연결되면 아래 env 두 줄씩을 지운다.
+      # BASE_PATH 없음 — 2026-08-17 부터 aicampingmarketing.co.kr 루트 배포다.
+      #
+      #   전에는 BASE_PATH=/camphive-aeo 를 넣었다. github.io 임시 주소가
+      #   /저장소이름/ 하위에서 열리기 때문이다. 도메인이 붙은 뒤에는 사이트가
+      #   도메인 루트에서 제공되므로, 그 값이 남아 있으면 모든 링크가
+      #   /camphive-aeo/... 로 나가 전 페이지 404 가 된다.
+      #
+      #   ⚠ 임시 주소(github.io/camphive-aeo/)로 되돌릴 일이 생기면 아래 두
+      #     단계에 env: BASE_PATH: /camphive-aeo 를 다시 넣어야 한다.
+      #     static/CNAME 삭제와 같은 커밋에서 해야 한다 — 따로 하면 그 사이
+      #     구간에서 전 페이지가 404 다.
       - name: 빌드 (dist/ 생성)
         run: node build.mjs
-        env:
-          BASE_PATH: /camphive-aeo
 
       - name: 소스 보기 검증 — 실패하면 배포하지 않는다
         run: node verify.mjs
-        env:
-          BASE_PATH: /camphive-aeo
 
       - name: 결과물 업로드
         uses: actions/upload-pages-artifact@v3
