@@ -567,6 +567,20 @@ async function main() {
     check(broken.length === 0, `내부 링크 유효 (${[...new Set(internal)].length}개)`,
       broken.length ? `깨짐: ${broken.join(', ')}` : '');
 
+    //  호스트가 빈 주소 — http:///faq/ 처럼 슬래시가 셋인 형태 (2026-08-17, G-3)
+    //
+    //  위의 검사는 href 가 `/` 로 시작하는 것만 본다. `http:///faq/` 는 h 로
+    //  시작해서 검사 대상에 들지도 않는다. 브라우저는 호스트가 빈 이 주소를
+    //  열지 못하는데, 404 0건으로 통과한다 — 링크가 죽은 채로 배포된다.
+    //  실제로 원고 하나가 이 형태로 링크 6개를 담고 왔다(게재 전에 걸러냈다).
+    //  프로토콜만 있고 호스트가 없는 모든 주소를 잡는다.
+    const emptyHost = [...raw.matchAll(/(?:href|src)="([a-z][a-z0-9+.-]*:\/\/\/[^"]*)"/gi)].map((m) => m[1]);
+    check(
+      emptyHost.length === 0,
+      '호스트가 빈 링크 없음 (슬래시 3개)',
+      emptyHost.length ? `${emptyHost.length}건: ${[...new Set(emptyHost)].slice(0, 3).join(', ')}` : ''
+    );
+
     // ── 7) 질의 3원칙 — 문체·업종어 ──────────────────────
     const slugKey = String(page.slug ?? '').replace(/^\/+|\/+$/g, '');
     if (!page.template && !CORPORATE_SLUGS.has(slugKey)) {
