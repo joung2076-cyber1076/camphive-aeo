@@ -11,9 +11,10 @@
 #     국내 캠핑 업종 수치가 아니라는 단서를 본문에 유지한다(8.3).
 #   ⚠ 색인 반영 4주는 해외 실행 사례 관측값이다. 국내 적용값이 아니라는
 #     단서를 지우지 말 것.
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 slug: measurement
-noindex: true
 nav: true
 navOrder: 3
 navLabel: 효과 측정

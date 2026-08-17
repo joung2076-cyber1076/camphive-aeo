@@ -4,10 +4,11 @@
 #   type: page 이므로 Article·FAQPage 노드를 붙이지 않는다(E12).
 #   ⚠ 영업시간은 미확인이라 쓰지 않는다(8.1). 「언제 쓰나」 열은 수단별 용도이지
 #     응대 시간이 아니다.
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 type: page
 slug: contact
-noindex: true
 changefreq: yearly
 
 title: 캠핑하이브에 어떻게 연락해? | 캠핑하이브

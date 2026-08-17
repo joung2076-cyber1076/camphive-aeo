@@ -2,10 +2,11 @@
 # 원고 게재 — 2026-08-17 (아키 지시 v13 1단계)
 #   H1·H2 는 아키가 확정한 문안이다. 한 글자도 바꾸지 않는다.
 #   type: page 이므로 Article·FAQPage 노드를 붙이지 않는다(E12).
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 type: page
 slug: intro/ai-marketing
-noindex: true
 changefreq: yearly
 
 title: 캠핑장 AI 마케팅이 뭐야? | 캠핑하이브

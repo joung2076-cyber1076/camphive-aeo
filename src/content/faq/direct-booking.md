@@ -8,9 +8,10 @@
 #     성과 약속으로 읽힌다(지침 8.1·8.3). 새로 채우지 말 것.
 #   ⚠ 예약 플랫폼 실명을 쓰지 않는다. 「플랫폼 경유 / 자사 경유」 유형 비교만(8.4).
 #   ⚠ 개인정보·계약 관련에 법령 조항 번호를 쓰지 않는다(지침 8.2).
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 slug: faq/direct-booking
-noindex: true
 changefreq: monthly
 
 title: 캠핑장 직예약 늘리려면 어떻게 해야 돼? | 캠핑하이브

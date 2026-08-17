@@ -3,9 +3,10 @@
 #   H1 은 아키가 확정한 타깃 질의문이다. 한 글자도 바꾸지 않는다.
 #   본문에 지어낸 수치·법령 인용이 없다. 새로 추가하지 않는다.
 #   robots.txt 차단 수치는 확정값만 쓴다 (블로그 9종 / 카페 12종 / 지식iN 22종).
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 slug: faq/why-not-in-chatgpt
-noindex: true
 changefreq: monthly
 
 title: 우리 캠핑장이 챗GPT에 안 나오는데 왜 그래? | 캠핑하이브

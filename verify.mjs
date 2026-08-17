@@ -129,6 +129,16 @@ function htmlPathFor(slug) {
   return s ? path.join(DIST, ...s.split('/'), 'index.html') : path.join(DIST, 'index.html');
 }
 
+/** dist 안의 index.html 개수 = 실제로 배포된 페이지 수 */
+async function countHtmlPages(dir) {
+  let n = 0;
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) n += await countHtmlPages(path.join(dir, entry.name));
+    else if (entry.name === 'index.html') n += 1;
+  }
+  return n;
+}
+
 /** 페이지에서 "소스에 반드시 있어야 하는" 문자열들을 뽑아낸다. */
 async function expectedStrings(page) {
   const out = [];
@@ -907,6 +917,46 @@ async function main() {
     check(
       !locs.some((l) => noindexUrls.some((s) => s && l.includes(`/${s}/`))),
       'noindex 페이지는 sitemap 에서 제외됨'
+    );
+
+    // ── 전역 스위치를 끈다고 가정했을 때의 sitemap 수 (2026-08-17 신설, D-4)
+    //
+    //   위의 검사는 「지금」 상태만 본다. 전역 차단 중에는 sitemap 이 비어
+    //   있는 게 정상이라 0 == 0 으로 늘 통과한다. 그래서 개별 noindex 가
+    //   섞여 들어와도 잡히지 않고, 색인을 여는 날 그 페이지만 조용히 빠진다.
+    //   이 검사는 스위치를 끈 상태를 미리 계산해 그 어긋남을 지금 잡는다.
+    //
+    //   기준 수는 실제 산출물이다 — dist 안의 index.html 개수를 센다(6.3.6.4).
+    //   원고 수가 아니라 실제로 배포된 페이지 수와 맞춘다.
+    //
+    //   예외를 뺀 수로 맞춘다. 이때 예외 수는 페이지가 아니라 site.config 의
+    //   indexExceptions 에서 가져온다 — 페이지 자신에게서 세면 빼는 쪽과
+    //   더하는 쪽이 같은 값이라 합이 언제나 맞고, 검사가 아무것도 못 잡는다.
+    //   목록을 페이지 밖에 두어야 원고에 noindex 가 섞여 들어온 순간 어긋난다.
+    const deployed = await countHtmlPages(DIST);
+    const wouldIndex = pages.filter((p) => !p.noindex && !p.draft).length;
+    const allowed = Array.isArray(site.indexExceptions) ? site.indexExceptions : [];
+    check(
+      wouldIndex + allowed.length === deployed,
+      '전역 스위치를 끄면 sitemap URL 수 == 배포 페이지 수',
+      `배포 ${deployed}개 / 색인 예정 ${wouldIndex}개` +
+        (allowed.length ? ` / 허용된 예외 ${allowed.length}개` : '')
+    );
+
+    // 예외 목록과 원고가 서로 맞는가 — 한쪽만 고친 상태를 잡는다
+    const blocked = pages.filter((p) => p.noindex).map((p) => String(p.slug ?? ''));
+    const undeclared = blocked.filter((s) => !allowed.includes(s));
+    const stale = allowed.filter((s) => !blocked.includes(s));
+    check(
+      undeclared.length === 0 && stale.length === 0,
+      '개별 noindex 는 site.config 의 indexExceptions 와 일치',
+      [
+        undeclared.length ? `목록에 없는 차단: ${undeclared.map((s) => `/${s}/`).join(', ')}` : '',
+        stale.length ? `원고에 없는 목록: ${stale.map((s) => `/${s}/`).join(', ')}` : '',
+        !undeclared.length && !stale.length ? `개별 차단 ${blocked.length}건` : '',
+      ]
+        .filter(Boolean)
+        .join(' · ')
     );
   }
 

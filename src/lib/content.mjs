@@ -67,6 +67,10 @@ export async function loadPages(contentDir) {
       category: data.category || undefined,
 
       noindex: bool(data.noindex),
+      // 개별 색인 차단의 사유. noindex 를 켰다면 반드시 있어야 하고,
+      // 없으면 validate 가 빌드를 세운다(2026-08-17 신설).
+      // 색인 여부는 원칙적으로 site.config.mjs 의 noindexAll 하나로 정한다.
+      noindexReason: typeof data.noindexReason === 'string' ? data.noindexReason.trim() : '',
       draft: bool(data.draft),
       // 구조 견본 페이지 표시 — 홈의 목록에 나타나지 않는다
       template: bool(data.template),

@@ -6,9 +6,10 @@
 #   ⚠ 배분 비율·금액이 0건인 것은 의도된 것이다. 원고가 「실측 없이 금액을
 #     말씀드리지 않는다」를 본문에서 명시한다. 새로 채우지 말 것(8.1·8.3).
 #   robots.txt 차단 수치는 확정값만 쓴다 (블로그 9종 / 카페 12종 / 지식iN 22종).
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 slug: faq/ad-budget
-noindex: true
 changefreq: monthly
 
 title: 캠핑장 홍보비 어디에 써야 돼? | 캠핑하이브

@@ -4,10 +4,11 @@
 #     22문항을 임의로 올리지 말 것 — 게재일이 8주 판정 기준일이 된다(F4).
 #   H1·H2 는 아키가 확정한 문안이다. 한 글자도 바꾸지 않는다.
 #   type: page 이므로 Article·FAQPage 노드를 붙이지 않는다(E12).
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 type: page
 slug: faq
-noindex: true
 nav: true
 navOrder: 4
 navLabel: 질문 120개

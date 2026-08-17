@@ -5,10 +5,11 @@
 #   ⚠ 요금 3종은 확정값이다(스타터 3개월 330,000 / 스탠다드 6개월 270,000 /
 #     프리미엄 12개월 220,000, 전부 VAT 별도). 홈 plan 섹션과 같은 값이어야 한다.
 #     계약 총액·할인율·한시 혜택을 덧붙이지 않는다.
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 type: page
 slug: intro/consulting
-noindex: true
 changefreq: yearly
 
 title: 캠핑장 컨설팅은 뭘 해주는 거야? | 캠핑하이브

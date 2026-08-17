@@ -8,6 +8,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import { wordCount } from './html.mjs';
+import { site } from '../../site.config.mjs';
 
 const RULES = {
   answerMin: 40,
@@ -24,11 +25,41 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 export function validatePage(page) {
   const errors = [];
   const warnings = [];
-  const bucket = page.draft || page.noindex ? warnings : errors;
+  // 규격 위반을 오류로 볼 것인가 경고로 볼 것인가
+  //
+  //   원래 조건은 `page.draft || page.noindex` 였다. 색인이 막힌 페이지는
+  //   AI 가 인용하지 않으니 규격 미달이어도 배포를 세울 이유가 없다는 뜻이다.
+  //   그 판단 자체는 옳다. 다만 기준이 개별 플래그였던 탓에, 원고에 붙은
+  //   noindex 가 색인만이 아니라 구조 검사까지 함께 껐다. 색인을 여는 날
+  //   그동안 눌려 있던 위반이 한꺼번에 오류로 튀어나온다.
+  //
+  //   2026-08-17: 개별 플래그를 없애면서 기준을 전역 스위치로 옮겼다.
+  //   뜻은 그대로다 — 「색인이 막혀 있는 동안에는 경고」. 다르게 만든 것은
+  //   기준이 한 곳이 됐다는 점뿐이다.
+  //
+  //   ⚠ 전역 스위치를 끄는 날 이 경고들은 전부 오류가 된다.
+  //     해제 전에 경고 0건을 먼저 만들어야 한다.
+  const bucket = page.draft || site.noindexAll || page.noindex ? warnings : errors;
 
   const need = (cond, msg) => {
     if (!cond) bucket.push(msg);
   };
+
+  // 개별 색인 차단에는 사유가 따라와야 한다 (2026-08-17 신설)
+  //
+  //   색인 여부는 site.config.mjs 의 noindexAll 하나로 정하는 것이 원칙이다.
+  //   전역 스위치와 개별 플래그를 둘 다 쓰면 전역을 열어도 개별로 막힌
+  //   페이지가 남고, 그 페이지는 아무 경고 없이 색인에서 빠진다.
+  //   그래서 개별 차단은 사유를 적어야만 통과시킨다.
+  //
+  //   errors 에 직접 넣는다. bucket 을 쓰면 noindex 인 페이지는 경고로
+  //   빠져 — 검사하려는 대상이 스스로 검사를 무력화한다.
+  if (page.noindex && !page.noindexReason) {
+    errors.push(
+      'noindex: true 를 켰으면 noindexReason 에 사유를 적어야 합니다. ' +
+        '색인 여부는 원칙적으로 site.config.mjs 의 noindexAll 로만 정합니다.'
+    );
+  }
 
   need(page.slug !== undefined, 'slug 가 없습니다.');
   need(Boolean(page.title), 'title 이 비어 있습니다.');

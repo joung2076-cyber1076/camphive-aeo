@@ -5,10 +5,11 @@
 #   「지체 없이」를 「10일 이내」 등 구체 기간으로 바꾸지 않는다.
 #   대표 이메일은 joung2076@gmail.com 이 정본이다 (2026-08-16 확정).
 #   7번 요청 방법과 11번 표에 이 주소를 싣는다.
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 type: page
 slug: privacy
-noindex: true
 changefreq: yearly
 
 title: 개인정보처리방침 | 캠핑하이브

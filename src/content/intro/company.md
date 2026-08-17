@@ -4,10 +4,11 @@
 #   type: page 이므로 Article·FAQPage 노드를 붙이지 않는다(E12).
 #   ⚠ 「데크 3.6m × 3.6m」 등은 표의 좌우 대비를 보여주는 예시 문장이다.
 #     특정 캠핑장의 실제 사양이 아니므로 실측값으로 오해되게 고치지 말 것.
-#   noindex 는 아키 지시로만 해제한다.
+#   색인 여부는 전역 스위치(site.config.mjs 의 noindexAll) 하나로만 정한다.
+#   개별 noindex 를 다시 넣으려면 noindexReason 에 사유를 함께 적어야 한다.
+#   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 type: page
 slug: intro/company
-noindex: true
 changefreq: yearly
 
 title: 캠핑하이브는 캠핑장을 얼마나 지어 봤어? | 캠핑하이브
