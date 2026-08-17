@@ -404,12 +404,18 @@ export function diagnosisForm(f, { id, title, lead } = {}) {
     .join('\n      ');
 
   // 도구 직행 — 우리 서버는 없다. 입력값을 쿼리스트링으로 붙여 도구로 보낸다.
-  // action 이 확정되면 아래 한 줄만 바꾼다. 파라미터명도 도구 쪽에 맞춘다.
+  //
+  // ⚠ 아직 채워지지 않은 두 가지 (2026-08-17 기준)
+  //   ① 진단 도구 URL — 아래 form 의 action="#" 을 도구 주소로 바꾼다.
+  //      예: action="https://도구주소/"
+  //   ② 파라미터명 — name / url / email 이 도구 쪽과 일치하는지 확인한다.
+  //
+  //   이 메모는 전에 HTML 주석으로 있었다. 화면에는 안 보여도 페이지 소스에는
+  //   나가므로 「【확인 필요】」가 우리 문장으로 인용될 수 있었다. 회수가 안 되는
+  //   사고라 코드 주석으로 옮겼다 — JS 주석은 산출물에 나가지 않는다.
   return `<div ${rv(0, 'form-block')}${id ? ` id="${esc(id)}"` : ''}>
       ${title ? `<h3>${esc(title)}</h3>` : ''}
       ${lead ? `<p>${esc(lead)}</p>` : ''}
-      <!-- 【확인 필요】 진단 도구 URL — action 에 넣는다. 예: action="https://도구주소/" -->
-      <!-- 【확인 필요】 파라미터명(name/url/email)이 도구 쪽과 일치하는지 확인 -->
       <form method="get" action="#" novalidate>
       ${fields}
       <div class="consent">
