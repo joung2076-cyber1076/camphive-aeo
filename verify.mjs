@@ -495,13 +495,18 @@ async function main() {
       };
       graph.forEach((n) => visit(n, null));
 
-      if (offenders.length) {
-        warn(`JSON-LD 문장이 본문에 없음 ${offenders.length}건 (색인 해제 전 실패로 승격)`);
-        for (const o of offenders.slice(0, 5)) {
-          console.log(C.dim(`         ${o.where}: "${o.text.slice(0, 60)}…"`));
-        }
-      } else {
-        check(true, 'JSON-LD 문장이 전부 본문에 있음', `${graph.length}개 노드 검사`);
+      // 2026-08-17 — 경고에서 실패로 승격했다(아키 판정 2).
+      //   경고로 두면 영구히 경고로 남는다는 것이 승격 사유였다. 승격 시점의
+      //   위반은 0건이라 빌드가 멈추지 않는다.
+      //   대상은 산출물이다 — plain 이 dist HTML 에서 태그를 걷어낸 값이고
+      //   graph 도 같은 파일의 JSON-LD 다(6.3.6.4).
+      check(
+        offenders.length === 0,
+        'JSON-LD 문장이 전부 본문에 있음',
+        offenders.length ? '' : `${graph.length}개 노드 검사`
+      );
+      for (const o of offenders.slice(0, 5)) {
+        console.log(C.err(`         ${o.where}: "${o.text.slice(0, 60)}…"`));
       }
     }
 
