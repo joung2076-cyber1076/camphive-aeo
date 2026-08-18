@@ -5,7 +5,7 @@
 //  단 한 줄도 들어가지 않는다. JS 0줄 = AI 크롤러에게 100% 읽히는 페이지.
 // ─────────────────────────────────────────────────────────────
 
-import { CANONICAL_SENTENCE } from '../../site.config.mjs';
+import { CANONICAL_SENTENCE, company } from '../../site.config.mjs';
 import { esc, urlFor, pathFor, assetPath, krDate } from './html.mjs';
 import { renderJsonLd } from './jsonld.mjs';
 import { floatingButtons, LANDING } from './render-landing.mjs';
@@ -128,24 +128,20 @@ function footer(ctx, page) {
   // 내려받기 아이콘 — 인라인 SVG. 이미지 파일·아이콘 폰트·CDN 없음.
   const downloadIcon = `<svg class="doc-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 2v8"/><path d="M4.5 7 8 10.5 11.5 7"/><path d="M2.5 13.5h11"/></svg>`;
 
-  // 회사 정보 표 — AI가 사실 관계를 표 형태로 뽑아가기 좋은 형식.
-  // 주소는 공장과 전시장을 나눠 적는다. 손님이 갈 수 있는 곳이
-  // 어디인지 한 줄로 뭉개면 AI가 공장 주소를 방문지로 안내한다.
-  const addr = (a) => [a.region, a.locality, a.street].filter(Boolean).join(' ');
-  const rows = [
-    ['상호', site.legalName],
-    org.founder ? ['대표자', org.founder] : null,
-    org.businessNumber ? ['사업자등록번호', org.businessNumber] : null,
-    ['설립', `${org.foundingYear}년`],
-    [org.address.label ?? '소재지', addr(org.address)],
-    org.showroom
-      ? [org.showroom.label, `${addr(org.showroom)}${org.showroom.note ? ` (${org.showroom.note})` : ''}`]
-      : null,
-    ['사업 분야', site.tagline],
-    org.telephone ? ['전화', org.telephone] : null,
-    org.fax ? ['팩스', org.fax] : null,
-    org.email ? ['이메일', org.email] : null,
-  ].filter(Boolean);
+  // 회사 정보 — site.config 의 company 객체 하나만 읽는다.
+  // (사장님 제공 실측값 2026-08-18 · 지침 6.3.6.2 단일 소스 · 8.1)
+  //
+  // 배치는 사장님 지시 — 세로 표로 늘어놓지 않고 가로로 이어 붙인다.
+  // 항목 구분자는 가운뎃점, 넓은 화면 2줄, 좁은 화면은 자동 줄바꿈.
+  // 종전의 세로 표(company-facts)는 2026-08-18 사장님 승인으로 이
+  // 2줄이 대체한다. 값이 없는 항목(우편번호 등)은 아예 만들지 않는다.
+  const companyAddr = [company.address.region, company.address.locality, company.address.street]
+    .filter(Boolean)
+    .join(' ');
+  const companyLines = `<div class="footer-company">
+        <p>${esc(company.name)} · 대표 ${esc(company.ceo)} · 사업자등록번호 ${esc(company.businessNumber)} · 개인정보 보호책임자 ${esc(company.privacyOfficer)}</p>
+        <p>${esc(companyAddr)} · <a href="tel:${esc(company.telephone.replace(/-/g, ''))}">${esc(company.telephone)}</a> · <a href="mailto:${esc(company.email)}">${esc(company.email)}</a> · <a href="${esc(pathFor('privacy'))}">개인정보처리방침</a></p>
+      </div>`;
 
   const sameAs = org.sameAs?.length
     ? `<ul class="footer-links">${org.sameAs
@@ -172,21 +168,7 @@ function footer(ctx, page) {
            화면에 다시 꺼내지 말 것 — 푸터에서 같은 문장이 전 페이지
            반복되면 본문 대비 상투구 비중만 올라간다. -->
 
-      <table class="company-facts">
-        <caption>회사 개요</caption>
-        <tbody>
-          ${rows
-            .map(([k, v]) => {
-              // 전화는 눌러서 걸리게 한다. 모바일에서 번호를 옮겨 적게 하면
-              // 그 자리에서 전화가 끊긴다.
-              // tel: 은 하이픈을 그대로 받는다. 표기를 통일해 두면
-              // 소스에서 "tel:15887366" 하나로 전수 검색된다.
-              const cell = k === '전화' ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : esc(v);
-              return `<tr><th scope="row">${esc(k)}</th><td>${cell}</td></tr>`;
-            })
-            .join('\n          ')}
-        </tbody>
-      </table>
+      ${companyLines}
     </div>
 
     <div class="footer-aside">

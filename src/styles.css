@@ -925,8 +925,11 @@ td.is-num { font-family: var(--mono); }
 }
 .footer-title { font-family: var(--head); font-size: 1.25rem; margin-bottom: var(--s4); }
 .canonical-sentence { max-width: 60ch; color: var(--muted); margin-bottom: var(--s10); font-size: 0.9375rem; }
-.company-facts { max-width: 560px; }
-.company-facts th { width: 140px; color: var(--muted); font-family: var(--mono); font-size: 0.75rem; font-weight: 500; }
+/* 회사 정보 2줄 — 사장님 배치 지시(2026-08-18): 가로로 이어 붙인다.
+   글자 크기·색은 .copyright(고지 계열)과 동일. 새 색 없음(D12). */
+.footer-company { font-size: 0.8125rem; color: var(--muted); line-height: 1.9; }
+.footer-company p { margin: 0; }
+.footer-company a { color: var(--muted); }
 
 .footer-aside-title {
   font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em;
