@@ -98,6 +98,26 @@ export const site = {
   basePath: (process.env.BASE_PATH || '').replace(/\/+$/, ''),
 };
 
+// 사장님 제공 실측값 2026-08-18 · 지침 6.3.6.2 단일 소스 · 8.1
+//
+// 푸터 화면과 JSON-LD(Organization·LocalBusiness)는 이 객체 하나만 읽는다.
+// 값이 없는 항목(우편번호·통신판매업 신고번호)은 키 자체를 만들지 않는다 —
+// 빈 문자열을 내보내면 AI가 「값이 빈칸인 회사」로 읽는다(6.3.2).
+export const company = {
+  name: '주식회사 캠핑하이브',
+  ceo: '정용택',                    // 화면 전용 — JSON-LD 에는 대응 필드가 없어 넣지 않는다(v9 D-2)
+  businessNumber: '829-88-03202',
+  address: {
+    region: '경기도',
+    locality: '포천시',
+    street: '내촌면 청군로 2222',
+    country: 'KR',
+  },
+  telephone: '1588-7366',
+  email: 'joung2076@gmail.com',
+  privacyOfficer: '정용택',         // 화면 전용
+};
+
 export const org = {
   foundingYear: 2014,
 
@@ -128,7 +148,7 @@ export const org = {
   },
 
   founder: '정용택',
-  telephone: '031-584-0636',
+  telephone: '1588-7366',
   fax: '031-622-9368',
   email: 'joung2076@gmail.com',
   businessNumber: '829-88-03202',

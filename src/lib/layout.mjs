@@ -180,7 +180,7 @@ function footer(ctx, page) {
               // 전화는 눌러서 걸리게 한다. 모바일에서 번호를 옮겨 적게 하면
               // 그 자리에서 전화가 끊긴다.
               // tel: 은 하이픈을 그대로 받는다. 표기를 통일해 두면
-              // 소스에서 "tel:031-584-0636" 하나로 전수 검색된다.
+              // 소스에서 "tel:15887366" 하나로 전수 검색된다.
               const cell = k === '전화' ? `<a href="tel:${esc(v)}">${esc(v)}</a>` : esc(v);
               return `<tr><th scope="row">${esc(k)}</th><td>${cell}</td></tr>`;
             })
