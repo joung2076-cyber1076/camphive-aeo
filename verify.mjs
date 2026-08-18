@@ -19,7 +19,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { site, bots, CANONICAL_SENTENCE } from './site.config.mjs';
+import { site, bots, company, CANONICAL_SENTENCE } from './site.config.mjs';
 import { loadPages } from './src/lib/content.mjs';
 
 // 랜딩 카피 데이터 — 없으면 그 검사만 건너뛴다
@@ -545,6 +545,67 @@ async function main() {
       );
       for (const o of offenders.slice(0, 5)) {
         console.log(C.err(`         ${o.where}: "${o.text.slice(0, 60)}…"`));
+      }
+    }
+
+    // ── 회사 정보 3자 대조 — 화면 푸터 ↔ JSON-LD ↔ config (2026-08-18, v9 D-3)
+    //
+    //  지침 6.3.6 · 6.4.4 — 화면이 정본. 기준값은 config 에서 온다.
+    //  화면과 JSON-LD 에 같은 값을 따로 적어 두면 반드시 어긋난다(6.3.6.2).
+    //  양쪽 모두 site.config 의 company 를 기준으로 대조해, 한쪽만
+    //  고친 상태가 배포되지 못하게 한다. 대상은 dist(배포 산출물)다.
+    {
+      const footerHtml = (raw.match(/<footer[\s\S]*?<\/footer>/i) ?? [''])[0];
+      const footerText = norm(footerHtml.replace(/<[^>]+>/g, ' '));
+      const companyAddr = [company.address.region, company.address.locality, company.address.street].join(' ');
+      // 대조 항목 5개 — v9 D-3 확정 목록. 지침 6.3.6 · 6.4.4
+      const FOOTER_ITEMS = [
+        ['상호', company.name],
+        ['사업자등록번호', company.businessNumber],
+        ['소재지', companyAddr],
+        ['전화번호', company.telephone],
+        ['이메일', company.email],
+      ];
+      const missingOnScreen = FOOTER_ITEMS.filter(([, v]) => !footerText.includes(norm(v)));
+      check(
+        missingOnScreen.length === 0,
+        '푸터 화면에 회사 정보 5항목 존재',
+        missingOnScreen.length
+          ? `누락: ${missingOnScreen.map(([k]) => k).join(', ')}`
+          : '상호·사업자등록번호·소재지·전화번호·이메일'
+      );
+
+      if (graph) {
+        const nodes = graph.filter((n) => n['@type'] === 'Organization' || n['@type'] === 'LocalBusiness');
+        const bad = [];
+        for (const n of nodes) {
+          const t = n['@type'];
+          const want = {
+            name: company.name,
+            telephone: company.telephone,
+            email: company.email,
+            taxID: company.businessNumber,
+          };
+          for (const [k, v] of Object.entries(want)) {
+            if (n[k] !== v) bad.push(`${t}.${k}="${n[k]}" ≠ config "${v}"`);
+          }
+          const a = n.address ?? {};
+          const wantAddr = {
+            streetAddress: company.address.street,
+            addressLocality: company.address.locality,
+            addressRegion: company.address.region,
+            addressCountry: company.address.country,
+          };
+          for (const [k, v] of Object.entries(wantAddr)) {
+            if (a[k] !== v) bad.push(`${t}.address.${k}="${a[k]}" ≠ config "${v}"`);
+          }
+          if ('postalCode' in a) bad.push(`${t}.address.postalCode 가 존재 — 값이 없으므로 키를 만들지 않는다(6.3.2)`);
+        }
+        check(
+          nodes.length === 2 && bad.length === 0,
+          'JSON-LD 회사 정보 == config(company)',
+          bad.length ? bad.slice(0, 3).join(' / ') : `Organization·LocalBusiness ${nodes.length}개 노드 · 항목 전부 일치`
+        );
       }
     }
 

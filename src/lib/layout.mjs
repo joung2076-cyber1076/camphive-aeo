@@ -52,7 +52,7 @@ ${page.published ? `<meta property="article:published_time" content="${esc(page.
 
 <meta name="geo.region" content="KR-41">
 <!-- 방문 가능한 곳(포천 전시장) 기준. 공장이 아니다. -->
-<meta name="geo.placename" content="${esc((org.showroom ?? org.address).locality)}">
+<meta name="geo.placename" content="${esc(company.address.locality)}">
 
 <link rel="stylesheet" href="${assetPath(page.type === 'landing' ? 'home.css' : 'styles.css')}">
 <link rel="sitemap" type="application/xml" href="${assetPath('sitemap.xml')}">

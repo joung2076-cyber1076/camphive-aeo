@@ -121,37 +121,11 @@ export const company = {
 export const org = {
   foundingYear: 2014,
 
-  /**
-   * 주소가 두 곳이다. 쓰이는 자리가 다르다.
-   *   address   = 가평 공장   → JSON-LD Organization.address (법인 소재)
-   *   showroom  = 포천 전시장 → JSON-LD LocalBusiness.address (손님이 가는 곳)
-   * LocalBusiness 는 "방문할 수 있는 곳"을 뜻한다. 공장 주소를 넣으면
-   * AI가 손님에게 공장 주소를 안내한다.
-   */
-  address: {
-    label: '공장',
-    region: '경기도',
-    locality: '가평군',
-    street: '조종면 명지산로 452',
-    postalCode: '',        // TODO(사장님): 우편번호
-    country: 'KR',
-  },
-
-  showroom: {
-    label: '전시장',
-    region: '경기도',
-    locality: '포천시',
-    street: '내촌면 청군로 2224',
-    postalCode: '',        // TODO(사장님): 우편번호
-    country: 'KR',
-    note: '방문 상담 가능',
-  },
-
-  founder: '정용택',
-  telephone: '1588-7366',
-  fax: '031-622-9368',
-  email: 'joung2076@gmail.com',
-  businessNumber: '829-88-03202',
+  // 상호·대표자·사업자등록번호·소재지·전화·이메일은 여기 두지 않는다 —
+  // 위의 company 가 단일 소스다(2026-08-18, v9 작업 A). 종전의
+  // 공장/전시장 이원 주소·임시 전화(E11)·대표자·팩스 필드는 소비처가
+  // 전부 company 로 옮겨 가 삭제했다. 같은 값을 두 곳에 적어 두면
+  // 반드시 어긋난다(6.3.6.2).
 
   // 상담 가능 시간이 확정되면 채운다. 비어 있으면 JSON-LD에 나오지 않는다.
   opens: '',

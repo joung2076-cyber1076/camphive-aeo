@@ -16,7 +16,7 @@
 //    {url}#breadcrumb        빵부스러기
 // ─────────────────────────────────────────────────────────────
 
-import { CANONICAL_SENTENCE } from '../../site.config.mjs';
+import { CANONICAL_SENTENCE, company } from '../../site.config.mjs';
 import { urlFor } from './html.mjs';
 
 const ID = {
@@ -29,33 +29,39 @@ const ID = {
   crumb: (url) => `${url}#breadcrumb`,
 };
 
+/** company(사장님 실측값)의 PostalAddress — Organization·LocalBusiness 공용. */
+function companyPostalAddress() {
+  return {
+    '@type': 'PostalAddress',
+    addressCountry: company.address.country,
+    addressRegion: company.address.region,
+    addressLocality: company.address.locality,
+    streetAddress: company.address.street,
+  };
+}
+
 /** 회사 — 모든 페이지에 동일하게 실린다. */
 function organizationNode(site, org) {
   const node = {
     '@type': 'Organization',
     '@id': ID.org(site.baseUrl),
-    name: site.name,
+    name: company.name, // v9 D-2 — 사장님 확정 상호
     legalName: site.legalName,
     url: `${site.baseUrl}/`,
     foundingDate: String(org.foundingYear),
     // ↓ 정본 문장. 회사를 한 문장으로 설명하는 값이며 전 페이지 동일.
     description: CANONICAL_SENTENCE,
     slogan: site.tagline,
-    address: {
-      '@type': 'PostalAddress',
-      addressCountry: org.address.country,
-      addressRegion: org.address.region,
-      addressLocality: org.address.locality,
-      ...(org.address.street ? { streetAddress: org.address.street } : {}),
-      ...(org.address.postalCode ? { postalCode: org.address.postalCode } : {}),
-    },
+    // 사장님 제공 실측값 2026-08-18 — site.config 의 company 하나만 읽는다
+    // (지침 6.3.6.2 단일 소스). postalCode 는 값이 없으므로 키를 만들지 않는다(6.3.2).
+    address: companyPostalAddress(),
     areaServed: org.areaServed,
     knowsAbout: org.knowsAbout,
   };
 
-  if (org.telephone) node.telephone = org.telephone;
-  if (org.email) node.email = org.email;
-  if (org.businessNumber) node.taxID = org.businessNumber;
+  node.telephone = company.telephone;
+  node.email = company.email;
+  node.taxID = company.businessNumber;
   if (org.sameAs?.length) node.sameAs = org.sameAs;
 
   return node;
@@ -66,28 +72,19 @@ function localBusinessNode(site, org) {
   const node = {
     '@type': 'LocalBusiness',
     '@id': ID.local(site.baseUrl),
-    name: site.name,
+    name: company.name, // v9 D-2 — 사장님 확정 상호
     url: `${site.baseUrl}/`,
     description: CANONICAL_SENTENCE,
     parentOrganization: { '@id': ID.org(site.baseUrl) },
-    // 손님이 방문하는 곳 = 포천 전시장. 공장 주소를 넣으면 AI가
-    // 손님에게 공장을 안내한다.
-    address: (() => {
-      const a = org.showroom ?? org.address;
-      return {
-        '@type': 'PostalAddress',
-        addressCountry: a.country,
-        addressRegion: a.region,
-        addressLocality: a.locality,
-        ...(a.street ? { streetAddress: a.street } : {}),
-        ...(a.postalCode ? { postalCode: a.postalCode } : {}),
-      };
-    })(),
+    // 소재지는 하나다 — 사장님 제공 실측값 2026-08-18 (v9).
+    // 종전의 공장/전시장 이원 구조는 이 값으로 대체됐다.
+    address: companyPostalAddress(),
     areaServed: org.areaServed,
   };
 
-  if (org.telephone) node.telephone = org.telephone;
-  if (org.email) node.email = org.email;
+  node.telephone = company.telephone;
+  node.email = company.email;
+  node.taxID = company.businessNumber;
   if (org.sameAs?.length) node.sameAs = org.sameAs;
 
   if (org.opens && org.closes && org.openDays?.length) {
