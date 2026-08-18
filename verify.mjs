@@ -985,6 +985,61 @@ async function main() {
         (allowed.length ? ` / 허용된 예외 ${allowed.length}개` : '')
     );
 
+    // ── 기대 슬러그 대조 (2026-08-18 신설, v8 작업 A) ─────────
+    //
+    //  근거: 지침 6.4.4 · 대장 J7 ② · 점검표 6번.
+    //  위의 「전역 스위치를 끄면」 검사는 개수만 본다. 그리고 그 기준 수를
+    //  검사 대상(배포 산출물·페이지)에서 세므로, 페이지가 실수로 14개가
+    //  되면 기대값도 14로 함께 내려가 합이 언제나 맞는다.
+    //  기준은 검사 대상 밖 — site.config 의 expectedSitemapSlugs 배열이다.
+    //
+    //  대조는 두 겹이다.
+    //   1) 배열 ↔ 색인 예정 페이지 — 전역 차단 중에도 항상 돈다.
+    //      원고가 조용히 늘거나 줄면 지금 잡는다.
+    //   2) 배열 ↔ dist/sitemap.xml 실물 — 색인이 열려 있을 때만 돈다.
+    //      차단 중에는 sitemap 0개가 정상이므로 건너뛰되, 조용히 지나가지
+    //      않도록 「건너뜀」을 화면에 낸다.
+    const expected = Array.isArray(site.expectedSitemapSlugs) ? site.expectedSitemapSlugs : null;
+    if (check(expected !== null, 'site.config 에 expectedSitemapSlugs 배열 존재')) {
+      const projected = pages.filter((p) => !p.noindex && !p.draft).map((p) => String(p.slug ?? ''));
+      const notBuilt = expected.filter((s) => !projected.includes(s));
+      const notPinned = projected.filter((s) => !expected.includes(s));
+      check(
+        notBuilt.length === 0 && notPinned.length === 0,
+        `기대 슬러그 ${expected.length}개 == 색인 예정 페이지 (차단 중에도 대조)`,
+        [
+          notBuilt.length ? `배열에 있는데 페이지 없음: ${notBuilt.map((s) => `/${s}/`).join(', ')}` : '',
+          notPinned.length ? `페이지에 있는데 배열에 없음: ${notPinned.map((s) => `/${s}/`).join(', ')}` : '',
+          !notBuilt.length && !notPinned.length ? `${projected.length}개 전부 일치` : '',
+        ]
+          .filter(Boolean)
+          .join(' / ')
+      );
+
+      if (site.noindexAll) {
+        console.log(
+          `  ${C.dim('건너뜀')}  sitemap 슬러그 대조 (noindexAll=true — 해제 시 ${expected.length}개 대조)`
+        );
+      } else {
+        const locPaths = locs.map((l) =>
+          l.replace(site.baseUrl, '').replace(/^\/+|\/+$/g, '')
+        );
+        const missing = expected.filter((s) => !locPaths.includes(s));
+        const extra = locPaths.filter((s) => !expected.includes(s));
+        check(
+          missing.length === 0 && extra.length === 0,
+          `sitemap 슬러그 대조 (기대 ${expected.length}개)`,
+          [
+            missing.length ? `배열에 있는데 sitemap 에 없음: ${missing.map((s) => `/${s}/`).join(', ')}` : '',
+            extra.length ? `sitemap 에 있는데 배열에 없음: ${extra.map((s) => `/${s}/`).join(', ')}` : '',
+            !missing.length && !extra.length ? `${locPaths.length}개 전부 일치` : '',
+          ]
+            .filter(Boolean)
+            .join(' / ')
+        );
+      }
+    }
+
     // 예외 목록과 원고가 서로 맞는가 — 한쪽만 고친 상태를 잡는다
     const blocked = pages.filter((p) => p.noindex).map((p) => String(p.slug ?? ''));
     const undeclared = blocked.filter((s) => !allowed.includes(s));

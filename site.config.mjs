@@ -66,6 +66,30 @@ export const site = {
    */
   indexExceptions: [],
 
+  // 지침 6.4.4 · 대장 J7② · 점검표 6번 — 기준값을 검사 대상에서 세지 않는다
+  // 페이지를 추가·삭제하면 이 배열도 함께 고친다. 그것이 이 배열의 목적이다
+  //
+  // 색인이 열렸을 때 sitemap 에 실려야 하는 슬러그 전부. '' 는 홈(/).
+  // verify 가 이 배열과 색인 예정 페이지·sitemap.xml 을 슬러그 단위로
+  // 양방향 대조한다 — 페이지가 조용히 늘거나 줄면 여기서 어긋난다.
+  expectedSitemapSlugs: [
+    '',
+    'about',
+    'contact',
+    'diagnosis',
+    'faq',
+    'faq/ad-budget',
+    'faq/direct-booking',
+    'faq/naver-blog-still-works',
+    'faq/why-not-in-chatgpt',
+    'intro/ai-marketing',
+    'intro/company',
+    'intro/consulting',
+    'measurement',
+    'privacy',
+    'service',
+  ],
+
   /**
    * 하위 경로 배포용 접두사. 예) GitHub Pages 프로젝트 주소
    *   https://사용자명.github.io/저장소이름/  → BASE_PATH=/저장소이름
