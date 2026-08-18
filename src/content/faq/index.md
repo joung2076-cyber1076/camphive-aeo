@@ -14,7 +14,7 @@ slug: faq
 hub: true
 nav: true
 navOrder: 4
-navLabel: 질문 120개
+navLabel: 캠핑장 운영 질문
 changefreq: monthly
 
 title: 캠핑장 운영하면서 생기는 질문, 어디서 답 찾아? | 캠핑하이브
