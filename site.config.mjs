@@ -110,7 +110,7 @@ export const company = {
   address: {
     region: '경기도',
     locality: '포천시',
-    street: '내촌면 청군로 2222',
+    street: '내촌면 청군로 2224',
     country: 'KR',
   },
   telephone: '1588-7366',
