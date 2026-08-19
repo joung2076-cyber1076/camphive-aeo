@@ -986,6 +986,30 @@ async function main() {
     );
   }
 
+  // ── 12-2) 「확인 필요」 표식 잔존 검사 (지침 6.4.4 · J7 조용한 건너뜀) ──
+  //
+  //  근거: 색인 해제 전 점검표 1번 — dist 에 「【확인 필요】」 0건.
+  //
+  //  ⚠ 이 검사는 2026-08-19 이전까지 존재하지 않았고, 점검은 사람이
+  //  「【확인 필요】」를 그대로 찾는 방식이었다. 그래서 실제 문자열이
+  //  「【실측 확인 필요】」였던 /diagnosis/ 의 HTML 주석 1건을 놓쳤다.
+  //  ① 【 와 】 사이에 어떤 글자가 끼어도 잡히게 넓힌다
+  //  ② HTML 주석 안까지 본다 — 주석도 페이지 소스이고 AI 가 읽는다
+  const markerRe = /【[^】]*확인\s*필요[^】]*】/g;
+  const markerHits = [];
+  for (const file of htmlFiles) {
+    const html = await readFile(file, 'utf8');
+    for (const m of html.matchAll(markerRe)) {
+      const rel = path.relative(DIST, file).split(path.sep).join('/');
+      markerHits.push(`${rel} — ${m[0]}`);
+    }
+  }
+  check(
+    markerHits.length === 0,
+    '「확인 필요」 표식이 산출물에 없음 (주석 포함)',
+    markerHits.length ? markerHits.join(' · ') : `${htmlFiles.length}개 파일 검사`
+  );
+
   const robotsPath = path.join(DIST, 'robots.txt');
   if (check(existsSync(robotsPath), 'robots.txt 존재')) {
     const robots = await readFile(robotsPath, 'utf8');
