@@ -55,8 +55,6 @@ function organizationNode(site, org) {
     // 사장님 제공 실측값 2026-08-18 — site.config 의 company 하나만 읽는다
     // (지침 6.3.6.2 단일 소스). postalCode 는 값이 없으므로 키를 만들지 않는다(6.3.2).
     address: companyPostalAddress(),
-    areaServed: org.areaServed,
-    knowsAbout: org.knowsAbout,
   };
 
   node.telephone = company.telephone;
@@ -79,7 +77,6 @@ function localBusinessNode(site, org) {
     // 소재지는 하나다 — 사장님 제공 실측값 2026-08-18 (v9).
     // 종전의 공장/전시장 이원 구조는 이 값으로 대체됐다.
     address: companyPostalAddress(),
-    areaServed: org.areaServed,
   };
 
   node.telephone = company.telephone;
@@ -215,7 +212,6 @@ function serviceNode(site, org, url) {
     serviceType: 'AEO·GEO 최적화',
     description: site.description,
     provider: { '@id': `${site.baseUrl}/#organization` },
-    areaServed: org.areaServed,
     audience: {
       '@type': 'Audience',
       audienceType: '캠핑장·글램핑장 운영자',

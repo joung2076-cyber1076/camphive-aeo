@@ -144,15 +144,6 @@ export const org = {
    *   예) sameAs: ['https://...'],
    */
 
-  knowsAbout: [
-    'AEO',
-    'GEO',
-    'AI 답변 최적화',
-    '캠핑장 마케팅',
-    '글램핑장 마케팅',
-    '생성형 검색 최적화',
-  ],
-  areaServed: '대한민국',
 };
 
 /**
