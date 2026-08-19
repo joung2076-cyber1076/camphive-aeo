@@ -17,6 +17,13 @@
 
 import { esc, krDate, renderTable, renderBlocks, pathFor } from './html.mjs';
 
+// 진단 도구 주소 — 진단기 팀 이식 사양서(2026-08-19) 1항·5항
+// 샘플 진단서는 저장된 고정 문서다. 몇 번 열어도 원가 0원.
+// 종합리포트(/report)는 미배포(404)라 링크하지 않는다.
+const DIAG_TOOL_URL = 'https://camphive-aeo.vercel.app/';
+const DIAG_SAMPLE_URL =
+  'https://camphive-aeo.vercel.app/diagnosis/dgn_8d90a41640bf4be78523f7b879fa1314';
+
 export function renderArticle(page, ctx) {
   const parts = [];
 
@@ -111,6 +118,42 @@ export function renderArticle(page, ctx) {
       .join('\n    ')}
   </ul>
 </nav>`);
+  }
+
+  // ── 진단 CTA (v15 작업 N-2) ────────────────────────
+  //
+  //  진단 도구는 우리 서버가 아니라 진단기 팀이 따로 배포한다.
+  //  이식 사양서(2026-08-19) 2항이 「쿼리 파라미터로 값을 넘겨도 무시된다」고
+  //  명시하므로 값을 넘기지 않고 링크로만 보낸다. ?src= 도 붙이지 않는다 —
+  //  기록되지 않아 붙여 봐야 측정에 쓸 수 없다.
+  //
+  //  /diagnosis/ 는 v13 G-2 에서 같은 버튼 2개를 이미 갖췄다. 중복으로 붙이지
+  //  않는다. 문구에 소요 시간을 넣지 않는다(K4) — 손님 사양·회선에 따라
+  //  달라져 검증할 수 없는 수치다.
+  //  대상은 아키가 지정한 11페이지다(v15 N-2). /diagnosis/ 는 이미 갖췄고,
+  //  /contact/ 와 /privacy/ 는 목록 밖이라 넣지 않는다 — 방침 문서에 영업
+  //  버튼을 붙이지 않는다.
+  const DIAG_CTA_SLUGS = new Set([
+    'service',
+    'measurement',
+    'faq',
+    'faq/ad-budget',
+    'faq/direct-booking',
+    'faq/naver-blog-still-works',
+    'faq/why-not-in-chatgpt',
+    'about',
+    'intro/ai-marketing',
+    'intro/company',
+    'intro/consulting',
+  ]);
+  if (DIAG_CTA_SLUGS.has(page.slug)) {
+    parts.push(`<aside class="diag-cta" aria-label="무료 AI 노출 진단">
+  <p>ChatGPT · Claude · Gemini 세 곳에 실제로 물어 우리 캠핑장이 답변에 나오는지 확인해 드립니다. 캠핑장 이름 · 홈페이지 주소 · 이메일 세 가지를 진단 화면에서 넣으시면 됩니다. 하루 20건 한정입니다.</p>
+  <p class="diag-cta-actions">
+    <a class="btn btn-primary" href="${DIAG_TOOL_URL}" target="_blank" rel="noopener">무료로 AI 노출 진단받기</a>
+    <a class="btn" href="${DIAG_SAMPLE_URL}" target="_blank" rel="noopener">진단서 샘플 보기</a>
+  </p>
+</aside>`);
   }
 
   parts.push(`</article>`);
