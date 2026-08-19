@@ -1010,6 +1010,63 @@ async function main() {
     markerHits.length ? markerHits.join(' · ') : `${htmlFiles.length}개 파일 검사`
   );
 
+  // ── 12-3) 소스 데이터 «값»의 「확인 필요」 표식 (8.1 · 6.3.2 · v15 작업 O) ──
+  //
+  //  12-2 는 산출물을 본다. 이 검사는 그 앞단인 소스 데이터를 본다.
+  //  home.data.mjs 의 priceLabel: '【금액 확인 필요】' 처럼 값에 든 표식은
+  //  렌더 경로가 살아나는 순간 화면에 그대로 나간다. 없는 값을 있는 것처럼
+  //  적는 것이라 8.1 위반이고, 6.3.2 는 값이 없으면 필드를 만들지 말라고 한다.
+  //
+  //  주석은 보지 않는다 — 화면에 나오지 않는다. 문자열 리터럴만 본다.
+  //
+  //  ⚠ 미결 1건은 실패가 아니라 경고로 «매 실행마다» 출력한다.
+  //  priceLabel 은 render-landing.mjs:594 가 실제로 읽으므로 빌더가 임의로
+  //  지울 수 없다. A14 요금 정본으로 교체할지는 아키 판정 대기(v15 O-1).
+  //  조용히 통과시키지 않으려고 이름을 박아 두고 매번 눈에 띄게 남긴다.
+  const PENDING_MARKERS = new Map([
+    ['home.data.mjs:priceLabel', '아키 판정 대기 — A14 요금 정본 교체 여부 (v15 O-1)'],
+  ]);
+  const DATA_FILES = ['site.config.mjs', 'src/content/home.data.mjs'];
+  const MARKER_IN_VALUE = /['"`][^'"`\n]*【[^】]*확인\s*필요[^】]*】[^'"`\n]*['"`]/g;
+  const valueHits = [];
+  for (const rel of DATA_FILES) {
+    const abs = path.join(ROOT, rel);
+    if (!existsSync(abs)) continue;
+    const raw = await readFile(abs, 'utf8');
+    // 주석 제거 — 줄 전체 주석과 줄 끝 주석, 그리고 블록 주석
+    const stripped = raw
+      .split('\n')
+      .map((ln) => ln.replace(/^\s*\/\/.*$/, '').replace(/\s\/\/\s.*$/, ''))
+      .join('\n')
+      .replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const m of stripped.matchAll(MARKER_IN_VALUE)) {
+      const before = stripped.slice(0, m.index);
+      const line = before.split('\n').length;
+      const keyMatch = before.match(/([A-Za-z_$][\w$]*)\s*:\s*$/);
+      valueHits.push({
+        file: path.basename(rel),
+        key: keyMatch ? keyMatch[1] : '(키 미상)',
+        line,
+        text: m[0],
+      });
+    }
+  }
+  const pendingHits = valueHits.filter((h) => PENDING_MARKERS.has(`${h.file}:${h.key}`));
+  const newHits = valueHits.filter((h) => !PENDING_MARKERS.has(`${h.file}:${h.key}`));
+  check(
+    newHits.length === 0,
+    '소스 데이터 값에 「확인 필요」 표식 없음 (주석 제외)',
+    newHits.length
+      ? newHits.map((h) => `${h.file}:${h.line} ${h.key} = ${h.text}`).join(' · ')
+      : `${DATA_FILES.length}개 파일 검사 · 미결 ${pendingHits.length}건은 아래 경고`
+  );
+  for (const h of pendingHits) {
+    warn(
+      `미결 표식 ${h.file}:${h.line} ${h.key} = ${h.text}`,
+      PENDING_MARKERS.get(`${h.file}:${h.key}`)
+    );
+  }
+
   const robotsPath = path.join(DIST, 'robots.txt');
   if (check(existsSync(robotsPath), 'robots.txt 존재')) {
     const robots = await readFile(robotsPath, 'utf8');
