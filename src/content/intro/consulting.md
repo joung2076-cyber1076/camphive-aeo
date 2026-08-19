@@ -35,7 +35,7 @@ related:
     note: 측정 주기와 8주 판정 기준
   - slug: contact
     label: 캠핑하이브에 어떻게 연락해?
-    note: 전화·이메일·팩스
+    note: 전화·이메일
   - slug: faq
     label: 캠핑장 운영하면서 생기는 질문, 어디서 답 찾아?
     note: 질문 22개를 네 갈래로
