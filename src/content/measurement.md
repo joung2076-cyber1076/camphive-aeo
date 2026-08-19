@@ -63,7 +63,7 @@ related:
     note: 네 단계와 각 단계 확인 방법
   - slug: diagnosis
     label: 우리 캠핑장이 AI 답변에 나오는지 어떻게 확인해?
-    note: 하루 20곳 무료 진단
+    note: 하루 20건 무료 진단
   - slug: faq
     label: 캠핑장 운영하면서 생기는 질문, 어디서 답 찾아?
     note: 분야별 질문 모음
