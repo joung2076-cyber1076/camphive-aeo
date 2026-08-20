@@ -263,6 +263,17 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   .site-header.is-scrolled { height: auto; }
   .site-header.is-scrolled .site-nav { display: none; }
 }
+/* 손전화 폭 — 띠가 «스크롤은 되는데 잘려 보이던» 것을 없앤다.
+   375px 에서 메뉴 5개의 총 폭이 358px 인데 띠에 주어진 자리는 327px 이라,
+   마지막 「캠핑장 운영 질문」이 화면 밖 7px 로 잘린 채 첫 화면에 나왔다.
+   가로로 밀면 보이기는 하나, 잘린 글자는 «밀 수 있다»는 신호가 되지 못한다.
+   항목을 빼거나 문구를 줄이지 않는다(E26) — 사이 간격과 글자 크기만 줄여
+   다섯 개가 한 화면에 들어오게 한다. 가로 스크롤 장치는 그대로 두어,
+   이보다 더 좁은 화면(320px 등)에서는 여전히 밀어서 볼 수 있다. */
+@media (max-width: 420px) {
+  .site-nav { gap: var(--s3); }
+  .site-nav a { font-size: 0.875rem; }
+}
 
 /* ── 앵커 목차 ──────────────────────────────────────────────── */
 .anchor-nav {
