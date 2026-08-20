@@ -1058,3 +1058,11 @@ td.is-num { font-family: var(--mono); }
   .floating, .anchor-nav, .site-header { display: none; }
   body { background: #fff; color: #000; }
 }
+
+/* 로고 심볼 — 원본 394×321 을 32×32 정사각 자리에 넣어 가로로 눌려 있었다.
+   width/height 속성은 자리를 잡아 주는 값이라 그대로 둔다(레이아웃이 안 흔들린다).
+   그림만 비율대로 담아 32×26 으로 들어가고 위아래 여백이 3px 씩 남는다.
+   .brand-mark·.footer-mark 는 하위 페이지에만 있는 클래스다 — 홈 로고는
+   home.dc.html 의 인라인 style(height:34px; width:auto)로 이미 비율을 지킨다.
+   같은 그림 파일을 쓰지만 눌린 것은 하위뿐이다. */
+.brand-mark, .footer-mark { object-fit: contain; }
