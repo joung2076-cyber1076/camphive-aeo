@@ -733,6 +733,20 @@ thead th { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); fo
 tbody tr { transition: background-color 0.15s ease; }
 tbody tr:hover { background: var(--hover-row); }
 td.is-num { font-family: var(--mono); }
+/* 손전화 폭 — 끊을 곳이 없는 긴 값 하나가 표 전체를 밀어내던 것을 막는다.
+   /contact/ 「연락 수단 두 가지」 표가 375px 에서 352px 로 부풀어 24px 자리에서
+   1px 넘쳤다. 범인은 joung2076@gmail.com 이다. 공백도 하이픈도 없어 줄바꿈
+   지점이 없으니, 브라우저가 그 한 덩어리 폭을 표의 최소 폭으로 잡는다.
+   overflow-wrap 은 break-word 가 아니라 anywhere 여야 한다 — break-word 는
+   «그려질 때»만 끊고 최소 폭 계산은 그대로 둔다. anywhere 라야 최소 폭이 준다.
+   넓은 화면에는 걸지 않는다. 자리가 넉넉한 곳에서 이메일을 굳이 끊을 이유가 없다.
+   ⚠ 이 규칙을 td 전체에 걸면 안 된다. 실측해 보니 다른 8개 페이지의 표까지
+   다시 흘러 문서 높이가 최대 420px 움직였다(/measurement/ · naver-blog 등).
+   그래서 body.p-contact 로 이 페이지에만 건다. 다른 페이지의 표 넘침은
+   원인이 달라(머리행 nowrap) 여기서 함께 고치지 않는다 — 작업 C 조사분이다. */
+@media (max-width: 480px) {
+  body.p-contact td { overflow-wrap: anywhere; }
+}
 
 /* ── 진단서 블록 (07) ───────────────────────────────────────── */
 .block-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease; }

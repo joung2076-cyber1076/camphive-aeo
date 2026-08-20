@@ -226,7 +226,7 @@ export function renderDocument(page, ctx, graph, main, design = null) {
 <head>
 ${head(page, ctx, graph)}
 </head>
-<body>
+<body${useDesign ? '' : ` class="p-${esc(page.slug.replace(/\//g, '-'))}"`}>
 <a class="skip" href="#main">본문 바로가기</a>
 ${useDesign ? design.style : ''}
 ${useDesign ? design.header : header(page, ctx)}
