@@ -688,26 +688,9 @@
       <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
         <h3 style="margin:0 0 8px;font-size:26px;font-weight:900;color:#FAFAF7">우리 캠핑장은 어떨까요?</h3>
         <p style="margin:0 0 28px;font-size:16px;line-height:1.7;color:#A5A59B">세 가지만 넣으시면 결과가 화면에 나옵니다.</p>
-        <form onSubmit="{{ onSubmitDemo }}" style="display:grid;gap:14px">
-          <label style="display:grid;gap:8px">
-            <span style="font-size:15px;font-weight:500;color:#C9C9BF">캠핑장 이름</span>
-            <input type="text" required="required" placeholder="예) ○○글램핑" style="width:100%;min-height:52px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.20);border-radius:8px;padding:14px 16px;font-size:17px;color:#FAFAF7;font-family:'Noto Sans KR',sans-serif">
-          </label>
-          <label style="display:grid;gap:8px">
-            <span style="font-size:15px;font-weight:500;color:#C9C9BF">홈페이지 주소</span>
-            <input type="url" required="required" placeholder="https://" style="width:100%;min-height:52px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.20);border-radius:8px;padding:14px 16px;font-size:17px;color:#FAFAF7;font-family:'Noto Sans KR',sans-serif">
-          </label>
-          <label style="display:grid;gap:8px">
-            <span style="font-size:15px;font-weight:500;color:#C9C9BF">이메일</span>
-            <input type="email" required="required" placeholder="result@example.com" style="width:100%;min-height:52px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.20);border-radius:8px;padding:14px 16px;font-size:17px;color:#FAFAF7;font-family:'Noto Sans KR',sans-serif">
-          </label>
-          <button type="submit" data-ga="diag_demo" style="width:100%;min-height:58px;margin-top:10px;background:#3B82F6;color:#FFFFFF;border:none;border-radius:100px;font-size:19px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer" style-hover="background:#2563EB" style-active="transform:scale(0.98)">지금 진단하기</button>
-        </form>
+        <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_demo" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;padding:0 16px;background:#3B82F6;color:#FFFFFF;font-size:19px;font-weight:700;border-radius:100px;text-decoration:none;box-sizing:border-box" style-hover="background:#2563EB" style-active="transform:scale(0.98)">무료 진단 시작하기 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
         <p style="margin:16px 0 0;font-family:'JetBrains Mono',monospace;font-size:13px;color:#A5A59B;text-align:center">무료 · 하루 20건 한정</p>
         <p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:#7E7E75;text-align:center">※ 잔여 건수는 예시 값이며, 서버 조회 실제 값으로 연동 예정</p>
-        <sc-if value="{{ submittedDemo }}" hint-placeholder-val="{{ false }}">
-          <p style="margin:16px 0 0;padding:14px;border:1px solid #3B82F6;border-radius:8px;font-size:15px;color:#60A5FA;text-align:center">진단 도구로 연결되는 자리입니다 (시안)</p>
-        </sc-if>
       </div>
     </div>
   </div>
@@ -1066,29 +1049,8 @@
       </div>
     </div>
     <div style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:36px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
-      <form onSubmit="{{ onSubmitFinal }}" style="display:grid;gap:16px">
-        <label style="display:grid;gap:8px">
-          <span style="font-size:16px;font-weight:700;color:#FFFFFF">캠핑장 이름 <span style="font-size:14px;font-weight:400;color:#7C8697">(필수)</span></span>
-          <input type="text" required="required" placeholder="상호를 정확히 넣어 주세요" style="width:100%;min-height:54px;background:#0B0E13;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:14px 16px;font-size:17px;color:#FFFFFF;font-family:'Noto Sans KR',sans-serif">
-        </label>
-        <label style="display:grid;gap:8px">
-          <span style="font-size:16px;font-weight:700;color:#FFFFFF">홈페이지 주소 <span style="font-size:14px;font-weight:400;color:#7C8697">(필수)</span></span>
-          <input type="url" required="required" placeholder="홈페이지가 없으면 네이버 플레이스 주소도 됩니다" style="width:100%;min-height:54px;background:#0B0E13;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:14px 16px;font-size:17px;color:#FFFFFF;font-family:'Noto Sans KR',sans-serif">
-        </label>
-        <label style="display:grid;gap:8px">
-          <span style="font-size:16px;font-weight:700;color:#FFFFFF">결과 받으실 이메일 <span style="font-size:14px;font-weight:400;color:#7C8697">(필수)</span></span>
-          <input type="email" required="required" placeholder="진단서를 다시 여실 때 쓰입니다" style="width:100%;min-height:54px;background:#0B0E13;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:14px 16px;font-size:17px;color:#FFFFFF;font-family:'Noto Sans KR',sans-serif">
-        </label>
-        <label style="display:flex;align-items:center;gap:12px;min-height:44px;font-size:16px;color:#C4CCD8">
-          <input type="checkbox" required="required" style="width:22px;height:22px;accent-color:#3B82F6">
-          <span>개인정보 수집·이용에 동의합니다 <a href="#cta" style="color:#60A5FA;text-decoration:underline">약관 보기</a></span>
-        </label>
-        <button type="submit" data-ga="diag_final" style="width:100%;min-height:60px;margin-top:6px;background:#3B82F6;color:#FFFFFF;border:none;border-radius:100px;font-size:20px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer" style-hover="background:#2563EB" style-active="transform:scale(0.98)">지금 진단하기</button>
-      </form>
+      <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_final" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:60px;padding:0 16px;background:#3B82F6;color:#FFFFFF;font-size:20px;font-weight:700;border-radius:100px;text-decoration:none;box-sizing:border-box" style-hover="background:#2563EB" style-active="transform:scale(0.98)">무료 진단 시작하기 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
       <p style="margin:16px 0 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:#8C96A6;text-align:center">무료 · 하루 20건 한정</p>
-      <sc-if value="{{ submittedFinal }}" hint-placeholder-val="{{ false }}">
-        <p style="margin:14px 0 0;padding:14px;border:1px solid #3B82F6;background:rgba(59,130,246,0.10);border-radius:8px;font-size:15px;color:#60A5FA;text-align:center">진단 도구로 연결되는 자리입니다 (시안)</p>
-      </sc-if>
     </div>
   </div>
 </section>
