@@ -747,6 +747,29 @@ td.is-num { font-family: var(--mono); }
 @media (max-width: 480px) {
   body.p-contact td { overflow-wrap: anywhere; }
 }
+/* 손전화 폭 — 표가 자리보다 넓어지던 8개 페이지를 «지목해서» 푼다.
+   원인이 둘이었다. ① 머리행 nowrap 이 표의 최소 폭을 정한다 —
+   「우리가 정할 수 있는 것」 같은 머리글 4개가 붙으면 375px 화면에서
+   표가 508px 이 된다. ② 본문 칸의 긴 주소(robots.txt 경로 등)도 끊을 곳이
+   없어 같은 일을 한다. ①만 풀면 /measurement/ 는 111px 그대로였다 — 실측이다.
+
+   ⚠ 두 규칙을 전역으로 걸면 안 된다. 실측하니 표가 멀쩡하던 페이지의
+   문서 높이까지 움직였다(/diagnosis/ +25 · /faq/ −47 · ai-marketing +26).
+   그래서 넘침이 실측된 8개 페이지만 지목한다. 넓은 화면(768·1280)은
+   손대지 않는다 — 거기서는 표가 이미 자리 안에 들어온다.
+
+   word-break:keep-all 은 «쓰지 않는다». 어절째 넘겨 읽기 좋게 하려던 것인데,
+   실측하니 그것이 최소 폭을 오히려 키워 넘침이 남았다(naver-blog 109px).
+   한글은 낱자에서 넘어가도 읽힌다. 넘침을 없애는 쪽을 택한다. */
+@media (max-width: 480px) {
+  :is(body.p-service, body.p-measurement, body.p-intro-company,
+      body.p-intro-consulting, body.p-faq-ad-budget, body.p-faq-direct-booking,
+      body.p-faq-naver-blog-still-works, body.p-faq-why-not-in-chatgpt)
+  :is(thead th, td) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
 
 /* ── 진단서 블록 (07) ───────────────────────────────────────── */
 .block-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease; }
