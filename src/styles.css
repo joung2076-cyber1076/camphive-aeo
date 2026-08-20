@@ -978,6 +978,12 @@ td.is-num { font-family: var(--mono); }
 .footer-company { font-size: 0.8125rem; color: var(--muted); line-height: 1.9; }
 .footer-company p { margin: 0; }
 .footer-company a { color: var(--muted); }
+/* 손가락 표적 — 전화·이메일·처리방침 링크가 글자 높이 그대로 19px 이었다.
+   손전화에서 누르기 어렵고, 옆 링크를 잘못 누르기도 쉽다.
+   글자 크기·색·간격은 D12 안에서 한 칸도 움직이지 않는다 — 위아래 여백만 준다.
+   inline-block 이라야 세로 padding 이 먹는다. 19 + 12 + 12 = 43px.
+   글자는 제자리에 있고 누를 수 있는 자리만 넓어진다. */
+.footer-company a { display: inline-block; padding-block: 12px; }
 
 .footer-aside-title {
   font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em;
