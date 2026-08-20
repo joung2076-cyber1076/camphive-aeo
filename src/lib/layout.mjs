@@ -101,9 +101,9 @@ function footer(ctx, page) {
   // status 는 없는 것을 있다고 하지 않기 위한 줄이다.
   // PDF가 올라오면 "PDF · 25면" 형식으로 바꾼다.
   const docs = [
-    { label: '캠핑하이브 회사소개서', slug: 'intro/company', status: 'PDF 준비 중' },
-    { label: '캠핑장 컨설팅 안내', slug: 'intro/consulting', status: 'PDF 준비 중' },
-    { label: '캠핑장 AI 마케팅 소개서', slug: 'intro/ai-marketing', status: 'PDF 준비 중' },
+    { label: '캠핑하이브 회사소개서', slug: 'intro/company', status: '웹 문서로 보기' },
+    { label: '캠핑장 컨설팅 안내', slug: 'intro/consulting', status: '웹 문서로 보기' },
+    { label: '캠핑장 AI 마케팅 소개서', slug: 'intro/ai-marketing', status: '웹 문서로 보기' },
   ];
 
   // 하위 페이지 9개 — 푸터에서 전 페이지로 닿게 한다 (2026-08-15 확정).
@@ -125,8 +125,13 @@ function footer(ctx, page) {
     { slug: 'privacy', label: '개인정보처리방침' },
   ];
 
-  // 내려받기 아이콘 — 인라인 SVG. 이미지 파일·아이콘 폰트·CDN 없음.
-  const downloadIcon = `<svg class="doc-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 2v8"/><path d="M4.5 7 8 10.5 11.5 7"/><path d="M2.5 13.5h11"/></svg>`;
+  // 문서로 가는 화살표 — 인라인 SVG. 이미지 파일·아이콘 폰트·CDN 없음.
+  //
+  // 2026-08-20 (v23 작업 H) 내려받기 아이콘에서 바꿨다. 전에는 아래로 향한
+  // 화살표와 받침선(내려받기)을 그려 놓고 실제로는 HTML 안내 페이지로 갔다.
+  // 아이콘·라벨·실제 동작 세 신호가 서로 다른 말을 하고 있었다.
+  // PDF 가 실제로 올라오면 그때 내려받기 아이콘으로 되돌린다.
+  const docIcon = `<svg class="doc-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.5 8h11"/><path d="M9 3.5 13.5 8 9 12.5"/></svg>`;
 
   // 회사 정보 — site.config 의 company 객체 하나만 읽는다.
   // (사장님 제공 실측값 2026-08-18 · 지침 6.3.6.2 단일 소스 · 8.1)
@@ -172,7 +177,7 @@ function footer(ctx, page) {
     </div>
 
     <div class="footer-aside">
-      <h2 class="footer-aside-title">자료 내려받기</h2>
+      <h2 class="footer-aside-title">회사·서비스 안내</h2>
       <nav class="footer-docs" aria-label="자료">
         ${docs
           .map(
@@ -181,7 +186,7 @@ function footer(ctx, page) {
             <span class="doc-label">${esc(d.label)}</span>
             <span class="doc-status">${esc(d.status)}</span>
           </span>
-          ${downloadIcon}
+          ${docIcon}
         </a>`
           )
           .join('\n        ')}
