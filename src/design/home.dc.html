@@ -1163,7 +1163,7 @@ class Component extends DCLogic {
   renderVals() {
     const d = this.state.done;
     const p = this.state.statP;
-    const cvs = this.cover || [['손님이 고르지 않습니다.', 'AI가 먼저 고릅니다.']];
+    const cvs = this.cover || [['AI의 추천 목록에 없다면,', '손님의 예약 목록에도 없습니다.']];
     const cv = cvs[this.state.coverIdx] || cvs[0];
     const list = this.engines || [{ name: 'ChatGPT', color: '#10A37F', glyph: '✺' }];
     const e = list[this.state.engineIdx] || list[0];
