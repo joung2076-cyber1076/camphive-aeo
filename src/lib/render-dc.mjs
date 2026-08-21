@@ -38,6 +38,7 @@ const FILL = {
   img0: '1',
   img1: '0',
   img2: '0',
+  img3: '0',
   coverOpacity: '1',
   coverShift: 'none',
   // ⚠ COVERS[0] 과 «같아야» 한다. 전개가 실패해 자리표시자로 남는 경우의
@@ -81,6 +82,7 @@ const ASSET_MAP = {
   'assets/hero-ai.png': 'img/hero-ai.jpg',
   'assets/hero-ai-2.png': 'img/hero-ai-2.jpg',
   'assets/hero-ai-3.png': 'img/hero-ai-3.jpg',
+  'assets/hero-ai-4.png': 'img/hero-ai-4.jpg',
   'assets/logo-mark.png': 'img/logo-mark.png',
   'assets/logo-light.png': 'img/logo-light.png',
   'assets/logo-dark.png': 'img/logo-dark.png',
@@ -157,6 +159,7 @@ const COVERS = [
   ['AI의 추천 목록에 없다면,', '손님의 예약 목록에도 없습니다.'],
   ['검색창 대신 AI에게 묻는 시대,', '사장님의 캠핑장은 답변에 나오고 있습니까?'],
   ['손님은 검색을 멈췄습니다.', '이제 AI에게 어디로 갈지 묻습니다.'],
+  ['키워드 검색의 시대는 끝났습니다.', '이제는 ‘AI 추천’의 시대입니다.'],
 ];
 
 /**
@@ -174,7 +177,7 @@ function expandCover(html) {
   out = out.replace('<section id="cover" ', '<section id="cover" data-cover ');
 
   out = out.replace(
-    /<img src="assets\/hero-ai(-[23])?\.png"/g,
+    /<img src="assets\/hero-ai(-[234])?\.png"/g,
     (m) => m.replace('<img ', '<img class="cover-img" ')
   );
 
