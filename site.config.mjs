@@ -113,7 +113,7 @@ export const company = {
     street: '내촌면 청군로 2224',
     country: 'KR',
   },
-  telephone: '1588-7366',
+  telephone: '070-8064-3789',
   email: 'joung2076@gmail.com',
   privacyOfficer: '정용택',         // 화면 전용
 };

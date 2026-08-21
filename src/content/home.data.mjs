@@ -494,15 +494,15 @@ export const LANDING = {
     sub: '진단 결과만 받고 종료하셔도 됩니다. 영업 전화는 1회만 드립니다.',
     // 카카오 채널이 아직 없다. 빈 링크(#)를 두면 눌러도 아무 일이 없어
     // 신뢰를 깎는다. 전화로 임시 연결한다.
-    kakao: '전화 문의 1588-7366',
-    kakaoHref: 'tel:15887366',
+    kakao: '전화 문의 070-8064-3789',
+    kakaoHref: 'tel:07080643789',
   },
 
   /* ── 플로팅 3버튼 ────────────────────────────────────────── */
   floating: [
     { label: '무료 AI 노출 진단', href: '#diagnose', primary: true },
     { label: '방문 컨설팅 30만원', href: '#plan', primary: false },
-    { label: '전화 문의 1588-7366', href: 'tel:15887366', primary: false },
+    { label: '전화 문의 070-8064-3789', href: 'tel:07080643789', primary: false },
   ],
 
   // 푸터 자료 3종은 layout.mjs 가 pathFor() 로 직접 그린다.
