@@ -184,10 +184,14 @@ function expandCover(html) {
   out = out.replace(
     /<p style="(position:absolute;inset:0;display:flex;flex-direction:column[^"]*?)opacity:\{\{\s*coverOpacity\s*\}\};transform:\{\{\s*coverShift\s*\}\}"><span>\{\{\s*coverLine1\s*\}\}<\/span><span>\{\{\s*coverLine2\s*\}\}<\/span><\/p>/,
     (m, style) =>
+      // 줄 단위 등장(2026-08-22 사장님 지시): 페이드는 <p> 가 아니라 <span> 두 개가
+      // 각각 맡는다. 1줄이 먼저 오르고 2줄이 뒤따라 올라 두 줄이 완성된다.
+      // 지연값은 enhance.js 가 준다. JS 가 없으면 첫 벌 두 줄이 그대로 보인다.
       COVERS.map(
         ([a, b], i) =>
-          `<p class="cover-line" style="${style}opacity:${i === 0 ? 1 : 0};transform:none">` +
-          `<span>${a}</span><span>${b}</span></p>`
+          `<p class="cover-line" style="${style.replace(/transition:[^;]*;/, '')}opacity:${i === 0 ? 1 : 0};transform:none">` +
+          `<span style="display:block;opacity:${i === 0 ? 1 : 0};transition:opacity 900ms ease,transform 900ms ease">${a}</span>` +
+          `<span style="display:block;opacity:${i === 0 ? 1 : 0};transition:opacity 900ms ease,transform 900ms ease">${b}</span></p>`
       ).join('')
   );
 
