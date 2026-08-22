@@ -173,13 +173,14 @@
 
           // 카피 — 두 줄이 같이 사라진 뒤(900ms), 다음 벌은 1줄 먼저,
           // 2줄은 700ms 뒤에 올라와 두 줄이 완성된다(2026-08-22 사장님 지시).
-          // 7초 주기 안: 퇴장 0.9s → 1줄 0.9s → 2줄 +0.7s → 두 줄 완성 약 4.5s 노출.
+          // 7초 주기 안: 퇴장 0.9s → 1줄 1.4s(흐림→선명·28px 부상) → 2줄 +0.55s 겹쳐 → 두 줄 완성 약 4.2s 노출.
           var hideSpans = cLines[at].querySelectorAll('span');
           var k;
           for (k = 0; k < hideSpans.length; k++) {
             hideSpans[k].style.transitionDelay = '0ms';
             hideSpans[k].style.opacity = '0';
-            hideSpans[k].style.transform = 'translateY(14px)';
+            hideSpans[k].style.transform = 'translateY(10px)';
+            hideSpans[k].style.filter = 'blur(6px)';
           }
           var hide = at, show = next;
           window.setTimeout(function () {
@@ -187,22 +188,24 @@
             var showSpans = cLines[show].querySelectorAll('span');
             var j;
             for (j = 0; j < showSpans.length; j++) {
+              // 마크업의 transition 값을 보관해 두고 되살린다(지우면 전환이 사라진다)
+              if (!showSpans[j].dataset.tr) showSpans[j].dataset.tr = showSpans[j].style.transition;
               showSpans[j].style.transition = 'none';
               showSpans[j].style.opacity = '0';
-              showSpans[j].style.transform = 'translateY(14px)';
+              showSpans[j].style.transform = 'translateY(28px)';
+              showSpans[j].style.filter = 'blur(10px)';
             }
             cLines[show].style.opacity = '1';
-            // 다음 프레임에서 전환을 되살려 1줄 → 2줄 순으로 올린다
-            window.requestAnimationFrame(function () {
-              window.requestAnimationFrame(function () {
-                for (var m = 0; m < showSpans.length; m++) {
-                  showSpans[m].style.transition = '';
-                  showSpans[m].style.transitionDelay = m === 0 ? '0ms' : '700ms';
-                  showSpans[m].style.opacity = '1';
-                  showSpans[m].style.transform = 'translateY(0)';
-                }
-              });
-            });
+            // 시작값을 강제로 반영(리플로우)한 뒤 전환을 되살려 1줄 → 2줄 순으로 올린다.
+            // rAF 는 숨은 탭에서 멈추므로 쓰지 않는다.
+            void cLines[show].offsetHeight;
+            for (var m = 0; m < showSpans.length; m++) {
+              showSpans[m].style.transition = showSpans[m].dataset.tr;
+              showSpans[m].style.transitionDelay = m === 0 ? '0ms' : '550ms';
+              showSpans[m].style.opacity = '1';
+              showSpans[m].style.transform = 'translateY(0)';
+              showSpans[m].style.filter = 'blur(0)';
+            }
           }, 900);
 
           at = next;

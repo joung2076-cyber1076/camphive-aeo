@@ -190,8 +190,8 @@ function expandCover(html) {
       COVERS.map(
         ([a, b], i) =>
           `<p class="cover-line" style="${style.replace(/transition:[^;]*;/, '')}opacity:${i === 0 ? 1 : 0};transform:none">` +
-          `<span style="display:block;opacity:${i === 0 ? 1 : 0};transition:opacity 900ms ease,transform 900ms ease">${a}</span>` +
-          `<span style="display:block;opacity:${i === 0 ? 1 : 0};transition:opacity 900ms ease,transform 900ms ease">${b}</span></p>`
+          `<span style="display:block;opacity:${i === 0 ? 1 : 0};transition:opacity 1400ms cubic-bezier(0.16,1,0.3,1),transform 1400ms cubic-bezier(0.16,1,0.3,1),filter 1400ms cubic-bezier(0.16,1,0.3,1)">${a}</span>` +
+          `<span style="display:block;opacity:${i === 0 ? 1 : 0};transition:opacity 1400ms cubic-bezier(0.16,1,0.3,1),transform 1400ms cubic-bezier(0.16,1,0.3,1),filter 1400ms cubic-bezier(0.16,1,0.3,1)">${b}</span></p>`
       ).join('')
   );
 
