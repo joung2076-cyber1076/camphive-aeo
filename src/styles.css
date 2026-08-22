@@ -42,6 +42,8 @@
   /* ── 액센트 블루 ──────────────────────────────────────── */
   --accent: #3B82F6;            /* 버튼 */
   --accent-hover: #2563EB;      /* 버튼 호버 */
+  --btn: #2563EB;               /* 1차 버튼 채움 — 흰 글자 5.17:1 (AA). D32 · 2026-08-22 */
+  --btn-hover: #3B82F6;         /* 1차 버튼 호버 */
   --accent-bright: #60A5FA;     /* 강조 텍스트 — 배경 위에서 이게 더 읽힌다 */
   --accent-ink: #FFFFFF;        /* 블루 위에 얹는 글자색 */
   --accent-soft: rgba(59, 130, 246, 0.20);   /* 형광펜 */
@@ -300,9 +302,9 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   font-size: 1rem; font-weight: 700; font-family: inherit;
   cursor: pointer; transition: filter 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
-/* 1차 — 오렌지 채움 + 검정 글자 (흰 글자 금지) */
-.btn-primary { background: var(--accent); color: var(--accent-ink); }
-.btn-primary:hover { filter: brightness(1.1); }
+/* 1차 — 블루 채움 + 흰 글자 (#2563EB · 5.17:1) · 호버 #3B82F6 */
+.btn-primary { background: var(--btn); color: var(--accent-ink); }
+.btn-primary:hover { background: var(--btn-hover); }
 /* 2차 — 테두리형 */
 .btn-secondary { background: transparent; color: var(--text); border-color: var(--line-strong); }
 .btn-secondary:hover { background: var(--accent-dim); border-color: var(--accent-line); }
