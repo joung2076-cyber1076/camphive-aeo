@@ -2,5 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "node build.mjs && node verify.mjs",
   "outputDirectory": "dist",
-  "installCommand": "echo dependency-free-skip-install"
+  "installCommand": "echo dependency-free-skip-install",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.aicampingmarketing.co.kr" }],
+      "destination": "https://aicampingmarketing.co.kr/:path*",
+      "permanent": true
+    }
+  ]
 }
