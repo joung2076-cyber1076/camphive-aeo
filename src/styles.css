@@ -1118,6 +1118,14 @@ body[class^="p-faq"] .caption { color: var(--f-muted); }
    승인 8색 밖이라 같은 자리를 같은 무게로 덮는다 — !important 를 쓰지 않는다. */
 body[class^="p-faq"] a { color: var(--t1); }
 body[class^="p-faq"] .content a:not(.btn) { color: var(--t1); }
+
+/* 강조(strong) — v45 AX · 사장님 지시 「강조는 파란색으로 통일」.
+   기본 규칙 strong { color: var(--text) }(150줄)는 다크 본문색 #E7EBF2 를 물고 있어
+   흰 바탕에서 대비 1.20:1 — 사실상 보이지 않았다(5페이지 120곳 전수 동일).
+   #2563EB / #ffffff = 5.17:1 · 구획 연한 배경 위에서도 4.57~4.71:1 로 AA 를 넘는다.
+   구획 ②③④ 안에서도 강조는 t1 하나로 통일한다(AX-3) — 구획색은 강조에 쓰지 않는다. */
+body[class^="p-faq"] .content strong,
+body[class^="p-faq"] .content b { color: var(--t1); }
 body[class^="p-faq"] hr { border-color: var(--f-line); }
 
 /* 핵심 답변 블록 — 파란 강조를 흰 바탕에 맞춘다 */
