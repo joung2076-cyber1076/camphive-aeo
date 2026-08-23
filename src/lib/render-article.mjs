@@ -67,12 +67,21 @@ export function renderArticle(page, ctx) {
   }
 
   // ── 5. H2 본문 5~8개 ────────────────────────────────────
-  for (const section of page.sections ?? []) {
-    const id = section.id ?? slugify(section.h2);
-    parts.push(`<section class="section" id="${esc(id)}">
+  //
+  //  허브(/faq/)는 같은 데이터를 «목차 + 아코디언»으로 그린다(v44 AV).
+  //  문장은 한 글자도 손대지 않는다 — 바뀌는 것은 감싸는 태그뿐이다(AV-2).
+  //  질문은 <summary> 안에 <h3> 로 넣는다. 헤딩 의미를 잃지 않으면서
+  //  같은 문장이 화면에 두 번 나오지 않게 하는 유일한 자리다.
+  if (page.hub) {
+    parts.push(renderHubSections(page.sections ?? []));
+  } else {
+    for (const section of page.sections ?? []) {
+      const id = section.id ?? slugify(section.h2);
+      parts.push(`<section class="section" id="${esc(id)}">
   <h2>${esc(section.h2)}</h2>
   ${renderBlocks(section.body)}
 </section>`);
+    }
   }
 
   // ── 6. FAQ 4문항 ────────────────────────────────────────
@@ -161,6 +170,72 @@ export function renderArticle(page, ctx) {
 }
 
 /** 한글 헤딩도 앵커로 쓸 수 있게 처리 */
+// ─────────────────────────────────────────────────────────────
+//  허브 전용 — 목차 4장 + 구획 블록 + 질문 아코디언 (v44 AV)
+//
+//  ⚠ 여기서 문장을 만들지 않는다. 원고에서 온 값을 그대로 감싸기만 한다.
+//  ⚠ <details> 안에 본문 전문이 «정적으로» 들어간다. 눌러야 받아오는 방식은
+//    AI 에게 빈 페이지가 된다(6.1.2 · AV-3).
+//  구획 색은 순서대로 4개다. 문항 수는 세지 않고 실제 h3 개수에서 센다.
+// ─────────────────────────────────────────────────────────────
+function renderHubSections(sections) {
+  const groups = sections.map((section, i) => {
+    const id = section.id ?? slugify(section.h2);
+    const tone = `t${(i % 4) + 1}`;
+    const { lead, items } = groupByQuestion(section.body);
+    return { id, tone, h2: section.h2, lead, items };
+  });
+
+  const toc = `<nav class="hub-toc" aria-label="구획 목차">
+  <ul>
+    ${groups
+      .map(
+        (g) => `<li class="hub-toc-item ${g.tone}"><a href="#${esc(g.id)}">
+      <span class="hub-toc-name">${esc(g.h2)}</span>
+      <span class="hub-toc-count">${g.items.length}문항</span>
+    </a></li>`
+      )
+      .join('\n    ')}
+  </ul>
+</nav>`;
+
+  const blocks = groups.map(
+    (g) => `<section class="hub-group ${g.tone}" id="${esc(g.id)}">
+  <h2 class="hub-group-title"><span class="hub-pill">${esc(g.h2)}</span></h2>
+  ${g.lead.length ? `<div class="hub-group-lead">${renderBlocks(g.lead)}</div>` : ''}
+  ${g.items
+    .map(
+      (item) => `<details class="q-card">
+    <summary><h3>${esc(item.q)}</h3></summary>
+    <div class="q-body">
+      ${renderBlocks(item.body)}
+    </div>
+  </details>`
+    )
+    .join('\n  ')}
+</section>`
+  );
+
+  return [toc, ...blocks].join('\n\n');
+}
+
+//  h3 를 만나면 새 문항을 열고, 다음 h3 까지의 블록을 그 문항의 본문으로 붙인다.
+//  ⚠ h3 앞에 놓인 블록(구획 도입문)은 «버리지 않는다». 지금 원고에는 없지만
+//    나중에 생기면 조용히 사라지는 자리가 된다 — 문장 유실은 AV-2 위반이다.
+function groupByQuestion(blocks) {
+  const items = [];
+  const lead = [];
+  for (const block of blocks ?? []) {
+    if (block && block.h3) {
+      items.push({ q: block.h3, body: [] });
+      continue;
+    }
+    if (items.length === 0) lead.push(block);
+    else items[items.length - 1].body.push(block);
+  }
+  return { lead, items };
+}
+
 function slugify(text) {
   return String(text ?? '')
     .trim()

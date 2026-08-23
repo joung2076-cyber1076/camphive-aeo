@@ -1068,3 +1068,185 @@ td.is-num { font-family: var(--mono); }
    home.dc.html 의 인라인 style(height:34px; width:auto)로 이미 비율을 지킨다.
    같은 그림 파일을 쓰지만 눌린 것은 하위뿐이다. */
 .brand-mark, .footer-mark { object-fit: contain; }
+
+/* ═══════════════════════════════════════════════════════════════
+   FAQ 흰 바탕 테마 — v44 AV (사장님 시안 2판 승인 2026-08-23)
+
+   대상은 /faq/ 와 그 하위뿐이다. body 클래스가 p-faq · p-faq-* 로
+   찍히므로(layout.mjs) 여기서만 색을 갈아입힌다. 홈과 나머지
+   페이지는 다크 그대로다 — 이 블록 밖으로 새지 않게 전부
+   body[class^="p-faq"] 아래에 둔다.
+
+   승인된 색 8개 외에 새 색을 들이지 않는다.
+   ══════════════════════════════════════════════════════════════ */
+body[class^="p-faq"] {
+  --f-bg: #ffffff;
+  --f-ink: #1d2a3a;
+  --f-muted: #5a6b80;
+  --f-line: #e3e8ef;
+  --f-head: #f5f7fa;
+  /* 구획 4색 — 진한 색과 연한 배경이 한 쌍이다 */
+  --t1: #2563EB;  --t1-bg: #eff4fe;
+  --t2: #0e7a4a;  --t2-bg: #ebf7f0;
+  --t3: #b45309;  --t3-bg: #fdf3e7;
+  --t4: #6d28d9;  --t4-bg: #f3effd;
+
+  background: var(--f-bg);
+  color: var(--f-ink);
+  font-size: 17.5px;
+  line-height: 1.75;
+  word-break: keep-all;
+}
+
+/* 본문 골격 — 다크 테마가 깔아 둔 색을 이 페이지에서만 덮는다 */
+body[class^="p-faq"] .content { max-width: 62rem; }
+body[class^="p-faq"] main { background: var(--f-bg); }
+body[class^="p-faq"] h1,
+body[class^="p-faq"] h2,
+body[class^="p-faq"] h3,
+body[class^="p-faq"] h4,
+body[class^="p-faq"] p,
+body[class^="p-faq"] li,
+body[class^="p-faq"] td,
+body[class^="p-faq"] th { color: var(--f-ink); }
+body[class^="p-faq"] .as-of,
+body[class^="p-faq"] .updated,
+body[class^="p-faq"] .related-note,
+body[class^="p-faq"] small,
+body[class^="p-faq"] .caption { color: var(--f-muted); }
+/* 본문 링크는 .content a:not(.btn) 이 --accent(#3B82F6)로 잡고 있다.
+   승인 8색 밖이라 같은 자리를 같은 무게로 덮는다 — !important 를 쓰지 않는다. */
+body[class^="p-faq"] a { color: var(--t1); }
+body[class^="p-faq"] .content a:not(.btn) { color: var(--t1); }
+body[class^="p-faq"] hr { border-color: var(--f-line); }
+
+/* 핵심 답변 블록 — 파란 강조를 흰 바탕에 맞춘다 */
+body[class^="p-faq"] .answer {
+  background: var(--t1-bg);
+  border: 1px solid var(--f-line);
+  border-left: 4px solid var(--t1);
+}
+body[class^="p-faq"] .answer-label { color: var(--t1); }
+body[class^="p-faq"] .answer-text { color: var(--f-ink); }
+
+/* 표 — 구조는 그대로 두고 색만(6.1.3) */
+body[class^="p-faq"] table { background: var(--f-bg); border-color: var(--f-line); }
+body[class^="p-faq"] th { background: var(--f-head); color: var(--f-ink); }
+body[class^="p-faq"] td, body[class^="p-faq"] th { border-color: var(--f-line); }
+
+/* 관련 문서·진단 CTA */
+body[class^="p-faq"] .related { border-top: 1px solid var(--f-line); }
+body[class^="p-faq"] .diag-cta {
+  background: var(--t1-bg);
+  border: 1px solid var(--f-line);
+  color: var(--f-ink);
+}
+body[class^="p-faq"] .diag-cta .btn-primary { background: var(--t1); color: #fff; }
+body[class^="p-faq"] .diag-cta .btn:not(.btn-primary) {
+  border-color: var(--t1); color: var(--t1); background: transparent;
+}
+
+/* ── 허브 전용 — 목차 4장 ─────────────────────────────────── */
+.hub-toc { margin: 28px 0 36px; }
+.hub-toc ul {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.hub-toc a {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 16px 18px; border-radius: 12px;
+  border: 1px solid var(--f-line);
+  text-decoration: none; height: 100%;
+}
+.hub-toc-name { font-weight: 700; font-size: 1rem; }
+.hub-toc-count { font-size: 0.875rem; color: var(--f-muted); }
+.hub-toc-item.t1 a { background: var(--t1-bg); } .hub-toc-item.t1 .hub-toc-name { color: var(--t1); }
+.hub-toc-item.t2 a { background: var(--t2-bg); } .hub-toc-item.t2 .hub-toc-name { color: var(--t2); }
+.hub-toc-item.t3 a { background: var(--t3-bg); } .hub-toc-item.t3 .hub-toc-name { color: var(--t3); }
+.hub-toc-item.t4 a { background: var(--t4-bg); } .hub-toc-item.t4 .hub-toc-name { color: var(--t4); }
+
+/* ── 구획 블록 ────────────────────────────────────────────── */
+.hub-group {
+  border-radius: 16px;
+  padding: 22px 20px 26px;
+  margin: 0 0 28px;
+  scroll-margin-top: 84px;   /* 고정 헤더에 제목이 가리지 않게 */
+}
+.hub-group.t1 { background: var(--t1-bg); }
+.hub-group.t2 { background: var(--t2-bg); }
+.hub-group.t3 { background: var(--t3-bg); }
+.hub-group.t4 { background: var(--t4-bg); }
+.hub-group-title { margin: 0 0 18px; font-size: 1rem; }
+.hub-pill {
+  display: inline-block; padding: 7px 16px; border-radius: 100px;
+  color: #fff; font-size: 0.9375rem; font-weight: 700;
+}
+.hub-group.t1 .hub-pill { background: var(--t1); }
+.hub-group.t2 .hub-pill { background: var(--t2); }
+.hub-group.t3 .hub-pill { background: var(--t3); }
+.hub-group.t4 .hub-pill { background: var(--t4); }
+.hub-group-lead { margin: 0 0 16px; }
+
+/* ── 질문 카드(아코디언) ──────────────────────────────────
+   <details>/<summary> 표준이라 JS 없이 열리고 닫힌다.
+   본문은 접혀 있어도 소스에 그대로 있다(6.1.2 · AV-3). */
+.q-card {
+  background: var(--f-bg);
+  border: 1px solid var(--f-line);
+  border-radius: 12px;
+  margin: 0 0 10px;
+  overflow: hidden;
+}
+.q-card:last-child { margin-bottom: 0; }
+.q-card > summary {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 18px; cursor: pointer;
+  list-style: none;
+}
+.q-card > summary::-webkit-details-marker { display: none; }
+.q-card > summary h3 {
+  margin: 0; font-size: 1.0625rem; line-height: 1.6; font-weight: 700;
+  flex: 1;
+}
+/* Q 표시는 «글자가 아니라 그림»이다. 텍스트 노드로 넣으면 질문 문장에 섞여
+   들어가 화면↔JSON-LD 대조를 깨뜨리고, 원고에 없던 글자가 추가된다(AV-2). */
+.q-card > summary::before {
+  content: 'Q'; flex: none;
+  font-weight: 800; font-size: 1.0625rem; line-height: 1.6;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.hub-group.t1 .q-card > summary::before { color: var(--t1); }
+.hub-group.t2 .q-card > summary::before { color: var(--t2); }
+.hub-group.t3 .q-card > summary::before { color: var(--t3); }
+.hub-group.t4 .q-card > summary::before { color: var(--t4); }
+/* 열림 표시 — 새 색을 들이지 않고 구획 색 삼각형으로 */
+.q-card > summary::after {
+  content: ''; flex: none; align-self: center;
+  width: 0; height: 0; margin-left: 4px;
+  border-left: 5px solid transparent; border-right: 5px solid transparent;
+  border-top: 6px solid currentColor; opacity: 0.55;
+  transition: transform 0.15s ease;
+}
+.q-card[open] > summary::after { transform: rotate(180deg); }
+.hub-group.t1 .q-card > summary::after { color: var(--t1); }
+.hub-group.t2 .q-card > summary::after { color: var(--t2); }
+.hub-group.t3 .q-card > summary::after { color: var(--t3); }
+.hub-group.t4 .q-card > summary::after { color: var(--t4); }
+.q-card > summary:hover h3 { text-decoration: underline; }
+.q-card > summary:focus-visible { outline: 2px solid var(--t1); outline-offset: -2px; }
+.q-body { padding: 0 18px 18px; border-top: 1px solid var(--f-line); }
+.q-body > :first-child { margin-top: 14px; }
+.q-body table { width: 100%; }
+
+/* 태블릿 폭에서 4장이 3+1 로 갈라져 마지막 한 장이 외따로 남는다. 2×2 로 묶는다.
+   휴대폰(640px 이하)은 1열 그대로 둔다 — 2열로 묶으면 글자가 너무 좁아진다. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .hub-toc ul { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .hub-group { padding: 18px 14px 20px; border-radius: 12px; }
+  .q-card > summary { padding: 14px 14px; }
+  .q-body { padding: 0 14px 14px; }
+}

@@ -450,10 +450,18 @@ async function main() {
         const screen = details.length
           ? details.map((d) => {
           const sm = d.match(/<summary[\s\S]*?>([\s\S]*?)<\/summary>/);
+          const rest = d.replace(/<summary[\s\S]*?<\/summary>/, '');
+          //  답변은 «문단만» 잇는다 — content.mjs 가 JSON-LD 를 만들 때 쓴 기준과
+          //  같아야 대조가 성립한다. 표·목록까지 넣으면 화면 쪽만 길어져
+          //  없는 어긋남이 생긴다(2026-08-23 · v44 AV, 허브가 아코디언이 되면서 드러났다).
+          //  ⚠ <p> 가 하나도 없으면 종전대로 전체를 편다 — 조용히 건너뛰지 않는다(J7).
+          //  한 문단 안의 태그는 «공백 없이» 뗀다(flatOne) — <strong> 을 공백으로
+          //  바꾸면 「문의로」가 「문의 로」가 되어 없는 어긋남이 생긴다.
+          const paras = (rest.match(/<p>[\s\S]*?<\/p>/g) ?? []).map(flatOne).filter(Boolean);
           return {
             // 번호 배지(Q1…)는 표기용이라 질문 본문에서 뺀다
             q: flat(sm ? sm[1] : '').replace(/^Q\d+\s*/, ''),
-            a: flat(d.replace(/<summary[\s\S]*?<\/summary>/, '')),
+            a: paras.length ? paras.join(' ') : flat(rest),
           };
             })
           : hubFaq;
