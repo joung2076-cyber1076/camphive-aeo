@@ -1119,13 +1119,14 @@ body[class^="p-faq"] .caption { color: var(--f-muted); }
 body[class^="p-faq"] a { color: var(--t1); }
 body[class^="p-faq"] .content a:not(.btn) { color: var(--t1); }
 
-/* 강조(strong) — v45 AX · 사장님 지시 「강조는 파란색으로 통일」.
+/* 강조(strong) — v46 BA · 사장님 판정 「강조는 색이 아니라 굵기로」.
    기본 규칙 strong { color: var(--text) }(150줄)는 다크 본문색 #E7EBF2 를 물고 있어
-   흰 바탕에서 대비 1.20:1 — 사실상 보이지 않았다(5페이지 120곳 전수 동일).
-   #2563EB / #ffffff = 5.17:1 · 구획 연한 배경 위에서도 4.57~4.71:1 로 AA 를 넘는다.
-   구획 ②③④ 안에서도 강조는 t1 하나로 통일한다(AX-3) — 구획색은 강조에 쓰지 않는다. */
+   흰 바탕에서 대비 1.20:1 — 사실상 보이지 않았다(v45 AX 실측, 5페이지 120곳 전수 동일).
+   v45 는 #2563EB 로 올렸으나(5.17:1) 120곳이 전부 파랑이 되어 사장님이 검정을 택했다.
+   색은 본문색 #1d2a3a(15.5:1), 굵기 700 은 기본 규칙 그대로 둔다 — 굵기가 유일한 강조다.
+   링크는 건드리지 않는다(BA-3) — 누를 수 있는 것과 강조는 다르다. */
 body[class^="p-faq"] .content strong,
-body[class^="p-faq"] .content b { color: var(--t1); }
+body[class^="p-faq"] .content b { color: var(--f-ink); }
 body[class^="p-faq"] hr { border-color: var(--f-line); }
 
 /* 핵심 답변 블록 — 파란 강조를 흰 바탕에 맞춘다 */
