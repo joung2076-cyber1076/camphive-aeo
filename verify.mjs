@@ -1023,6 +1023,11 @@ async function main() {
   //  priceLabel 은 render-landing.mjs:594 가 실제로 읽으므로 빌더가 임의로
   //  지울 수 없다. A14 요금 정본으로 교체할지는 아키 판정 대기(v15 O-1).
   //  조용히 통과시키지 않으려고 이름을 박아 두고 매번 눈에 띄게 남긴다.
+  //
+  //  ⚠ 해제 후 정리 — A14(2026-08-23). render-landing.mjs:594 는 존재하지만
+  //  renderLanding() 호출이 0회인 죽은 경로다(build.mjs 는 import 만 한다).
+  //  dist 「【확인 필요】」 0건 · 「【금액 확인 필요】」 0건이라 점검표 ② 는 O 다.
+  //  렌더러째 정리는 색인 해제 후 v44 에서 한다. 이 경고는 끄지 않는다(6.4.4).
   const PENDING_MARKERS = new Map([
     ['home.data.mjs:priceLabel', '아키 판정 대기 — A14 요금 정본 교체 여부 (v15 O-1)'],
   ]);
