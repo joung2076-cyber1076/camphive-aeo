@@ -1121,10 +1121,11 @@ body[class^="p-faq"] .content a:not(.btn) { color: var(--t1); }
 body[class^="p-faq"] hr { border-color: var(--f-line); }
 
 /* 핵심 답변 블록 — 파란 강조를 흰 바탕에 맞춘다 */
+/* 기본 .answer 는 «네 변 모두» 액센트 1px 테두리다(932줄). 흰 바탕에서도 그 형태를
+   그대로 쓴다 — 한쪽만 굵게 두르는 형태는 이 사이트의 컴포넌트 규칙이 아니다. */
 body[class^="p-faq"] .answer {
   background: var(--t1-bg);
-  border: 1px solid var(--f-line);
-  border-left: 4px solid var(--t1);
+  border: 1px solid var(--t1);
 }
 body[class^="p-faq"] .answer-label { color: var(--t1); }
 body[class^="p-faq"] .answer-text { color: var(--f-ink); }
