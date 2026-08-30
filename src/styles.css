@@ -1129,6 +1129,19 @@ body[class^="p-faq"] .content strong,
 body[class^="p-faq"] .content b { color: var(--f-ink); }
 body[class^="p-faq"] hr { border-color: var(--f-line); }
 
+/* 소제목 위계 — v48 BC-확정 · 사장님 A안 채택.
+   소제목이 본문 강조보다 «작았다» — h3 17px 인데 strong 은 본문 17.5px 를 물고 700 이라,
+   질문이 본문 굵은 글씨에 묻혔다(2026-08-30 실측). 색은 이미 둘 다 #1d2a3a 라(v46 BA)
+   구분 수단이 크기·굵기·여백밖에 없다.
+   하위 4페이지 16문항이 대상이다. .faq-item h3(857줄)은 /diagnosis/ · /measurement/ ·
+   /service/ 도 쓰므로 «전역으로 고치지 않는다» — FAQ 계열에서만 덮는다.
+   허브 22문항은 .q-card > summary h3 쪽에서 같은 값으로 맞췄다. */
+body[class^="p-faq"] .faq-item h3 {
+  font-size: 19px;
+  font-weight: 900;
+  margin-top: var(--s10);
+}
+
 /* 핵심 답변 블록 — 파란 강조를 흰 바탕에 맞춘다 */
 /* 기본 .answer 는 «네 변 모두» 액센트 1px 테두리다(932줄). 흰 바탕에서도 그 형태를
    그대로 쓴다 — 한쪽만 굵게 두르는 형태는 이 사이트의 컴포넌트 규칙이 아니다. */
@@ -1211,19 +1224,19 @@ body[class^="p-faq"] .diag-cta .btn:not(.btn-primary) {
 .q-card:last-child { margin-bottom: 0; }
 .q-card > summary {
   display: flex; align-items: flex-start; gap: 12px;
-  padding: 16px 18px; cursor: pointer;
+  padding: 20px 18px 16px; cursor: pointer;
   list-style: none;
 }
 .q-card > summary::-webkit-details-marker { display: none; }
 .q-card > summary h3 {
-  margin: 0; font-size: 1.0625rem; line-height: 1.6; font-weight: 700;
+  margin: 0; font-size: 19px; line-height: 1.6; font-weight: 900;
   flex: 1;
 }
 /* Q 표시는 «글자가 아니라 그림»이다. 텍스트 노드로 넣으면 질문 문장에 섞여
    들어가 화면↔JSON-LD 대조를 깨뜨리고, 원고에 없던 글자가 추가된다(AV-2). */
 .q-card > summary::before {
   content: 'Q'; flex: none;
-  font-weight: 800; font-size: 1.0625rem; line-height: 1.6;
+  font-weight: 800; font-size: 19px; line-height: 1.6;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
 .hub-group.t1 .q-card > summary::before { color: var(--t1); }
