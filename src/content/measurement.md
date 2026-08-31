@@ -16,7 +16,7 @@
 #   사유 없이 넣으면 빌드가 실패한다 — 조용한 차단을 막기 위한 장치다.
 slug: measurement
 nav: true
-navOrder: 3
+navOrder: 4
 navLabel: 효과 측정
 changefreq: monthly
 

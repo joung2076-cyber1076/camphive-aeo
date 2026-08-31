@@ -51,15 +51,12 @@
   }
   .skip:focus { left: 16px; top: 16px; }
 
-  /* 헤더 CTA — 폰에서는 짧은 문구로 바꾼다.
-     긴 문구(274px)와 로고(209px)를 합치면 483px 이라 375px 화면에서
-     버튼이 로고를 172px 덮었다. 버튼은 크기가 줄지도(flex:none),
-     줄바꿈되지도(nowrap) 않아 제 크기를 지키며 밀고 들어온다.
-     자리·색·모양은 그대로 두고 글자만 바꾼다. */
-  .cta-short { display: none; }
+  /* 헤더 CTA — v49 3-4 로 라벨이 「무료 진단 받기」 한 가지가 됐다.
+     종전에는 긴 문구(274px)가 375px 에서 로고를 172px 덮어, 폰에서만 짧은
+     문구로 바꿔 끼우는 .cta-long / .cta-short 두 벌을 두고 있었다.
+     새 라벨은 두 폭 모두에서 같은 크기라 그 두 규칙은 쓰는 곳이 없어져 지웠다.
+     아래 헤더 안쪽 여백 조정은 그대로 둔다 — 메뉴가 5개로 늘어 여전히 필요하다. */
   @media (max-width: 720px) {
-    .cta-long { display: none; }
-    .cta-short { display: inline; }
     /* 글자를 줄여도 375px 에서 35px 이 모자랐다.
        헤더 안쪽 여백 32px×2 와 사이 간격 24px 이 88px 을 먹어
        쓸 수 있는 폭이 311px 뿐이었기 때문이다(로고 209 + 버튼 119 = 328).
@@ -193,11 +190,14 @@
       </span>
     </a>
     <nav style="display:flex;align-items:center;gap:26px;flex:1 1 auto;justify-content:flex-end;min-width:0;overflow-x:auto">
-      <a href="#service" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">서비스 소개</a>
-      <a href="#data" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">실측 데이터</a>
-      <a href="#process" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">분석 과정</a>
+      <!-- v49 3-1·3-2 — 앵커 3개(#service·#data·#process)를 메뉴에서 뺐다.
+           본문 섹션과 id 는 그대로 둔다. 전 페이지 메뉴를 실제 페이지 5개로 통일한다. -->
+      <a href="/" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">홈</a>
+      <a href="/service/" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">서비스</a>
+      <a href="/diagnosis/" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">진단도구 알아보기</a>
+      <a href="/measurement/" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">효과 측정</a>
       <a href="/faq/" style="flex:none;white-space:nowrap;font-size:15px;font-weight:500;color:#AFB8C6">캠핑장 운영 질문</a>
-      <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_hero" style="display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap;min-height:46px;padding:12px 22px;background:#2563EB;color:#FFFFFF;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06)" style-hover="background:#2563EB"><span class="cta-long">우리 캠핑장 AI검색 노출도 진단하기</span><span class="cta-short">무료 진단</span> <span style="font-family: &quot;JetBrains Mono&quot;, monospace;">▸</span></a>
+      <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_hero" style="display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap;min-height:46px;padding:12px 22px;background:#2563EB;color:#FFFFFF;font-size:16px;font-weight:700;border-radius:100px;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,0.06)" style-hover="background:#2563EB">무료 진단 받기 <span style="font-family: &quot;JetBrains Mono&quot;, monospace;">▸</span></a>
     </nav>
   </div>
 </header>

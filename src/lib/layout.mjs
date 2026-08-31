@@ -10,6 +10,10 @@ import { esc, urlFor, pathFor, assetPath, krDate } from './html.mjs';
 import { renderJsonLd } from './jsonld.mjs';
 import { floatingButtons, LANDING } from './render-landing.mjs';
 
+// 헤더 오른쪽 끝 신청 버튼 (v49 3-4). 홈 헤더와 같은 대상·같은 라벨을 쓴다.
+// 메뉴 링크가 아니라 «신청» 한 개짜리 별도 요소이므로 nav 링크 목록에 넣지 않는다.
+const DIAG_TOOL_URL = 'https://camphive-aeo.vercel.app/';
+
 function head(page, ctx, graph) {
   const { site, org } = ctx;
   const url = urlFor(site.baseUrl, page.slug);
@@ -82,6 +86,7 @@ function header(page, ctx) {
       <span class="brand-sub">Since 2014 · 전국 280곳</span>
     </a>
     ${links ? `<nav class="site-nav" aria-label="주요 메뉴">\n        ${links}\n      </nav>` : ''}
+    <a class="nav-cta" href="${esc(DIAG_TOOL_URL)}" target="_blank" rel="noopener" data-ga="diag_header">무료 진단 받기</a>
   </div>
 </header>`;
 }
@@ -113,7 +118,7 @@ function footer(ctx, page) {
   const siteLinks = [
     { slug: 'service', label: 'AI 검색 노출 방법' },
     { slug: 'measurement', label: '효과 측정' },
-    { slug: 'diagnosis', label: '무료 진단' },
+    { slug: 'diagnosis', label: '진단도구 알아보기' },
     // 「자주 묻는 질문」은 어느 사이트에나 붙는 말이라 무엇에 대한 질문인지
     // 알려주지 않는다. 앵커 문구는 링크 대상을 가리키는 단서이므로 업종어를
     // 넣는다(질의 3원칙 ①). 홈은 시안 푸터를 써서 이 목록의 영향을 받지 않는다.

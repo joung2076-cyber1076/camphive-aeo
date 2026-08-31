@@ -277,6 +277,36 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   .site-nav a { font-size: 0.875rem; }
 }
 
+/* 헤더 신청 버튼 (v49 3-4) — 메뉴 오른쪽 끝, 메뉴 링크가 아닌 «별도 요소».
+   홈 헤더의 버튼과 라벨·대상·모양을 맞춘다(무료 진단 받기 · 진단 도구).
+   색은 승인 토큰만 쓴다 — 채움 --btn(#2563EB) · 글자 --accent-ink(#FFFFFF).
+   .site-nav 에 margin-left:auto 를 줘 «메뉴+버튼»이 한 덩어리로 오른쪽에 붙는다.
+   선택자를 .site-header 로 한 단계 올린 이유: FAQ 계열은 body[class^="p-faq"] a
+   가 링크 색을 --t1(#2563EB)로 덮는데, 그 값이 버튼 채움색과 «같은 파랑»이라
+   .nav-cta 단독(0,1,0)으로는 져서 글자가 배경에 묻혀 보이지 않았다(375px 눈 확인에서 발견).
+   (버튼이 생기기 전에는 자식이 둘이라 space-between 만으로 붙어 있었다.) */
+.site-nav { margin-left: auto; }
+.site-header .nav-cta {
+  display: inline-flex; align-items: center; flex: none; white-space: nowrap;
+  min-height: 40px; padding: var(--s2) var(--s5);
+  border-radius: 100px; background: var(--btn); color: var(--accent-ink);
+  font-size: 0.9375rem; font-weight: 700;
+  transition: background-color 0.15s ease;
+}
+.site-header .nav-cta:hover { background: var(--btn-hover); }
+/* 좁은 화면 — 헤더가 세로로 쌓이는 폭(860px 이하)에서는 버튼을 «줄 전체»로
+   늘리지 않고 오른쪽 끝에 붙인 채 한 줄만 차지하게 한다. 메뉴 띠(.site-nav)
+   안에 넣지 않는 이유는, 375px 에서 메뉴 5개가 이미 띠를 가득 채워
+   버튼까지 넣으면 첫 화면에서 잘린 채 나오기 때문이다(268-274줄 기록). */
+@media (max-width: 860px) {
+  .site-nav { margin-left: 0; }
+  .site-header .nav-cta { align-self: flex-end; margin-top: var(--s2); }
+  .site-header.is-scrolled .nav-cta { display: none; }
+}
+@media (max-width: 420px) {
+  .site-header .nav-cta { font-size: 0.875rem; padding: var(--s2) var(--s4); min-height: 36px; }
+}
+
 /* ── 앵커 목차 ──────────────────────────────────────────────── */
 .anchor-nav {
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);

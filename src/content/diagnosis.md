@@ -3,7 +3,7 @@ type: diagnosis
 slug: diagnosis
 nav: true
 navOrder: 3
-navLabel: 무료 진단
+navLabel: 진단도구 알아보기
 changefreq: monthly
 
 title: 우리 캠핑장이 AI 답변에 나오는지 어떻게 확인해? | 캠핑하이브

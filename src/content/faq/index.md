@@ -13,7 +13,7 @@ type: article
 slug: faq
 hub: true
 nav: true
-navOrder: 4
+navOrder: 5
 navLabel: 캠핑장 운영 질문
 changefreq: monthly
 
