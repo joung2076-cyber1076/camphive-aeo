@@ -351,7 +351,9 @@
 
 <section id="hero" data-screen-label="S01 히어로" style="padding:88px 32px 96px;border-bottom:1px solid rgba(255,255,255,0.09)">
   
-<div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center">
+<!-- v53 A3 — 우측 카드 열이 사라져 2칸 그리드(1.05fr 0.95fr)를 1단으로 편다.
+     v52 A1 에서 #service 에 쓴 방식과 같다. 폭 제한은 그대로 max-width:1200px. -->
+<div style="max-width:1200px;margin:0 auto">
     <div>
       <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#7C8697;margin-bottom:26px">
         <span style="width:26px;height:3px;background:#3B82F6;display:inline-block"></span>AI 답변 최적화 · 캠핑 버티컬 특화
@@ -369,54 +371,6 @@
         <a href="#report-preview" style="display:inline-flex;align-items:center;min-height:56px;padding:16px 30px;background:transparent;color:#FFFFFF;font-size:18px;font-weight:700;border:1.5px solid rgba(255,255,255,0.22);border-radius:100px" style-hover="border-color:#3B82F6;color:#60A5FA">진단서 샘플 보기</a>
       </div><p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:14px;color:#7C8697">확인해 드립니다 · 무료 · 카드 등록 없음</p>
       
-    </div>
-
-    <div style="background:#12161D;border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,0.55)">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:20px">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.10em;color:#60A5FA">AI 대화 재현</span>
-      </div>
-      
-      <div style="display:flex;justify-content:flex-end;margin-bottom:22px">
-        <div style="background:#2E2E2A;color:#F2F2EC;font-size:17px;padding:13px 18px;border-radius:14px 14px 4px 14px;max-width:88%">{{ typedQ }}<span style="display:inline-block;width:2px;height:17px;background:#3B82F6;margin-left:3px;vertical-align:-3px;animation:blink 1s step-end infinite"></span></div>
-      </div><div style="{{ answerStyle }}">
-        <p style="margin:0 0 14px;font-size:16px;line-height:1.7;color:#D8D8D0">{{ answerLead }}</p>
-        <div style="display:grid;gap:10px;margin-bottom:18px">
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA">01</span><span style="font-size:16px;color:#F2F2EC">별빛솔밭 캠핑장</span></div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA">02</span><span style="font-size:16px;color:#F2F2EC">물안개계곡 오토캠핑장</span></div>
-          <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.06);border-radius:8px;padding:12px 14px"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#60A5FA">03</span><span style="font-size:16px;color:#F2F2EC">하늘담은 글램핑</span></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;border:2px dashed #D96A55;border-radius:8px;padding:14px 16px">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#D96A55">✕ 미언급</span>
-          <span style="font-size:16px;color:#F2F2EC">우리 캠핑장은 이 답변에 없습니다</span>
-        </div>
-      </div>
-      <p style="margin:18px 0 0;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:#8B8B82">ChatGPT · 제미나이 · 클로드 · 웹검색 켬 · 1회 질의 기준<br />AI 답변은 확률 기반이라 측정할 때마다 달라집니다.</p>
-      <div style="margin-top:22px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.12)">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
-          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.10em;color:#9AA4B4">3사 언급률 실측</span>
-          <span style="display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.10em;color:#60A5FA">
-            <span style="width:7px;height:7px;border-radius:50%;background:#3B82F6;animation:pulseDot 1.6s ease-in-out infinite"></span>LIVE
-          </span>
-        </div>
-        <div style="display:grid;gap:12px">
-          <div style="display:flex;align-items:center;gap:14px">
-            <span style="width:78px;flex:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:#3DD6AC">ChatGPT</span>
-            <span style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative"><span style="position:absolute;top:0;left:0;width:32%;height:100%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.85),transparent);animation:trackScan 2.6s ease-in-out infinite"></span></span>
-            <span style="width:46px;flex:none;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#E8A33D;animation:dotBlink 2.6s ease-in-out infinite">0/3</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px">
-            <span style="width:78px;flex:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:#E89476">Claude</span>
-            <span style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative"><span style="position:absolute;top:0;left:0;width:32%;height:100%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.85),transparent);animation:trackScan 2.6s ease-in-out 0.35s infinite"></span></span>
-            <span style="width:46px;flex:none;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#E8A33D;animation:dotBlink 2.6s ease-in-out 0.35s infinite">0/3</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:14px">
-            <span style="width:78px;flex:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:#7BA9F7">Gemini</span>
-            <span style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,0.08);overflow:hidden;position:relative"><span style="position:absolute;top:0;left:0;width:32%;height:100%;background:linear-gradient(90deg,transparent,rgba(96,165,250,0.85),transparent);animation:trackScan 2.6s ease-in-out 0.7s infinite"></span></span>
-            <span style="width:46px;flex:none;text-align:right;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#E8A33D;animation:dotBlink 2.6s ease-in-out 0.7s infinite">0/3</span>
-          </div>
-        </div>
-        <p style="margin:14px 0 0;font-size:13px;line-height:1.7;color:#7C8697">위 수치는 화면 예시입니다. 실제 값은 진단 시점에 측정됩니다.</p>
-      </div>
     </div>
   </div></section><div style="overflow:hidden;border-bottom:1px solid rgba(255,255,255,0.09);background:#0F1319;padding:16px 0">
   <div style="display:flex;width:max-content;animation:marquee 42s linear infinite">
@@ -642,8 +596,8 @@
     <p style="margin:32px 0 0;font-size:19px;line-height:1.7;color:#FFFFFF;border-left:4px solid #3B82F6;padding-left:20px">진단서는 계약 여부와 관계없이 드립니다. 받아만 보고 끝내셔도 됩니다. 기록 번호로 언제든 다시 여실 수 있습니다.</p>
     <p style="margin:24px 0 0"><a href="https://camphive-aeo.vercel.app/diagnosis/dgn_8d90a41640bf4be78523f7b879fa1314" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:56px;padding:16px 30px;background:transparent;color:#FFFFFF;font-size:18px;font-weight:700;border:1.5px solid rgba(255,255,255,0.22);border-radius:100px">진단서 샘플 보기</a></p>
     <!-- v52 A2 — 0362976 의 #demo 에서 꺼낸 H3 와 버튼. 지시문이 지목한 두 개만 옮겼다. -->
-        <h3 style="margin:0 0 8px;font-size:26px;font-weight:900;color:#FAFAF7">우리 캠핑장은 어떨까요?</h3>
-        <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_demo" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;padding:0 16px;background:#2563EB;color:#FFFFFF;font-size:19px;font-weight:700;border-radius:100px;text-decoration:none;box-sizing:border-box" style-hover="background:#2563EB" style-active="transform:scale(0.98)">무료 진단 시작하기 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
+        <h3 style="margin:0 0 28px;font-size:26px;font-weight:900;color:#FAFAF7">우리 캠핑장은 어떨까요?</h3>
+        <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_demo" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:360px;min-height:58px;padding:0 16px;background:#2563EB;color:#FFFFFF;font-size:19px;font-weight:700;border-radius:100px;text-decoration:none;box-sizing:border-box" style-hover="background:#2563EB" style-active="transform:scale(0.98)">무료 진단 시작하기 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
   </div>
 </section>
 
