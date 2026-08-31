@@ -96,7 +96,33 @@
      흐르는 배너(span)의 nowrap 은 의도된 가로 흐름이라 건드리지 않는다. */
   @media (max-width: 1000px) { main p { white-space: normal !important; } }
   @media (max-width: 1080px) { header nav { gap: 16px !important; } header nav a { font-size: 14px !important; } }
-  @media (max-width: 720px) { header nav a:not([data-ga]) { display: none; } }
+  /* v50 판정 2-1 — 종전 @media (max-width:720px){ header nav a:not([data-ga]){display:none} } 를 삭제했다.
+     메뉴 링크 5개를 폰에서 통째로 숨기던 규칙이라, 사장님 결정 「전 페이지 메뉴 통일」이
+     폰에서만 지켜지지 않았다(375px 홈 헤더 = 로고 + 버튼뿐).
+     v50 판정 2-2 — 한 줄에 안 들어가면 «줄바꿈되게 둔다». 항목을 빼거나 숨기지 않는다.
+     메뉴 띠는 가로 스크롤(overflow-x:auto)이라 그대로 두면 잘린 채 나오므로,
+     좁은 화면에서만 스크롤을 풀고 줄바꿈으로 바꾼다.
+     v50 판정 1-2·1-3 — 사이 간격 8px · 글자 13px 은 하위 페이지(styles.css 275줄)와 같은 값이다. */
+  /* 줄바꿈은 «한 줄에 안 들어가는 폭 전체»에 걸어야 한다(2-2). 420px 만 덮으면
+     421~720px 구간이 종전 숨김 규칙이 가려 주던 채로 드러난다 — 실측 500px 에서
+     nav 가 오른쪽 정렬 + overflow-x 라 넘친 만큼이 «왼쪽으로» 밀려, 「홈」이 left -55px,
+     「서비스」가 -26px 로 로고 뒤에 숨었다. 경계는 하위 페이지 헤더가 세로로 쌓이는
+     860px 에 맞춘다(styles.css 249줄) — 로고 227 + 메뉴 520 + 여백이 한 줄에 들어가는
+     폭은 실측 약 790px 부터라 860px 아래는 어차피 두 줄이다. */
+  @media (max-width: 860px) {
+    header > div { flex-wrap: wrap !important; }
+    header nav {
+      flex: 1 0 100% !important; flex-wrap: wrap !important;
+      overflow-x: visible !important; justify-content: flex-start !important;
+      row-gap: 8px !important;
+    }
+  }
+  /* 사이 간격·글자 축소는 지시대로 420px 이하에서만 건다(1-2). 421~860px 은
+     줄바꿈만 적용되고 글자는 14px·간격 16px 그대로다. */
+  @media (max-width: 420px) {
+    header nav { column-gap: 8px !important; }
+    header nav a { font-size: 13px !important; }
+  }
 
   /* ── 좁은 화면 — 시안의 가로 격자를 세로로 세운다 ──────────────────
      홈은 시안 마크업을 그대로 쓰는 페이지라 칸 나눔이 태그 안에 직접
