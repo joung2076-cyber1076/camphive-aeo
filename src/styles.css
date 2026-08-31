@@ -851,12 +851,19 @@ td.is-num { font-family: var(--mono); }
 .ask-ours dd { font-weight: 700; }
 
 /* ── FAQ (14) — 접지 않는다 ─────────────────────────────────── */
-.faq-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
-.faq-item { padding-block: var(--s6); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 64px 1fr; gap: var(--s5); }
-.faq-item .num { color: var(--accent); }
-.faq-item h3 { font-size: 1.0625rem; margin-bottom: var(--s3); }
+/* v49 1-1·1-2·1-3 · 2-1·2-2 (2026-08-31) — 2칸 그리드를 세로 스택으로 바꾼다.
+   64px 칸은 번호(.num)가 들어갈 자리였는데 렌더러(render-article.mjs:97-100 ·
+   render-home.mjs:87-90)가 .num 을 그리지 않는다. 그래서 제목이 그 빈 칸에 갇혀
+   한 글자씩 줄바꿈됐다 — 1280px 실측 h3 폭 64px · 7줄 · 186px.
+   죽은 규칙 2줄을 지웠다: .faq-list(HTML 어디에도 없음) · .faq-item .num(dist 0건).
+   620px 미디어쿼리도 지웠다 — 1열이 이제 «모든 폭의 기본값»이라 덮어쓸 것이 없다.
+   소제목 19px·900 은 v48 의 body[class^="p-faq"] 한정을 풀어 여기로 올렸다.
+   /diagnosis/ · /measurement/ · /service/ 도 같은 값이 된다(2-1·2-2).
+   gap 은 종전 «좁은 화면» 값 --s2 를 그대로 쓴다 — h3 의 margin-bottom --s3 와
+   합쳐 제목·답변 사이가 20px 로, 620px 이하에서 보던 간격과 같다. */
+.faq-item { padding-block: var(--s6); border-bottom: 1px solid var(--line); display: grid; gap: var(--s2); }
+.faq-item h3 { font-size: 19px; font-weight: 900; margin-bottom: var(--s3); }
 .faq-item p { color: var(--muted); }
-@media (max-width: 620px) { .faq-item { grid-template-columns: 1fr; gap: var(--s2); } }
 
 /* ── 폼 ─────────────────────────────────────────────────────── */
 .form-block {
@@ -1129,18 +1136,13 @@ body[class^="p-faq"] .content strong,
 body[class^="p-faq"] .content b { color: var(--f-ink); }
 body[class^="p-faq"] hr { border-color: var(--f-line); }
 
-/* 소제목 위계 — v48 BC-확정 · 사장님 A안 채택.
-   소제목이 본문 강조보다 «작았다» — h3 17px 인데 strong 은 본문 17.5px 를 물고 700 이라,
-   질문이 본문 굵은 글씨에 묻혔다(2026-08-30 실측). 색은 이미 둘 다 #1d2a3a 라(v46 BA)
-   구분 수단이 크기·굵기·여백밖에 없다.
-   하위 4페이지 16문항이 대상이다. .faq-item h3(857줄)은 /diagnosis/ · /measurement/ ·
-   /service/ 도 쓰므로 «전역으로 고치지 않는다» — FAQ 계열에서만 덮는다.
-   허브 22문항은 .q-card > summary h3 쪽에서 같은 값으로 맞췄다. */
-body[class^="p-faq"] .faq-item h3 {
-  font-size: 19px;
-  font-weight: 900;
-  margin-top: var(--s10);
-}
+/* 소제목 위계 — v48 BC-확정(A안 19px·900)은 v49 2-1 에서 .faq-item h3(공통)로
+   올렸다. 여기서 FAQ 계열만 덮던 한정을 풀어 7페이지가 같은 값을 쓴다.
+   v48 이 함께 주던 margin-top: var(--s10) 은 v49 1-4 로 걷어냈다 —
+   .content h3 의 margin-block var(--s8) 과 «서로 덮어써» 4페이지는 40px,
+   나머지 3페이지는 32px 로 값이 갈려 있었다. 낮은 쪽(.content h3 32px)만
+   남겨 7페이지를 하나로 맞춘다. 위 여백은 .faq-item 의 padding-block --s6 와
+   합쳐 24+32=56px 이며, 이는 v48 이전과 같은 리듬이다. */
 
 /* 핵심 답변 블록 — 파란 강조를 흰 바탕에 맞춘다 */
 /* 기본 .answer 는 «네 변 모두» 액센트 1px 테두리다(932줄). 흰 바탕에서도 그 형태를
