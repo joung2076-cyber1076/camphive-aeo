@@ -252,12 +252,16 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
     flex-direction: column; align-items: stretch; gap: 0;
     padding-block: var(--s3);
   }
+  /* 가로 스크롤 띠 → «줄바꿈» (아키 판정 2026-08-31, v50 1-4 ㄱ안).
+     360px 에서 메뉴 5개가 320px 인데 띠 자리는 312px 뿐이라 마지막 항목이
+     8px 잘렸다. 글자를 12.5px 로 내리면 홈 13px / 하위 12.5px 로 값이 갈리고,
+     라벨이 한 글자만 길어져도 다시 깨진다. 홈 헤더와 같은 처방(줄바꿈)을 쓴다.
+     글자 13px·좌우 여백 24px 는 건드리지 않는다. */
   .site-nav {
     gap: var(--s5); margin-top: var(--s3); padding-top: var(--s2);
     border-top: 1px solid var(--line);
-    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap; row-gap: var(--s2);
   }
-  .site-nav::-webkit-scrollbar { display: none; }
   .site-nav a {
     display: inline-flex; align-items: center; min-height: 40px;
     white-space: nowrap;
