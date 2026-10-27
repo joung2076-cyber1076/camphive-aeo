@@ -1146,14 +1146,24 @@ body[class^="p-faq"] {
 /* 본문 골격 — 다크 테마가 깔아 둔 색을 이 페이지에서만 덮는다 */
 body[class^="p-faq"] .content { max-width: 62rem; }
 body[class^="p-faq"] main { background: var(--f-bg); }
-body[class^="p-faq"] h1,
-body[class^="p-faq"] h2,
-body[class^="p-faq"] h3,
-body[class^="p-faq"] h4,
-body[class^="p-faq"] p,
-body[class^="p-faq"] li,
-body[class^="p-faq"] td,
-body[class^="p-faq"] th { color: var(--f-ink); }
+/* v54 (2026-10-27) — main 한정. 전에는 이 8개 선택자에 main 이 없어 바닥글(.site-footer)까지
+   번졌다. 바닥글은 FAQ 계열에서도 다크 패널(--deep) 그대로인데 그 위의 회사명·
+   사업자등록번호·주소·저작권 글자가 잉크색 #1d2a3a 로 찍혀 대비 1.25:1 — 사실상
+   보이지 않았다(색인 해제 전 눈 확인 15쪽×2폭 실측 · 5쪽 공통). 흰 바탕은 main 안뿐이므로
+   색 덮기도 main 안으로 한정한다. 머리글은 a·span 만 있어 이 규칙과 무관하다.
+   자기 색 규칙이 있는 바닥글 글자(.footer-company·.copyright·소제목의 --muted,
+   .footer-logo 의 #fff)는 한정만으로 돌아온다. 색 규칙이 없는 .footer-title 은
+   body 의 --f-ink 를 물려받으므로 바닥글에 다크 본문색(--text)을 아래 1줄로 되돌린다.
+   새 색 없음 — 다른 10쪽 바닥글과 같은 값이다. */
+body[class^="p-faq"] main h1,
+body[class^="p-faq"] main h2,
+body[class^="p-faq"] main h3,
+body[class^="p-faq"] main h4,
+body[class^="p-faq"] main p,
+body[class^="p-faq"] main li,
+body[class^="p-faq"] main td,
+body[class^="p-faq"] main th { color: var(--f-ink); }
+body[class^="p-faq"] .site-footer { color: var(--text); }
 body[class^="p-faq"] .as-of,
 body[class^="p-faq"] .updated,
 body[class^="p-faq"] .related-note,
