@@ -80,8 +80,13 @@ export function renderTable(table) {
     table.note ? `<p class="table-note">${esc(table.note)}</p>` : '',
   ].join('');
 
+  // v56 (2026-10-29) — 열 수를 data-cols 로 적는다. 폰 폭에서 4~5열 표만 최소 폭을 주어
+  // 가로로 밀리게 하려는 것인데(styles.css 「v56」 규칙), CSS 만으로는 열 수를 셀 수 없고
+  // :has() 는 구형 폰에서 못 믿는다(home.dc.html 480px 규칙과 같은 이유).
+  // 화면 모양과 AI 판독에는 아무 영향이 없는 속성이다.
+  const n = cols.length || (rows[0] ? rows[0].length : 0);
   return `<figure class="data-table">
-  <table>
+  <table data-cols="${n}">
     ${table.caption ? `<caption>${esc(table.caption)}</caption>` : ''}
     ${head}
     ${body}

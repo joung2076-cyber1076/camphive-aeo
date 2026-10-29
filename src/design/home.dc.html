@@ -173,6 +173,32 @@
      넓은 화면에서는 원래 넘치지 않아 보이는 것이 달라지지 않는다.
      높이 62px 은 세 문장 모두 44px 이라 그대로 둔다. */
   main [style*="position:relative;height:62px"] { overflow: hidden; }
+  /* v56 (2026-10-29) — S03 #data 「전환율 대비」 막대. 라벨이 인라인 width:180px;flex:none 이라
+     375px 에서 막대 폭이 0px(AI 14.2%) · 12px(일반 2.8%)로 눌려 막대 비교라는 뜻이 사라졌다
+     (10/27 사람 눈 화면 확인 결함 ③). 막대 두 개를 온전히 그리려면 상자 안폭 696px
+     (라벨 180 + 간격 36 + 막대 420 + 수치 60)이 필요하고, 화면 폭으로는 약 840px 부터다.
+     그 아래에서는 한 줄을 두 줄로 나눈다 — 1줄: 라벨 ‥ 수치, 2줄: 막대.
+     막대 길이는 시안의 420px:83px(= 14.2:2.8) 비율을 백분율(100%:19.76%)로 옮겨 그대로 지킨다.
+     경계는 헤더가 두 줄이 되는 860px 에 맞춘다. 마크업·색·글자 크기·순서 변경 없음.
+     인라인 선언이라 !important 가 있어야 이긴다. 861px 이상은 변화 없음. */
+  @media (max-width: 860px) {
+    main [style*="display:flex;align-items:center;gap:18px"] { flex-wrap: wrap !important; row-gap: 0 !important; }
+    main [style*="width:180px;flex:none"] { width: auto !important; flex: 1 1 0 !important; min-width: 0; word-break: keep-all; }
+    main [style*="animation:numFlash"] { order: 1; }
+    /* 짧은 막대(일반 2.8%)는 폭이 19.76% 뿐이라 첫 줄에 끼어든다 — flex 는 max-width 로
+       줄인 크기로 줄바꿈을 정하므로 basis 100% 로도 못 내린다(10/29 1·2차 실측).
+       그래서 수치 뒤에 폭 100%·높이 0 의 빈 항목(::before · order 2)을 두어 줄을 끊고,
+       막대(order 3)는 그 다음 줄에서 시작하게 한다. 두 막대가 같은 x 에서 출발해야
+       길이 비교가 된다. 막대 위 간격 10px 은 row-gap 대신 margin-top 으로 준다. */
+    main [style*="display:flex;align-items:center;gap:18px"]::before { content: ''; flex: 0 0 100%; order: 2; height: 0; }
+    main [style*="transform-origin:left center;animation:barSweep"] { order: 3; margin-top: 10px; flex: 0 0 auto !important; width: 100% !important; max-width: none !important; }
+    main [style*="max-width:83px;background:repeating-linear-gradient"] { width: 19.76% !important; }
+  }
+  /* 폰 폭에서는 이 상자의 좌우 안쪽 여백 40px 을 20px 로 줄여 라벨(약 178px)과 수치(약 60px)가
+     한 줄에 들어가게 한다(375px: 안폭 231 → 271). 481px 이상은 그대로다. */
+  @media (max-width: 480px) {
+    main [style*="padding:36px 40px"] { padding-left: 20px !important; padding-right: 20px !important; }
+  }
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[

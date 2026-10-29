@@ -810,6 +810,36 @@ td.is-num { font-family: var(--mono); }
     overflow-wrap: anywhere;
   }
 }
+/* v56 (2026-10-29) — 4~5열 표가 폰 폭에서 글자를 1~2자씩 세로로 쪼개던 5쪽
+   (10/27 사람 눈 화면 확인 결함 ② · 42칸 · 글자 폭 21~39px). 바로 위 규칙이 표를 화면
+   안(본문 327px)으로 욱여넣으니 4열이면 칸 안 글자 폭이 40px 을 못 넘었다.
+   표를 접지 않는다 — 열을 접으면 AI가 행/열 구조를 못 읽는다(.data-table 주석).
+   대신 표 자체에 최소 폭을 주어 figure.data-table(overflow-x:auto) 안에서 가로로
+   밀리게 한다. 원래 설계가 택한 방식으로 되돌리는 것이다.
+   열 수는 renderTable(html.mjs) 이 data-cols 로 적는다 — :has() 는 구형 폰에서 못 믿는다.
+   4열 540px(열당 135px · 글자 폭 약 103px) · 5열 660px. 2~3열 표는 그대로 둔다.
+   넘침이 실측된 5쪽만 지목한다. /service/ · /diagnosis/ · /intro/ai-marketing/ 의
+   4열 표는 쪼개짐이 실측되지 않아 손대지 않는다. 481px 이상은 변화 없음.
+
+   칸 안에서는 어절을 끊지 않는다(word-break: keep-all). 위 8쪽 규칙의 overflow-wrap:
+   anywhere 는 칸의 최소 폭을 글자 1자로 만들어, 표가 540px 이어도 「0원」·「주 1회」
+   열이 19~39px 로 짓눌리고 「2026-08-17」이 다섯 줄로 쪼개졌다(10/29 실측).
+   8쪽 규칙이 keep-all 을 피한 이유는 「넘침」이었는데, 이 표들은 figure 안에서
+   가로로 밀리므로 넘침이 문제가 아니다. 그래서 이 7개 표에서만 되돌린다. */
+@media (max-width: 480px) {
+  :is(body.p-measurement, body.p-intro-consulting, body.p-faq-ad-budget,
+      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works)
+  table[data-cols="4"] { min-width: 540px; }
+  :is(body.p-measurement, body.p-intro-consulting, body.p-faq-ad-budget,
+      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works)
+  table[data-cols="5"] { min-width: 660px; }
+  :is(body.p-measurement, body.p-intro-consulting, body.p-faq-ad-budget,
+      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works)
+  :is(table[data-cols="4"], table[data-cols="5"]) :is(th, td) {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+}
 
 /* ── 진단서 블록 (07) ───────────────────────────────────────── */
 .block-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform 0.2s ease, border-color 0.2s ease; }
