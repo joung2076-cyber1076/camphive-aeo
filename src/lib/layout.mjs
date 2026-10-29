@@ -83,7 +83,7 @@ function header(page, ctx) {
     <a class="brand" href="${esc(pathFor(''))}">
       <img class="brand-mark" src="${assetPath('img/logo-mark.png')}" alt="캠핑하이브 심볼" width="32" height="32" decoding="async">
       <span class="brand-name">CAMPINGHIVE</span>
-      <span class="brand-sub">Since 2014 · 전국 280곳</span>
+      <span class="brand-sub">Since 2013 · 250개 현장</span>
     </a>
     ${links ? `<nav class="site-nav" aria-label="주요 메뉴">\n        ${links}\n      </nav>` : ''}
     <a class="nav-cta" href="${esc(DIAG_TOOL_URL)}" target="_blank" rel="noopener" data-ga="diag_header">무료 진단 받기</a>
