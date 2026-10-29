@@ -818,8 +818,10 @@ td.is-num { font-family: var(--mono); }
    밀리게 한다. 원래 설계가 택한 방식으로 되돌리는 것이다.
    열 수는 renderTable(html.mjs) 이 data-cols 로 적는다 — :has() 는 구형 폰에서 못 믿는다.
    4열 540px(열당 135px · 글자 폭 약 103px) · 5열 660px. 2~3열 표는 그대로 둔다.
-   넘침이 실측된 5쪽만 지목한다. /service/ · /diagnosis/ · /intro/ai-marketing/ 의
-   4열 표는 쪼개짐이 실측되지 않아 손대지 않는다. 481px 이상은 변화 없음.
+   넘침이 실측된 5쪽만 지목한다. /diagnosis/ · /intro/ai-marketing/ 의 4열 표는
+   쪼개짐이 실측되지 않아 손대지 않는다. 481px 이상은 변화 없음.
+   v57 (2026-10-29 오후) — /service/ 를 더했다. 10/27 눈 확인은 「좁음 · 쪼개짐 없음」으로
+   적었으나 10/29 어절 단위 실측에서 표 1(4열)에 영어 단어 쪼개짐 6건이 있었다(대표 「가」).
 
    칸 안에서는 어절을 끊지 않는다(word-break: keep-all). 위 8쪽 규칙의 overflow-wrap:
    anywhere 는 칸의 최소 폭을 글자 1자로 만들어, 표가 540px 이어도 「0원」·「주 1회」
@@ -828,14 +830,27 @@ td.is-num { font-family: var(--mono); }
    가로로 밀리므로 넘침이 문제가 아니다. 그래서 이 7개 표에서만 되돌린다. */
 @media (max-width: 480px) {
   :is(body.p-measurement, body.p-intro-consulting, body.p-faq-ad-budget,
-      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works)
+      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works, body.p-service)
   table[data-cols="4"] { min-width: 540px; }
   :is(body.p-measurement, body.p-intro-consulting, body.p-faq-ad-budget,
-      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works)
+      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works, body.p-service)
   table[data-cols="5"] { min-width: 660px; }
   :is(body.p-measurement, body.p-intro-consulting, body.p-faq-ad-budget,
-      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works)
+      body.p-faq-direct-booking, body.p-faq-naver-blog-still-works, body.p-service)
   :is(table[data-cols="4"], table[data-cols="5"]) :is(th, td) {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  /* v57 (2026-10-29 오후) — /service/ 표 2(3열 · 「열어야 하는 봇」). OpenAI · Anthropic ·
+     Perplexity 가 폰 폭에서 3줄로 쪼개졌다(10/29 실측 6건). 이 쪽의 3열 표 4개 중 이 표만
+     해당하므로 절(section) id 로 지목한다 — 절 id 는 소제목 글자에서 나오고, 8주 측정 중에는
+     본문을 바꾸지 않는다(F8 · 7.3.3). 소제목이 바뀌면 이 선택자도 같이 고친다.
+     최소 폭 540px 은 4열 표와 같은 값이다 — keep-all 만 주면(335px) 봇 이름이 하이픈에서
+     꺾이고 표가 828 → 948px 로 오히려 길어졌다(10/29 실측). 540px 에서는 507px. */
+  body.p-service section[id="캠핑장-홈페이지에서-봇을-막고-있는지-어떻게-확인해"]
+  figure.data-table:first-of-type table { min-width: 540px; }
+  body.p-service section[id="캠핑장-홈페이지에서-봇을-막고-있는지-어떻게-확인해"]
+  figure.data-table:first-of-type :is(th, td) {
     word-break: keep-all;
     overflow-wrap: break-word;
   }
