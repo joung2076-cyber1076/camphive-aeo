@@ -32,7 +32,11 @@ function head(page, ctx, graph) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <meta name="robots" content="${robots}">
-<link rel="canonical" href="${esc(url)}">
+${/*
+  2026-10-31 v61 — 네이버 서치어드바이저 소유 확인 태그(제니 지시 · 대표 결정 「가」 등록 진행).
+  홈에만 넣는다(네이버는 홈에서 확인). 지우면 등록이 풀린다 — 지우지 말 것(결정대장 49차).
+  짝: static/googlee45b10acd8bf1b67.html(구글 서치콘솔 확인 파일).
+*/ ''}${page.type === 'landing' ? '<meta name="naver-site-verification" content="42d4829c69ac8df8e455c5b149372cac4723d848" />\n' : ''}<link rel="canonical" href="${esc(url)}">
 <meta name="author" content="${esc(site.legalName)}">
 <meta name="publisher" content="${esc(site.legalName)}">
 ${page.updated ? `<meta name="last-modified" content="${esc(page.updated)}">` : ''}
