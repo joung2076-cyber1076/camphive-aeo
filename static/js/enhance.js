@@ -356,5 +356,52 @@
       // #sample-report 주소로 바로 들어온 경우 — 같은 창을 쪽 넘김으로 연다
       if (location.hash === '#sample-report') svOpen(null);
     }
+
+    /* 7) 홈 FAQ 갈래 탭 · 더보기 (2026-11-01 v64)
+     *
+     * 16문항은 전부 마크업에 있다. 여기서는 is-hidden 만 옮긴다.
+     * 「전체 보기」는 앞 6문항을 먼저 보이고 「더 보기」로 나머지를 연다.
+     * 갈래 탭은 data-faq-cat 이 같은 문항만 보인다(더 보기 없이 전부).
+     * 이 블록이 실패하면 faq-js 가 붙지 않아 탭 · 더 보기는 숨고 16문항이 다 보인다.
+     */
+    var faqTabs = document.querySelectorAll('[data-faq-tab]');
+    var faqItems = document.querySelectorAll('#faq details[data-faq-cat]');
+    var faqMore = document.querySelector('[data-faq-more]');
+    if (faqTabs.length && faqItems.length) {
+      root.classList.add('faq-js');
+      var FAQ_FIRST = 6;
+      var faqOpenAll = false;
+      var faqCur = 'all';
+
+      var faqApply = function () {
+        for (var i = 0; i < faqItems.length; i++) {
+          var hide = faqCur === 'all'
+            ? (!faqOpenAll && i >= FAQ_FIRST)
+            : faqItems[i].getAttribute('data-faq-cat') !== faqCur;
+          faqItems[i].classList.toggle('is-hidden', hide);
+        }
+        if (faqMore) faqMore.classList.toggle('is-hidden', !(faqCur === 'all' && !faqOpenAll));
+        for (var k = 0; k < faqTabs.length; k++) {
+          faqTabs[k].setAttribute('aria-pressed', String(faqTabs[k].getAttribute('data-faq-tab') === faqCur));
+        }
+      };
+
+      for (var ft = 0; ft < faqTabs.length; ft++) {
+        faqTabs[ft].addEventListener('click', function () {
+          faqCur = this.getAttribute('data-faq-tab');
+          faqApply();
+        });
+      }
+      if (faqMore) {
+        faqMore.addEventListener('click', function () {
+          faqOpenAll = true;
+          faqApply();
+          // 더 보기로 연 첫 문항(7번째)으로 초점을 옮긴다 — 키보드로 이어 읽게
+          var firstNew = faqItems[FAQ_FIRST] && faqItems[FAQ_FIRST].querySelector('summary');
+          if (firstNew) firstNew.focus();
+        });
+      }
+      faqApply();
+    }
   });
 })();

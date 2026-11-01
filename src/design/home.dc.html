@@ -235,6 +235,53 @@
   @media (max-width: 480px) {
     #hero a[data-ga="diag_hero"], #cta a[data-ga="diag_final"] { font-size: 17px !important; line-height: 1.4; }
   }
+  /* v64 (2026-11-01) — 메인 FAQ 고도화(대표 작업지시서 · 제니 수정본 · 판정 3건 가 · 가 · 가 · 디자인 잠금 예외 D42).
+     ① FAQ 갈래 탭 · 더보기 — 보이기/숨기기만 한다. 16개 답 전문은 처음 받은 HTML 에 다 있다(AI · 검색 수집기가 읽음).
+        탭 · 더보기 단추는 enhance.js 가 html 에 faq-js 를 붙인 뒤에만 보인다 — 스크립트가 없으면 16개가 전부 펼쳐 보인다.
+     ② 답 칸 — 바탕은 승인 색 #1B212B(지시서 #1A1D24 는 승인 색 밖이라 가장 가까운 값) · 왼쪽 3px 파랑 세로선 ·
+        위 여백 16 → 24px(1.5배) · 줄간격 1.75 · 강조 600 + 포인트 색. 답의 문단은 속성 없는 <p> 로 둔다 —
+        render-dc.mjs parseFaq · verify 가 같은 기준(속성 없는 <p> 만 잇기)으로 구조화 데이터 답을 만든다.
+        작은 CTA 는 속성 있는 <p class="faq-cta" data-faq-cta> 라 구조화 데이터 답에 들어가지 않는다(지시서 개발 주의 2).
+     ③ 비교 카드(#ai-compare) — 「예시 화면 — 실제 AI 답변이 아닙니다」를 카드 위에 먼저 둔다(대표 결정 2 = 가).
+        경고 아이콘은 회색 — 앰버 경고색은 쓰지 않는다(v59 규칙).
+     ④ 신청 칸(#apply) — 입력 칸 없음(판정 1 = 가) · 기존 진단 화면으로 가는 단추 하나. 수집 항목 · /privacy/ 변경 0.
+     색은 시안에 이미 있는 값만 쓴다(#0B0E13 · #0F1319 · #12161D · #161B22 · #1B212B · #2563EB · #3B82F6 · #60A5FA · #C4CCD8 · #8C96A6 · #FFFFFF). */
+  .faq-tabs, .faq-more { display: none; }
+  .faq-js .faq-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+  .faq-tab { min-height: 44px; padding: 0 18px; border: 1px solid rgba(255,255,255,0.22); border-radius: 100px; background: transparent; color: #C4CCD8; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .faq-tab:hover { border-color: #3B82F6; color: #FFFFFF; }
+  .faq-tab[aria-pressed="true"] { background: #2563EB; border-color: #2563EB; color: #FFFFFF; }
+  .faq-js .faq-more { display: flex; align-items: center; justify-content: center; margin: 16px auto 0; min-height: 48px; padding: 0 24px; border: 1px solid rgba(255,255,255,0.22); border-radius: 100px; background: transparent; color: #FFFFFF; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+  .faq-js #faq details.is-hidden, .faq-js .faq-more.is-hidden { display: none; }
+  .faq-a { margin: 24px 0 0 44px; padding: 20px 24px; background: #1B212B; border-left: 3px solid #3B82F6; border-radius: 0 8px 8px 0; }
+  .faq-a p { margin: 0; font-size: 17px; line-height: 1.75; color: #C4CCD8; }
+  .faq-a p + p { margin-top: 14px; }
+  .faq-a p:first-child { color: #FFFFFF; font-weight: 700; }
+  .faq-a strong { font-weight: 600; color: #60A5FA; }
+  .faq-a em { font-style: normal; color: #FFFFFF; }
+  .faq-a .faq-cta { margin-top: 18px; text-align: right; }
+  .faq-a .faq-cta a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid #3B82F6; border-radius: 100px; color: #60A5FA; font-size: 15px; font-weight: 700; text-decoration: none; }
+  .faq-a .faq-cta a:hover { background: #2563EB; color: #FFFFFF; text-decoration: none; }
+  .cmp-label { display: inline-block; margin: 0 0 20px; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.22); border-radius: 100px; background: #1B212B; color: #FFFFFF; font-size: 15px; font-weight: 700; }
+  .cmp-q { margin: 0 0 20px; padding: 16px 20px; border-radius: 12px; background: #161B22; border: 1px solid rgba(255,255,255,0.09); color: #FFFFFF; font-size: 17px; line-height: 1.7; }
+  .cmp-tag { display: inline-block; margin-right: 10px; padding: 2px 10px; border-radius: 100px; background: #1B212B; color: #8C96A6; font-size: 13px; font-weight: 700; vertical-align: 1px; }
+  .cmp-card { padding: 24px; border-radius: 12px; background: #161B22; border: 1px solid rgba(255,255,255,0.09); }
+  .cmp-after { border-color: #3B82F6; }
+  .cmp-head { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 16px; font-weight: 700; color: #8C96A6; }
+  .cmp-after .cmp-head { color: #60A5FA; }
+  .cmp-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #8C96A6; color: #8C96A6; font-size: 13px; font-weight: 900; line-height: 1; }
+  .cmp-badge { margin-left: auto; padding: 3px 10px; border-radius: 100px; background: #2563EB; color: #FFFFFF; font-size: 13px; font-weight: 700; }
+  .cmp-text { margin: 0; font-size: 17px; line-height: 1.75; color: #C4CCD8; }
+  .cmp-before .cmp-text { color: #8C96A6; }
+  .cmp-after .cmp-text { color: #FFFFFF; }
+  .cmp-src { margin: 12px 0 0; font-size: 14px; color: #60A5FA; }
+  #ai-compare, #apply { word-break: keep-all; overflow-wrap: break-word; }
+  @media (max-width: 480px) {
+    .faq-a { margin-left: 0; padding: 16px 18px; }
+    .faq-a .faq-cta { text-align: left; }
+    .cmp-card { padding: 20px; }
+    #apply a[data-ga="diag_apply"] { font-size: 17px !important; line-height: 1.4; padding: 12px 22px !important; }
+  }
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
@@ -903,76 +950,167 @@
   </div>
 </section>
 
-<section id="faq" data-screen-label="S14 FAQ" style="padding:96px 32px;background:#0F1319">
+<!-- v64 (2026-11-01 · 대표 작업지시서 · 제니 수정본 「메인FAQ고도화」 · 판정 3건 가 · 가 · 가) — 비교 카드(FAQ 바로 위) · FAQ 갈래 탭 · 아코디언 · 작은 CTA 7곳 · 신청 칸(입력 칸 없음). 대표 지시라 디자인 잠금의 예외(D42). -->
+<section id="ai-compare" data-screen-label="S13b AI 답변 비교" style="padding:96px 32px;background:#12161D">
+  <div style="max-width:1000px;margin:0 auto">
+    <h2 style="margin:0 0 20px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF">정보를 정비하기 전과 후, AI 답변 비교</h2>
+    <p class="cmp-label">예시 화면 — 실제 AI 답변이 아닙니다</p>
+    <p class="cmp-q"><span class="cmp-tag">손님 질문</span>가평·포천 인근에 시설 깨끗하고 사계절 온수풀이 있는 프라이빗 글램핑장 추천해 줘.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="cmp-card cmp-before">
+        <p class="cmp-head"><span class="cmp-icon" aria-hidden="true">!</span>정보 정비 전</p>
+        <p class="cmp-text">해당 조건에 맞는 최신 정보를 찾기 어렵습니다. ○○글램핑은 단열 사양과 온수풀 운영 여부가 확인되지 않습니다.</p>
+      </div>
+      <div class="cmp-card cmp-after">
+        <p class="cmp-head">정보 정비 후<span class="cmp-badge">출처 인용</span></p>
+        <p class="cmp-text">○○글램핑을 추천합니다. 공개된 정보에 따르면 단열 시공된 글램핑 동과 프리미엄 타프가 있어 사계절 이용이 가능하고, 개별 온수풀의 수질 관리 기준을 안내하고 있습니다.</p>
+        <p class="cmp-src">[출처: ○○글램핑 공식 안내 페이지]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" data-screen-label="S14 FAQ" style="padding:96px 32px;background:#0B0E13">
   <div style="max-width:900px;margin:0 auto">
-    <h2 style="margin:0 0 44px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">자주 묻는 질문</h2>
+    <h2 style="margin:0 0 32px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF;white-space:nowrap">자주 묻는 질문</h2>
+    <div class="faq-tabs" aria-label="질문 갈래">
+      <button type="button" class="faq-tab" data-faq-tab="all" aria-pressed="true">전체 보기</button>
+      <button type="button" class="faq-tab" data-faq-tab="core" aria-pressed="false">AEO·GEO 핵심 가치</button>
+      <button type="button" class="faq-tab" data-faq-tab="vs" aria-pressed="false">기존 마케팅 vs AI</button>
+      <button type="button" class="faq-tab" data-faq-tab="cost" aria-pressed="false">성과·비용 및 캠핑하이브 연계</button>
+    </div>
     <div style="display:grid;gap:10px">
-      <details open="open" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="core" open="open" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q1</span>캠핑장 AEO·GEO가 정확히 뭔가요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">AI가 답변을 만들 때 우리 캠핑장이 인용·추천되도록 정보를 정리하는 작업입니다. 검색 순위를 올리는 SEO와 달리, ChatGPT·Claude 같은 AI의 답변 안에 들어가는 것이 목표입니다.</p>
+        <div class="faq-a">
+          <p>검색 결과에 한 줄 더 뜨게 하는 일이 아닙니다. AI가 손님 질문에 답할 때 우리 캠핑장을 근거 있는 답으로 고르게 만드는 정보 정비 작업입니다.</p>
+          <p>예전 손님은 네이버에 ‘가평 글램핑’을 검색해 블로그 수십 개를 비교했습니다. 지금은 ChatGPT · Claude · Gemini 같은 AI에게 <em>“아이와 가기 좋고 개별 온수풀이 있는 조용한 글램핑장 3곳만 추천해 줘”</em>라고 바로 묻는 손님이 생겼습니다. <strong>AEO(답변 엔진 최적화)</strong>와 <strong>GEO(생성형 엔진 최적화)</strong>는 AI가 웹의 정보를 모아 답을 만들 때, 대표님 캠핑장의 사실 <span style="white-space:nowrap">정보(시설</span> 사양 · 사이트 간격 · 수질 관리 · 인허가 상태)를 확인 가능한 형태로 정리해 AI가 인용할 근거를 만드는 일입니다. 목표는 단순 노출이 아니라 <strong>‘AI 답변 속 추천’</strong>입니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="vs" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q2</span>캠핑장 네이버 블로그 마케팅만 계속하면 안 되나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">부족합니다. 네이버 블로그·카페는 robots.txt에서 AI 봇을 이름 단위로 차단하고 있습니다 (2026-08-14 원문 확인). 블로그에만 투자하면 AI로 캠핑장을 찾는 손님을 놓칠 수 있습니다.</p>
+        <div class="faq-a">
+          <p>블로그 체험단은 쓰는 동안만 효과가 나는 비용이고, AEO·GEO는 정리해 둔 정보가 남는 자산에 가깝습니다.</p>
+          <p>체험단은 비용을 들이는 동안 노출되지만, 멈추면 새 글에 밀려 사라집니다. 협찬 후기만으로는 손님이 확인하고 싶은 <span style="white-space:nowrap">사실(시설</span> 사양 · 규정 · 접근성)을 채우기 어렵습니다. AI 최적화는 한 번 정리한 사실 정보가 계속 인용 근거로 남도록 만드는 작업이라, 블로그와 맡는 역할이 다릅니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q3</span>작업하면 언제부터 AI가 우리 캠핑장을 추천해 주나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">어뷰징으로 하루아침에 올렸다 내일 막히는 불법 프로그램이 아닙니다. AI 엔진이 우리 캠핑장의 새로운 데이터를 학습하고 신뢰도를 쌓는 데 저희는 8주를 1차 판정 기간으로 잡고 매주 확인합니다. 하지만 한 번 AI의 ‘신뢰할 수 있는 캠핑장’ 목록에 이름을 올리면, 광고를 끊어도 쉽게 사라지지 않는 자산이 됩니다.</p>
+        <div class="faq-a">
+          <p>8주를 1차 판정 기간으로 잡고 매주 확인합니다. 엔진마다 반영 속도가 다르기 때문입니다.</p>
+          <p>실시간으로 웹을 찾아보는 AI는 공개한 정보가 비교적 빨리 답변에 반영되고, 학습해 둔 데이터에 기대는 AI는 더 오래 걸립니다. 그래서 날짜를 약속하지 않고, 착수 전 진단값과 매주 측정값을 나란히 놓고 변화를 보여 드립니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="core" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q4</span>우리 캠핑장은 변변한 홈페이지도 없고 네이버 카페나 인스타만 쓰는데 가능한가요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">네, 오히려 처음부터 제대로 세팅하기에 더 좋습니다. 기존에 어설프게 만들어진 홈페이지를 뜯어고치는 것보다, AI가 가장 잘 읽어들일 수 있는 AEO 전용 표준 구조로 가볍고 정확하게 기둥을 세워드리니 걱정하지 마십시오.</p>
+        <div class="faq-a">
+          <p>가능합니다. 흩어진 채널의 정보를 AI가 읽을 수 있는 한 곳의 공식 정보로 묶어 드립니다.</p>
+          <p>인스타그램 사진과 회원제 카페 글은 손님에게는 매력적이지만, AI가 읽고 인용하기에는 어려운 형태입니다. 무거운 홈페이지를 새로 만들 필요는 없습니다. 캠핑장의 핵심 사양과 운영 정보를 AI가 읽기 쉬운 표준 <span style="white-space:nowrap">구조(스키마)의</span> 정보 페이지로 만들어 공개하고, 인스타그램 · 플레이스의 내용과 하나로 맞춥니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="vs" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q5</span>캠핑장을 예약 플랫폼에만 올려도 되지 않나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">예약 플랫폼을 통한 예약은 수수료가 발생합니다. AI 답변에서 직접 유입되는 손님은 자사 예약 경로로 들어오기 때문에 수수료 구조가 다릅니다.</p>
+        <div class="faq-a">
+          <p>플랫폼 입점은 기본입니다. 다만 손님이 캠핑장 이름으로 직접 찾아오는 길을 따로 만들어야 수수료와 할인 경쟁에서 벗어날 수 있습니다.</p>
+          <p>플랫폼 안의 상단 노출은 대개 수수료나 할인 쿠폰과 연결됩니다. AI 답변에서 <em>“가평에서 조용하고 관리가 잘 되는 곳”</em>으로 우리 캠핑장 이름이 나오면, 손님이 이름으로 찾아와 <strong>‘지명 예약’</strong>을 하는 경로가 생깁니다. 플랫폼 비중을 조절하고 객단가를 지키는 수단입니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q6</span>캠핑장 노출 성과를 보장해주시나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">보장하지 않습니다. AI 답변은 각 모델의 정책·알고리즘 변경에 영향을 받습니다. 대신 측정 방법을 공개하고 월 단위로 실측치를 제공합니다.</p>
+        <div class="faq-a">
+          <p>보장하지 않습니다. 대신 측정 방법을 공개하고, 매월 실측 리포트로 변화를 보여 드립니다.</p>
+          <p>AI 답변은 각 모델의 정책과 알고리즘 변경에 영향을 받습니다. 착수 전 대표님 캠핑장의 현재 상태를 먼저 진단하고, 작업 후 같은 질문 시나리오에서 <strong>인용 횟수</strong>와 <strong>답변 속 언급 위치</strong>가 어떻게 바뀌었는지 실제 AI 답변 캡처와 수치로 매월 보고합니다. 효과가 낮을 것으로 보이는 캠핑장에는 유료 계약을 권하지 않습니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="vs" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q7</span>작은 캠핑장도 효과가 있나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">있습니다. 오히려 대형 사업장보다 AI 노출 경쟁이 덜한 지역·조건 질문(반려동물 동반, 계곡, 노지 감성 등)에서 선점 여지가 큽니다.</p>
+        <div class="faq-a">
+          <p>작은 캠핑장일수록 광고비 총량이 아니라 ‘조건이 맞는 곳’을 고르는 AI 답변이 유리할 수 있습니다.</p>
+          <p>광고비로는 대형 글램핑장을 이기기 어렵습니다. AI는 규모보다 <strong>손님 질문의 조건에 맞는지</strong>를 봅니다. <em>“15사이트 미만의 조용한 숲속 캠핑장”</em>, <em>“반려견 동반 · 개별 펜스가 있는 곳”</em>처럼 우리 캠핑장만의 조건을 정확한 정보로 정리해 두면, 그 조건을 찾는 손님의 질문에서 이름이 나올 가능성이 커집니다. 어느 정도 기대할 수 있는지는 무료 진단으로 먼저 가늠해 드립니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="core" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q8</span>캠핑장 콘텐츠는 AI로 자동 생성하나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">아닙니다. 자동 생성 콘텐츠는 정보 정밀도가 낮아 AI 인용 기준을 충족하기 어렵습니다. 사업장 인터뷰와 현장 확인을 바탕으로 직접 작성합니다.</p>
+        <div class="faq-a">
+          <p>AI는 도구로 씁니다. 무엇을 쓸지는 캠핑장을 직접 지어 본 사람이 정합니다.</p>
+          <p>글램핑 구조물 제작, 프리미엄 타프 설계, 야영장 인허가와 배치를 다뤄 온 현장의 눈으로 캠핑장의 강점을 먼저 뽑습니다. 그렇게 뽑은 사실 정보를 AI가 이해하기 쉬운 <span style="white-space:nowrap">구조(엔티티</span> · 시맨틱 마크업)로 정리해 발행합니다. 캠핑장 대표님이 읽어도 어색하지 않은 글만 내보냅니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="vs" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q9</span>지금 우리 캠핑장은 네이버 플레이스랑 블로그 체험단 하고 있는데, 당장 다 끊어야 하나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">무작정 다 끊으실 필요 없습니다. 다만 매달 효과도 없는데 관성적으로 태우던 ‘배포형 블로그’나 ‘의미 없는 트래픽 작업’ 비용만 줄이셔도 충분합니다. 그 아낀 비용으로 AI가 추천하는 탄탄한 기본기(AEO)를 한 번 제대로 깔아두면, 대행사 계약을 끊어도 사라지지 않는 우리 캠핑장만의 평생 자산이 됩니다.</p>
+        <div class="faq-a">
+          <p>아닙니다. 기존 채널은 그대로 두고, 지금 놓치고 있는 AI 검색 손님을 더하는 방식입니다.</p>
+          <p>플레이스와 블로그를 멈출 필요는 없습니다. 체험단 예산 가운데 효과가 확인되지 않는 부분이 있다면, 그 일부를 AI 정보 정비로 옮기는 것을 권합니다. AEO 작업에서 정리한 사실 정보는 플레이스 · 홈페이지 · 블로그의 설명을 하나로 맞추는 데에도 그대로 쓰입니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="core" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q10</span>캠핑장 노출은 어떤 AI를 대상으로 측정하나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">ChatGPT · Claude · Gemini 3사를 대상으로 측정합니다. 측정에 사용한 질문 원문과 측정 일시를 진단서에 함께 기재합니다. 측정하지 않는 엔진은 측정한다고 적지 않습니다.</p>
+        <div class="faq-a">
+          <p>ChatGPT · Claude · Gemini 3사를 측정합니다. 측정하지 않는 엔진은 측정한다고 적지 않습니다.</p>
+          <p>손님이 실제로 할 만한 질문 시나리오를 여러 개 만들어 세 엔진에 묻고, 우리 캠핑장이 답변에 인용되는지, 답변 속 어느 위치에 언급되는지를 기록합니다. 진단서에는 질문 원문과 측정 일시를 함께 적습니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q11</span>캠핑장 AI 마케팅 비용은 얼마인가요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">운영 모델과 사이트 규모에 따라 달라집니다. 무료 진단 후 사업장 조건에 맞춘 견적을 드립니다.</p>
+        <div class="faq-a">
+          <p>캠핑장의 정보 상태와 목표 질문의 경쟁 정도에 따라 맞춤 견적을 드립니다. 무료 진단을 먼저 보시고 판단하셔도 늦지 않습니다.</p>
+          <p>지금 웹에 정리된 정보, 운영 중인 채널, 목표로 하는 지역 · 조건 질문의 경쟁 정도에 따라 범위가 달라집니다. 먼저 <strong>[무료 진단 리포트]</strong>로 AI가 지금 우리 캠핑장을 어떻게 설명하는지(또는 아예 모르는지) 확인하신 뒤, 투자할 가치가 있다고 보실 때 결정하시면 됩니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q12</span>캠핑하이브에서 캠핑장 시공도 받았는데 연계되나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">네. 시공 고객에게는 개장 전 사전 최적화 프로그램과 별도 조건을 적용합니다.</p>
+        <div class="faq-a">
+          <p>연계됩니다. 시공 때 만든 자료를 그대로 쓰므로 정보를 모으는 단계가 짧아집니다.</p>
+          <p>텐트 원단의 방염 · 단열 사양, 타프의 풍하중 설계와 배수 구조는 손님에게 안전과 쾌적함을 설명하는 핵심 사실입니다. <span style="white-space:nowrap">(주)캠핑하이브에서</span> 시공 · 컨설팅을 받으신 캠핑장은 도면, 자재 사양, 인허가 자료를 저희가 이미 갖고 있는 경우가 많아, 그 자료를 AI가 인용하기 좋은 형태로 바로 옮길 수 있습니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q13</span>캠핑장 무료 진단은 정말 무료인가요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">네. 카드 등록도, 상담 예약도 필요 없습니다. 상호·홈페이지 주소·이메일 세 가지만 넣으시면 결과가 화면에 나옵니다. 진단서만 받고 끝내셔도 됩니다.</p>
+        <div class="faq-a">
+          <p>무료입니다. 결제 조건이 없고, 영업 전화는 1회만 드립니다. 리포트 품질을 지키기 위해 하루 20건까지만 받습니다.</p>
+          <p>진단 화면에 캠핑장 이름 · 홈페이지 주소 · 이메일 세 가지를 넣으시면, ChatGPT · Claude · Gemini에서 지금 우리 캠핑장이 어떻게 설명되는지, 같은 질문에서 어떤 캠핑장이 대신 추천되는지를 정리한 <strong>‘우리 캠핑장 AI 노출 진단 리포트’</strong>를 화면으로 보여 드리고 이메일로도 보내 드립니다.</p>
+          <p class="faq-cta" data-faq-cta><a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_faq">내 캠핑장 AI 노출 상태 무료로 확인하기 →</a></p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q14</span>캠핑장 진단 결과는 얼마나 정확한가요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">AI에게 실제로 물어본 답변을 그대로 보여드립니다. 다만 AI는 같은 질문에도 매번 조금씩 다르게 답하므로, 진단서에 측정 일시와 질문 원문을 함께 표시합니다. 저희가 확인한 사실과 추정한 내용도 구분해 표기합니다.</p>
+        <div class="faq-a">
+          <p>AI에게 실제로 물어본 답변을 그대로 보여 드립니다. 질문 원문과 측정 일시를 함께 적습니다.</p>
+          <p>캠퍼가 자주 묻는 지역별 · 테마별 질문을 여러 각도로 입력하고, 우리 캠핑장 정보를 틀리게 말하고 있지는 않은지(할루시네이션) 확인합니다. AI는 같은 질문에도 매번 조금씩 다르게 답하므로, 확인한 사실과 추정한 내용을 구분해 표기합니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q15</span>캠핑장 진단을 여러 번 받을 수 있나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">무료 진단은 이메일 기준 1회입니다. 받으신 진단서는 기록 번호로 언제든 다시 여실 수 있습니다. 정기 재측정은 유료 프로그램에 포함됩니다.</p>
+        <div class="faq-a">
+          <p>무료 진단은 이메일 기준 1회입니다. 시즌이 바뀌거나 시설을 새로 갖췄을 때의 재진단은 유료 프로그램으로 받으실 수 있습니다.</p>
+          <p>글램핑 텐트 교체, 수영장 신설, 타프 증축처럼 새 투자가 들어갔을 때 AI가 그 변화를 반영하고 있는지 확인하는 일은 중요합니다. 계약 고객에게는 매월 같은 방식으로 추적 진단을 드립니다.</p>
+        </div>
       </details>
-      <details style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
+      <details data-faq-cat="cost" style="background:#161B22;border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:22px 26px">
         <summary style="cursor:pointer;list-style:none;display:flex;gap:14px;font-size:19px;font-weight:700;color:#FFFFFF;line-height:1.6"><span style="font-family:'JetBrains Mono',monospace;color:#60A5FA;flex:none">Q16</span>캠핑장 말고 다른 업종도 하시나요?</summary>
-        <p style="margin:16px 0 0;padding-left:44px;font-size:17px;line-height:1.85;color:#C4CCD8">캠핑장·글램핑장만 합니다. 2013년부터 250개 현장에 글램핑·프리미엄 타프를 직접 만들어 시공하면서 쌓인 업종 데이터가 이 서비스의 근거이기 때문입니다.</p>
+        <div class="faq-a">
+          <p>하지 않습니다. 캠핑장 · 글램핑장 · 아웃도어 숙박업만 합니다.</p>
+          <p>여러 업종을 함께 맡으면 캠핑장의 사계절 예약 흐름과 인허가 사정을 깊이 다루기 어렵습니다. 캠핑하이브는 2013년부터 250개 현장에 글램핑 · 프리미엄 타프를 직접 만들어 시공했고, 캠핑장 5곳을 직접 운영했습니다. 그 경험을 캠핑장 대표님의 예약과 자산 가치를 높이는 데에만 씁니다.</p>
+        </div>
       </details>
     </div>
+    <button type="button" class="faq-more" data-faq-more>질문 10개 더 보기</button>
     <p style="margin:28px 0 0;text-align:center"><a href="/faq/" style="color:#60A5FA;font-size:17px;font-weight:700;text-decoration:underline">캠핑장 운영 질문 전체 보기</a></p>
+  </div>
+</section>
+
+<section id="apply" data-screen-label="S14b 무료 진단 신청" style="padding:80px 32px;background:#0F1319">
+  <div style="max-width:900px;margin:0 auto;text-align:center">
+    <h2 style="margin:0 0 16px;font-size:clamp(20px,3vw,34px);line-height:1.45;font-weight:900;letter-spacing:-0.025em;color:#FFFFFF">대표님의 캠핑장, 지금 ChatGPT에게는 <span style="white-space:nowrap">‘투명인간’으로</span> 취급받고 있지 않습니까?</h2>
+    <p style="margin:0 0 28px;font-size:18px;line-height:1.75;color:#C4CCD8">리포트 품질을 지키기 위해 하루 20곳의 캠핑장만 무료 진단을 진행합니다.</p>
+    <a href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_apply" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:0 28px;background:#2563EB;color:#FFFFFF;font-size:19px;font-weight:700;border-radius:100px;text-decoration:none;box-sizing:border-box" style-hover="background:#2563EB" style-active="transform:scale(0.98)">내 캠핑장 AI 진단 리포트 신청하기 <span style="font-family:'JetBrains Mono',monospace">▸</span></a>
+    <p style="margin:16px 0 0;font-size:15px;line-height:1.7;color:#8C96A6">진단 화면에서 캠핑장 이름 · 홈페이지 주소 · 이메일 세 가지를 넣으시면 됩니다.</p>
   </div>
 </section>
 

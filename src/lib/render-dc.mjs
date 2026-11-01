@@ -301,12 +301,21 @@ let cache = null;
  */
 function parseFaq(mainHtml) {
   const flat = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  //  v64 (2026-11-01) — 답이 문단 여러 개 + 강조(<strong> · <em>) + 작은 CTA 가 됐다.
+  //  verify.mjs 4-3 과 «같은 기준»으로 뽑는다: 속성 없는 <p> 만 문단으로 보고,
+  //  문단 안의 태그는 공백 없이 떼고(「AEO(…)와」가 「AEO(…) 와」가 되지 않게),
+  //  문단 사이만 공백으로 잇는다. 작은 CTA 는 속성 있는 <p data-faq-cta> 라 빠진다
+  //  — 지시서 「CTA 문구는 구조화 데이터 답변에 넣지 않는다」.
+  //  속성 없는 <p> 가 하나도 없으면 종전대로 전체를 편다.
+  const flatOne = (s) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   return (mainHtml.match(/<details[\s\S]*?<\/details>/g) ?? []).map((d) => {
     const sm = d.match(/<summary[\s\S]*?>([\s\S]*?)<\/summary>/);
+    const rest = d.replace(/<summary[\s\S]*?<\/summary>/, '');
+    const paras = (rest.match(/<p>[\s\S]*?<\/p>/g) ?? []).map(flatOne).filter(Boolean);
     return {
       // 번호 배지(Q1…)는 표기용이라 질문 본문에서 뺀다
       q: flat(sm ? sm[1] : '').replace(/^Q\d+\s*/, ''),
-      a: flat(d.replace(/<summary[\s\S]*?<\/summary>/, '')),
+      a: paras.length ? paras.join(' ') : flat(rest),
     };
   });
 }
