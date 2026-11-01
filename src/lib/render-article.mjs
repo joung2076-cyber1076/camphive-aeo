@@ -16,13 +16,14 @@
 // ─────────────────────────────────────────────────────────────
 
 import { esc, krDate, renderTable, renderBlocks, pathFor } from './html.mjs';
+import { SAMPLE_ID } from './sample-viewer.mjs';
 
 // 진단 도구 주소 — 진단기 팀 이식 사양서(2026-08-19) 1항·5항
-// 샘플 진단서는 저장된 고정 문서다. 몇 번 열어도 원가 0원.
 // 종합리포트(/report)는 미배포(404)라 링크하지 않는다.
+// 「진단서 샘플 보기」는 2026-11-01 부터 진단 도구의 실제 진단서가 아니라
+// 이 사이트 안의 샘플 창(이름 가린 6쪽)을 연다 — sample-viewer.mjs.
 const DIAG_TOOL_URL = 'https://camphive-aeo.vercel.app/';
-const DIAG_SAMPLE_URL =
-  'https://camphive-aeo.vercel.app/diagnosis/dgn_8d90a41640bf4be78523f7b879fa1314';
+const DIAG_SAMPLE_HREF = `#${SAMPLE_ID}`;
 
 export function renderArticle(page, ctx) {
   const parts = [];
@@ -160,7 +161,7 @@ export function renderArticle(page, ctx) {
   <p>ChatGPT · Claude · Gemini 세 곳에 실제로 물어 우리 캠핑장이 답변에 나오는지 확인해 드립니다. 캠핑장 이름 · 홈페이지 주소 · 이메일 세 가지를 진단 화면에서 넣으시면 됩니다. 하루 20건 한정입니다.</p>
   <p class="diag-cta-actions">
     <a class="btn btn-primary" href="${DIAG_TOOL_URL}" target="_blank" rel="noopener">무료로 AI 노출 진단받기</a>
-    <a class="btn" href="${DIAG_SAMPLE_URL}" target="_blank" rel="noopener">진단서 샘플 보기</a>
+    <a class="btn" href="${DIAG_SAMPLE_HREF}" data-sample-open>진단서 샘플 보기</a>
   </p>
 </aside>`);
   }

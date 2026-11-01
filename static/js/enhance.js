@@ -280,5 +280,81 @@
         io3.observe(bars[c]);
       }
     }
+
+    /* 6) 진단 리포트 샘플 창 (2026-11-01) — sample-viewer.mjs 가 만든 마크업
+     *
+     * 창 · 쪽 · 잠금 안내는 이미 마크업에 다 있다. 여기서는 열고 닫고,
+     * is-on 을 옮겨 한 쪽씩 보이게만 한다. 이 블록이 실패하면 단추가
+     * #sample-report 로 이동해 :target 으로 열리고 쪽이 세로로 이어 보인다.
+     * 열 때 주소에 #을 남기지 않는다 — 닫은 뒤 :target 이 다시 창을 열지 않게.
+     */
+    var sv = document.getElementById('sample-report');
+    if (sv) {
+      root.classList.add('sv-js');
+      var svSlides = sv.querySelectorAll('.sv-slide');
+      var svDots = sv.querySelectorAll('.sv-dot');
+      var svPrev = sv.querySelector('.sv-prev');
+      var svNext = sv.querySelector('.sv-next');
+      var svStage = sv.querySelector('.sv-stage');
+      var svClose = sv.querySelector('.sv-close');
+      var svAt = 0;
+      var svFrom = null;
+
+      var svShow = function (i) {
+        svAt = Math.max(0, Math.min(svSlides.length - 1, i));
+        for (var s = 0; s < svSlides.length; s++) svSlides[s].classList.toggle('is-on', s === svAt);
+        for (var d = 0; d < svDots.length; d++) {
+          svDots[d].setAttribute('aria-current', String(Number(svDots[d].getAttribute('data-sv-go')) === svAt));
+        }
+        if (svPrev) svPrev.disabled = svAt === 0;
+        if (svNext) svNext.disabled = svAt === svSlides.length - 1;
+        if (svStage) svStage.scrollTop = 0;
+      };
+
+      var svOpen = function (e) {
+        if (e) { e.preventDefault(); svFrom = e.currentTarget; }
+        svShow(0);
+        sv.classList.add('is-open');
+        root.classList.add('sv-open');
+        if (svClose) svClose.focus();
+      };
+
+      var svShut = function (e) {
+        if (e) e.preventDefault();
+        sv.classList.remove('is-open');
+        root.classList.remove('sv-open');
+        if (location.hash === '#sample-report' && window.history && history.replaceState) {
+          history.replaceState(null, '', location.pathname + location.search);
+        }
+        if (svFrom) svFrom.focus();
+      };
+
+      var svOpeners = document.querySelectorAll('[data-sample-open]');
+      for (var o = 0; o < svOpeners.length; o++) svOpeners[o].addEventListener('click', svOpen);
+
+      var svExits = sv.querySelectorAll('.sv-close, .sv-exit');
+      for (var x = 0; x < svExits.length; x++) svExits[x].addEventListener('click', svShut);
+
+      if (svPrev) svPrev.addEventListener('click', function () { svShow(svAt - 1); });
+      if (svNext) svNext.addEventListener('click', function () { svShow(svAt + 1); });
+      for (var t = 0; t < svDots.length; t++) {
+        svDots[t].addEventListener('click', function () {
+          svShow(Number(this.getAttribute('data-sv-go')));
+        });
+      }
+
+      // 바깥 어두운 곳을 누르면 닫는다
+      sv.addEventListener('click', function (e) { if (e.target === sv) svShut(e); });
+
+      document.addEventListener('keydown', function (e) {
+        if (!sv.classList.contains('is-open')) return;
+        if (e.key === 'Escape') svShut(e);
+        else if (e.key === 'ArrowLeft') svShow(svAt - 1);
+        else if (e.key === 'ArrowRight') svShow(svAt + 1);
+      });
+
+      // #sample-report 주소로 바로 들어온 경우 — 같은 창을 쪽 넘김으로 연다
+      if (location.hash === '#sample-report') svOpen(null);
+    }
   });
 })();

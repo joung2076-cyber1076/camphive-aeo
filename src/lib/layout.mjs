@@ -9,6 +9,7 @@ import { CANONICAL_SENTENCE, company } from '../../site.config.mjs';
 import { esc, urlFor, pathFor, assetPath, krDate } from './html.mjs';
 import { renderJsonLd } from './jsonld.mjs';
 import { floatingButtons, LANDING } from './render-landing.mjs';
+import { sampleViewer } from './sample-viewer.mjs';
 
 // 헤더 오른쪽 끝 신청 버튼 (v49 3-4). 홈 헤더와 같은 대상·같은 라벨을 쓴다.
 // 메뉴 링크가 아니라 «신청» 한 개짜리 별도 요소이므로 nav 링크 목록에 넣지 않는다.
@@ -234,6 +235,10 @@ export function renderDocument(page, ctx, graph, main, design = null) {
   // 문서형 페이지는 지금까지대로 main 이 폭을 잡는다.
   const isLanding = page.type === 'landing';
   const useDesign = isLanding && design;
+  // 진단 리포트 샘플 창 — 「진단서 샘플 보기」 단추가 있는 쪽에만 붙인다(2026-11-01).
+  // 단추 목록을 여기 따로 적지 않고 본문에서 표식을 찾는다. 목록을 두 곳에
+  // 적으면 한쪽만 바뀌어 단추는 있는데 창이 없는 쪽이 생긴다.
+  const hasSample = (useDesign ? design.main : main).includes('data-sample-open');
 
   return `<!doctype html>
 <html lang="${esc(ctx.site.lang)}">
@@ -252,7 +257,7 @@ ${main}
 </main>`
 }
 ${useDesign ? '' : isLanding ? floatingButtons(LANDING.floating) : ''}
-${useDesign ? design.footer : footer(ctx, page)}
+${useDesign ? design.footer : footer(ctx, page)}${hasSample ? `\n${sampleViewer()}` : ''}
 ${/*
   enhance.js 는 홈에도 붙인다.
 
