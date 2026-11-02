@@ -281,34 +281,48 @@
       }
     }
 
-    /* 6) 진단 리포트 샘플 창 (2026-11-01) — sample-viewer.mjs 가 만든 마크업
+    /* 6) 진단 리포트 샘플 창 (2026-11-01 · 11-02 전면 개편) — sample-viewer.mjs 가 만든 마크업
      *
-     * 창 · 쪽 · 잠금 안내는 이미 마크업에 다 있다. 여기서는 열고 닫고,
-     * is-on 을 옮겨 한 쪽씩 보이게만 한다. 이 블록이 실패하면 단추가
+     * 창 · 9쪽 · 「N / 9」 · 썸네일 · 잠금 안내 · 확대 보기 그림은 이미 마크업에
+     * 다 있다. 여기서는 열고 닫고, is-on 을 옮겨 한 쪽씩 보이고, 쪽을 누르면
+     * 확대 보기를 켜고, 끌어서 움직이게만 한다. 이 블록이 실패하면 단추가
      * #sample-report 로 이동해 :target 으로 열리고 쪽이 세로로 이어 보인다.
      * 열 때 주소에 #을 남기지 않는다 — 닫은 뒤 :target 이 다시 창을 열지 않게.
      */
     var sv = document.getElementById('sample-report');
     if (sv) {
       root.classList.add('sv-js');
+      var svBox = sv.querySelector('.sv-box');
+      var svMeta = sv.querySelector('.sv-meta');
+      var svStage = sv.querySelector('.sv-stage');
       var svSlides = sv.querySelectorAll('.sv-slide');
-      var svDots = sv.querySelectorAll('.sv-dot');
+      var svAts = sv.querySelectorAll('.sv-at span');
+      var svThumbs = sv.querySelectorAll('.sv-thumb');
       var svPrev = sv.querySelector('.sv-prev');
       var svNext = sv.querySelector('.sv-next');
-      var svStage = sv.querySelector('.sv-stage');
-      var svClose = sv.querySelector('.sv-close');
+      var svClose = sv.querySelector('.sv-close-meta');
+      var svPane = sv.querySelector('.sv-zoom-pane');
+      var svZimgs = sv.querySelectorAll('.sv-zimg');
+      var svZx = sv.querySelector('.sv-zoom-x');
       var svAt = 0;
       var svFrom = null;
+      var svZoomFrom = null;
 
       var svShow = function (i) {
         svAt = Math.max(0, Math.min(svSlides.length - 1, i));
         for (var s = 0; s < svSlides.length; s++) svSlides[s].classList.toggle('is-on', s === svAt);
-        for (var d = 0; d < svDots.length; d++) {
-          svDots[d].setAttribute('aria-current', String(Number(svDots[d].getAttribute('data-sv-go')) === svAt));
+        for (var a = 0; a < svAts.length; a++) svAts[a].classList.toggle('is-on', a === svAt);
+        for (var d = 0; d < svThumbs.length; d++) {
+          svThumbs[d].setAttribute('aria-current', String(Number(svThumbs[d].getAttribute('data-sv-go')) === svAt));
         }
         if (svPrev) svPrev.disabled = svAt === 0;
         if (svNext) svNext.disabled = svAt === svSlides.length - 1;
-        if (svStage) svStage.scrollTop = 0;
+        // 새 쪽의 첫머리가 보이게 — 머리띠를 보고 있을 때는 그대로 둔다
+        // (위에 붙는 .sv-meta 는 붙은 자리를 재므로, 붙지 않는 .sv-stage 로 잰다)
+        if (svBox && svMeta && svStage) {
+          var svTop = svStage.offsetTop - svMeta.offsetHeight;
+          if (svBox.scrollTop > svTop) svBox.scrollTop = svTop;
+        }
       };
 
       var svOpen = function (e) {
@@ -316,11 +330,18 @@
         svShow(0);
         sv.classList.add('is-open');
         root.classList.add('sv-open');
-        if (svClose) svClose.focus();
+        if (svBox) svBox.scrollTop = 0;
+        if (svClose) svClose.focus({ preventScroll: true });
+      };
+
+      var svZoomShut = function () {
+        sv.classList.remove('is-zoom');
+        if (svZoomFrom) svZoomFrom.focus();
       };
 
       var svShut = function (e) {
         if (e) e.preventDefault();
+        sv.classList.remove('is-zoom');
         sv.classList.remove('is-open');
         root.classList.remove('sv-open');
         if (location.hash === '#sample-report' && window.history && history.replaceState) {
@@ -329,18 +350,80 @@
         if (svFrom) svFrom.focus();
       };
 
+      // 쪽을 누르면 확대 보기 — 누른 자리가 화면 가운데 오게
+      var svZoomOpen = function (e) {
+        e.preventDefault();
+        var idx = this.getAttribute('data-sv-zoom');
+        var r = this.getBoundingClientRect();
+        var fx = e.clientX ? (e.clientX - r.left) / r.width : 0.5;
+        var fy = e.clientY ? (e.clientY - r.top) / r.height : 0;
+        var img = null;
+        for (var z = 0; z < svZimgs.length; z++) {
+          var on = svZimgs[z].getAttribute('data-sv-z') === idx;
+          svZimgs[z].classList.toggle('is-on', on);
+          if (on) img = svZimgs[z];
+        }
+        svZoomFrom = this;
+        sv.classList.add('is-zoom');
+        if (img && svPane) {
+          svPane.scrollLeft = Math.max(0, fx * img.offsetWidth - svPane.clientWidth / 2);
+          svPane.scrollTop = Math.max(0, fy * img.offsetHeight - svPane.clientHeight / 2);
+        }
+        if (svZx) svZx.focus();
+      };
+
       var svOpeners = document.querySelectorAll('[data-sample-open]');
       for (var o = 0; o < svOpeners.length; o++) svOpeners[o].addEventListener('click', svOpen);
 
       var svExits = sv.querySelectorAll('.sv-close, .sv-exit');
       for (var x = 0; x < svExits.length; x++) svExits[x].addEventListener('click', svShut);
 
+      var svPapers = sv.querySelectorAll('[data-sv-zoom]');
+      for (var p = 0; p < svPapers.length; p++) svPapers[p].addEventListener('click', svZoomOpen);
+      if (svZx) svZx.addEventListener('click', svZoomShut);
+
       if (svPrev) svPrev.addEventListener('click', function () { svShow(svAt - 1); });
       if (svNext) svNext.addEventListener('click', function () { svShow(svAt + 1); });
-      for (var t = 0; t < svDots.length; t++) {
-        svDots[t].addEventListener('click', function () {
+      for (var t = 0; t < svThumbs.length; t++) {
+        svThumbs[t].addEventListener('click', function () {
           svShow(Number(this.getAttribute('data-sv-go')));
         });
+      }
+
+      // 확대 보기 — 마우스로 끌어서 움직인다(손가락은 브라우저가 밀어 준다)
+      var svDrag = null;
+      if (svPane) {
+        svPane.addEventListener('pointerdown', function (e) {
+          if (e.pointerType !== 'mouse' || e.button !== 0) return;
+          svDrag = { x: e.clientX, y: e.clientY, l: svPane.scrollLeft, t: svPane.scrollTop };
+          svPane.classList.add('is-drag');
+          if (svPane.setPointerCapture) svPane.setPointerCapture(e.pointerId);
+          e.preventDefault();
+        });
+        svPane.addEventListener('pointermove', function (e) {
+          if (!svDrag) return;
+          svPane.scrollLeft = svDrag.l - (e.clientX - svDrag.x);
+          svPane.scrollTop = svDrag.t - (e.clientY - svDrag.y);
+        });
+        var svDragEnd = function () { svDrag = null; svPane.classList.remove('is-drag'); };
+        svPane.addEventListener('pointerup', svDragEnd);
+        svPane.addEventListener('pointercancel', svDragEnd);
+      }
+
+      // 휴대폰 — 쪽을 옆으로 밀어 넘긴다(두 손가락으로 키운 동안은 넘기지 않음)
+      var svSwipe = null;
+      if (svStage) {
+        svStage.addEventListener('touchstart', function (e) {
+          svSwipe = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+        }, { passive: true });
+        svStage.addEventListener('touchend', function (e) {
+          if (!svSwipe || !e.changedTouches.length) return;
+          var dx = e.changedTouches[0].clientX - svSwipe.x;
+          var dy = e.changedTouches[0].clientY - svSwipe.y;
+          svSwipe = null;
+          if (window.visualViewport && window.visualViewport.scale > 1.05) return;
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) svShow(svAt + (dx < 0 ? 1 : -1));
+        }, { passive: true });
       }
 
       // 바깥 어두운 곳을 누르면 닫는다
@@ -348,8 +431,12 @@
 
       document.addEventListener('keydown', function (e) {
         if (!sv.classList.contains('is-open')) return;
-        if (e.key === 'Escape') svShut(e);
-        else if (e.key === 'ArrowLeft') svShow(svAt - 1);
+        if (e.key === 'Escape') {
+          if (sv.classList.contains('is-zoom')) { e.preventDefault(); svZoomShut(); }
+          else svShut(e);
+        } else if (sv.classList.contains('is-zoom')) {
+          return;
+        } else if (e.key === 'ArrowLeft') svShow(svAt - 1);
         else if (e.key === 'ArrowRight') svShow(svAt + 1);
       });
 

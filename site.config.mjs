@@ -27,8 +27,9 @@ export const site = {
    * 절대 URL 기준 도메인 (https 포함, 끝에 슬래시 없음)
    *
    * 메인 도메인은 이 하나뿐이다. canonical·sitemap·JSON-LD의 모든 절대 URL이
-   * 여기서 나온다. 서브 도메인(aimarketing.ai.kr)은 이 주소로 301 넘길 뿐이며
-   * 여기에 적지 않는다. 두 주소가 같은 본문을 내보내면 AI가 어느 쪽이 원본인지
+   * 여기서 나온다. 보조 주소(aimarketing.ai.kr)는 쓰지 않는다(대표 결정
+   * 2026-10-31 「안 씀」 · 넘기기 설정 없음 · 다음 갱신 때 연장 안 함 · 대장
+   * 대기표 14). 두 주소가 같은 본문을 내보내면 AI가 어느 쪽이 원본인지
    * 판단하지 못해 양쪽 다 인용에서 밀린다.
    */
   baseUrl: 'https://aicampingmarketing.co.kr',
