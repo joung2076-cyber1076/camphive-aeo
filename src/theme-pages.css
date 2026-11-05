@@ -196,10 +196,12 @@ body[class^="p-"] .site-footer .doc-label{font-size:15px;font-weight:700;color:v
 body[class^="p-"] .site-footer .doc-status{font-family:var(--t-font);font-size:13px;letter-spacing:0;color:var(--t-sub)}
 body[class^="p-"] .site-footer .doc-icon{color:var(--t-sub)}
 body[class^="p-"] .site-footer .doc-card:hover .doc-icon{color:var(--t-text)}
-body[class^="p-"] .site-footer .footer-nav-wrap{margin-top:48px;padding-top:24px;border-top:1px solid var(--t-line)}
+/* 바닥글 안의 가로선은 글자 폭에 맞춘다(.wrap 의 좌우 여백 32px 안쪽) — 테두리로 그리면 여백까지 뻗어 글자 줄과 어긋난다 */
+body[class^="p-"] .site-footer :is(.footer-nav-wrap,.footer-bottom){border-top:0;background:linear-gradient(var(--t-line),var(--t-line)) center top/calc(100% - 64px) 1px no-repeat}
+body[class^="p-"] .site-footer .footer-nav-wrap{margin-top:48px;padding-top:24px}
 body[class^="p-"] .site-footer .footer-sitemap a{font-size:15px;color:var(--t-sub)}
 body[class^="p-"] .site-footer .footer-sitemap a:hover{color:var(--t-text)}
-body[class^="p-"] .site-footer .footer-bottom{margin-top:40px;padding-top:24px;border-top:1px solid var(--t-line)}
+body[class^="p-"] .site-footer .footer-bottom{margin-top:40px;padding-top:24px}
 body[class^="p-"] .site-footer :is(.updated-line,.copyright){margin:0;font-family:var(--t-font);font-size:13px;line-height:1.7;letter-spacing:0;color:var(--t-sub)}
 body[class^="p-"] .site-footer .footer-links a{color:var(--t-sub)}
 
@@ -236,6 +238,7 @@ body[class^="p-"] .site-footer .footer-links a{color:var(--t-sub)}
   body[class^="p-"] .form-block{padding:20px}
   body[class^="p-"] .site-footer{padding:48px 0 32px}
   body[class^="p-"] .site-footer .footer-nav-wrap{margin-top:32px}
+  body[class^="p-"] .site-footer :is(.footer-nav-wrap,.footer-bottom){background-size:calc(100% - 32px) 1px}
   body[class^="p-"] .site-footer .footer-bottom{margin-top:32px}
 }
 
@@ -292,6 +295,8 @@ body.p-privacy .content > .related{padding-top:40px}
 #sample-report a.sv-go:hover{background:var(--t-accent-hover)}
 #sample-report a.sv-exit{border-color:var(--t-faint);border-radius:var(--t-r-btn);color:var(--t-text)}
 #sample-report .sv-nav{background:var(--t-surface);border-color:var(--t-faint);border-radius:var(--t-r-btn);color:var(--t-text)}
+/* 첫 쪽의 「이전」 — 흐리게(opacity .35 · 대비 3.0)가 아니라 보조색 글자 · 선 색 테두리로 「누를 수 없음」을 보인다 */
+#sample-report .sv-nav:disabled{opacity:1;color:var(--t-sub);border-color:var(--t-line)}
 #sample-report .sv-thumbs{background:var(--t-bg)}
 #sample-report .sv-thumb span{background:var(--t-surface);color:var(--t-text)}
 #sample-report .sv-thumb[aria-current="true"]{border-color:var(--t-text)}

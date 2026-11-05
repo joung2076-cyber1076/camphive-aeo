@@ -183,8 +183,7 @@ function footer(ctx, page) {
            AI가 "브랜드가 여러 개인 회사"로 읽어 관문③(식별)에서 손해다.
            "캠핑하이브 AEO"는 정본 문장 안에 이미 들어 있다. -->
       <p class="footer-logo">
-        <img class="footer-mark" src="${assetPath('img/logo-mark.png')}" alt="캠핑하이브 심볼" width="28" height="28" decoding="async" loading="lazy">
-        CAMPINGHIVE
+        <img class="footer-logo-img" src="${assetPath('img/logo-header.png')}" alt="캠핑하이브" width="183" height="24" decoding="async" loading="lazy">
       </p>
       <h2 class="footer-title">${esc(site.legalName)}</h2>
 

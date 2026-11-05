@@ -56,9 +56,22 @@ export function renderTable(table) {
   const cols = table.columns ?? [];
   const rows = table.rows ?? [];
 
+  // v66 (2026-11-05) — 숫자 칸 오른쪽 정렬(지시서 v3 3절 표). 첫 칸 밖의 열에서 빈칸이 아닌 값이
+  // 전부 숫자 꼴(숫자 + 단위 · 기호)이면 그 열의 머리 칸과 값 칸에 is-num 을 붙인다. 글자는 바꾸지 않는다.
+  const NUM = /^[\s~약±+\-–−]*[\d][\d\s.,%~+\-–−×→↓↑:/]*(원|만|억|천|배|회|건|곳|개|년|월|일|주|시간|분|초|명|pt|점|위|면|px|%|만 원|억 원|천 원)?[\s.,%)]*$/;
+  const numCol = cols.map((_, i) => {
+    if (i === 0) return false;
+    const vals = rows.map((r) => String(r[i] ?? '').trim()).filter(Boolean);
+    return vals.length > 0 && vals.every((v) => v.length <= 18 && NUM.test(v));
+  });
+  const cls = (i, base = '') => {
+    const c = [base, numCol[i] ? 'is-num' : ''].filter(Boolean).join(' ');
+    return c ? ` class="${c}"` : '';
+  };
+
   const head = cols.length
     ? `<thead><tr>${cols
-        .map((c, i) => `<th scope="col"${i === 0 ? ' class="col-key"' : ''}>${esc(c)}</th>`)
+        .map((c, i) => `<th scope="col"${cls(i, i === 0 ? 'col-key' : '')}>${esc(c)}</th>`)
         .join('')}</tr></thead>`
     : '';
 
@@ -69,7 +82,7 @@ export function renderTable(table) {
           .map((cell, i) =>
             i === 0
               ? `<th scope="row">${esc(cell)}</th>`
-              : `<td>${esc(cell)}</td>`
+              : `<td${cls(i)}>${esc(cell)}</td>`
           )
           .join('')}</tr>`
     )

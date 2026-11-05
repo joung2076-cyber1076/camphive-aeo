@@ -48,6 +48,21 @@ body{background:var(--t-bg);color:var(--t-text);font-family:var(--t-font);word-b
 .site-header .hdr-tel:hover{color:var(--t-text)}
 .site-header .nav-cta{min-height:40px}
 
+/* 768~1100px — 메뉴가 로고 · 전화번호와 겹치지 않게(하위 쪽 작업자 실측 900px 겹침) */
+@media (max-width:1100px) and (min-width:768px){
+  .site-header .hdr-tel{display:none}
+  .site-header .site-nav{gap:18px}
+  .site-header .site-nav a{font-size:14px}
+}
+@media (max-width:920px) and (min-width:768px){
+  .site-header .hdr{height:auto;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;row-gap:6px}
+  .site-header .site-nav{order:3;flex:1 0 100%;justify-content:flex-start;gap:20px}
+}
+
+/* 바닥글 공식 로고 · 숫자 칸 오른쪽 정렬(15쪽 공통) */
+.footer-logo-img{display:block;height:24px;width:auto}
+body[class^="p-"] .data-table :is(td,th).is-num{text-align:right}
+
 /* ── 휴대폰 하단 신청 바 (PC 는 머리 줄이 대신한다) ── */
 .apply-bar{display:none}
 @media (max-width:767px){
