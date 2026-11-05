@@ -32,32 +32,32 @@
   /* ── 층위 — 시안 배경 4단계 ──────────────────────────────
      시안은 섹션을 번갈아 칠해 경계를 만든다. 선이 아니라 명도차로
      끊는 구조라, 두 값이 가까워 보여도 붙여 놓으면 층이 보인다. */
-  --bg: #0B0E13;          /* 기본 섹션 */
-  --alt: #0F1319;         /* 교차 섹션 — bg 와 번갈아 쓴다 */
-  --surface: #161B22;     /* 카드 */
-  --deep: #12161D;        /* 다크 패널 (강조 블록) */
+  --bg: #0A0E0C;          /* 기본 섹션 */
+  --alt: #0A0E0C;         /* 교차 섹션 — bg 와 번갈아 쓴다 */
+  --surface: #141C18;     /* 카드 */
+  --deep: #141C18;        /* 다크 패널 (강조 블록) */
   --cover: #08090C;       /* 커버·오프닝 — 가장 어둡다 */
   --footer-bg: #070910;
 
   /* ── 액센트 블루 ──────────────────────────────────────── */
-  --accent: #3B82F6;            /* 버튼 */
-  --accent-hover: #2563EB;      /* 버튼 호버 */
-  --btn: #2563EB;               /* 1차 버튼 채움 — 흰 글자 5.17:1 (AA). D32 · 2026-08-22 */
-  --btn-hover: #3B82F6;         /* 1차 버튼 호버 */
-  --accent-bright: #60A5FA;     /* 강조 텍스트 — 배경 위에서 이게 더 읽힌다 */
+  --accent: #00E676;            /* 버튼 */
+  --accent-hover: #00E676;      /* 버튼 호버 */
+  --btn: #00E676;               /* 1차 버튼 채움 — 흰 글자 5.17:1 (AA). D32 · 2026-08-22 */
+  --btn-hover: #00E676;         /* 1차 버튼 호버 */
+  --accent-bright: #00E676;     /* 강조 텍스트 — 배경 위에서 이게 더 읽힌다 */
   --accent-ink: #FFFFFF;        /* 블루 위에 얹는 글자색 */
-  --accent-soft: rgba(59, 130, 246, 0.20);   /* 형광펜 */
-  --accent-line: rgba(59, 130, 246, 0.40);   /* 호버 테두리 */
-  --accent-dim: rgba(59, 130, 246, 0.08);    /* 2차 CTA 호버 배경 */
-  --accent-glow: rgba(59, 130, 246, 0.35);   /* 커버 발광·버튼 그림자 */
+  --accent-soft: rgba(0,230,118, 0.20);   /* 형광펜 */
+  --accent-line: rgba(0,230,118, 0.40);   /* 호버 테두리 */
+  --accent-dim: rgba(0,230,118, 0.08);    /* 2차 CTA 호버 배경 */
+  --accent-glow: rgba(0,230,118, 0.35);   /* 커버 발광·버튼 그림자 */
 
   /* ── 상태색 ───────────────────────────────────────────────
      빨강을 쓰지 않는다. 2026-08-12 수정지시 A-3 — 「차단」이 아니라
      「미흡」이므로 위험(빨강)에서 주의(앰버)로 낮춘 것이다. */
-  --warn: #E8A33D;        /* 주의 — 앰버 */
+  --warn: #FF5722;        /* 주의 — 앰버 */
   --caution: #C9903F;     /* 주의(약) */
   --success: #4ADE80;
-  --danger: #E8A33D;      /* 구 이름 유지. 값은 앰버다 */
+  --danger: #FF5722;      /* 구 이름 유지. 값은 앰버다 */
   --danger-soft: rgba(232, 163, 61, 0.12);
 
   /* ── 선 ─────────────────────────────────────────────────── */
@@ -68,9 +68,9 @@
   /* ── 글자 — 시안은 6단계를 쓴다 ─────────────────────────── */
   --text-strong: #FFFFFF; /* 제목 */
   --text: #E7EBF2;        /* 본문 */
-  --text-2: #C4CCD8;
+  --text-2: #9AA8A1;
   --text-3: #AFB8C6;
-  --muted: #8C96A6;
+  --muted: #9AA8A1;
   --caption: #7C8697;
 
   /* ── 모서리 ─────────────────────────────────────────────── */
@@ -287,10 +287,10 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 
 /* 헤더 신청 버튼 (v49 3-4) — 메뉴 오른쪽 끝, 메뉴 링크가 아닌 «별도 요소».
    홈 헤더의 버튼과 라벨·대상·모양을 맞춘다(무료 진단 받기 · 진단 도구).
-   색은 승인 토큰만 쓴다 — 채움 --btn(#2563EB) · 글자 --accent-ink(#FFFFFF).
+   색은 승인 토큰만 쓴다 — 채움 --btn(#00E676) · 글자 --accent-ink(#FFFFFF).
    .site-nav 에 margin-left:auto 를 줘 «메뉴+버튼»이 한 덩어리로 오른쪽에 붙는다.
    선택자를 .site-header 로 한 단계 올린 이유: FAQ 계열은 body[class^="p-faq"] a
-   가 링크 색을 --t1(#2563EB)로 덮는데, 그 값이 버튼 채움색과 «같은 파랑»이라
+   가 링크 색을 --t1(#00E676)로 덮는데, 그 값이 버튼 채움색과 «같은 파랑»이라
    .nav-cta 단독(0,1,0)으로는 져서 글자가 배경에 묻혀 보이지 않았다(375px 눈 확인에서 발견).
    (버튼이 생기기 전에는 자식이 둘이라 space-between 만으로 붙어 있었다.) */
 .site-nav { margin-left: auto; }
@@ -340,7 +340,7 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   font-size: 1rem; font-weight: 700; font-family: inherit;
   cursor: pointer; transition: filter 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
-/* 1차 — 블루 채움 + 흰 글자 (#2563EB · 5.17:1) · 호버 #3B82F6 */
+/* 1차 — 블루 채움 + 흰 글자 (#00E676 · 5.17:1) · 호버 #00E676 */
 .btn-primary { background: var(--btn); color: var(--accent-ink); }
 .btn-primary:hover { background: var(--btn-hover); }
 /* 2차 — 테두리형 */
@@ -408,13 +408,13 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 }
 .cover-glow {
   position: absolute; inset: 0;
-  background: radial-gradient(60% 55% at 50% 45%, rgba(59, 130, 246, 0.18), transparent 72%);
+  background: radial-gradient(60% 55% at 50% 45%, rgba(0,230,118, 0.18), transparent 72%);
   animation: heroGlow 16s ease-in-out infinite;
 }
 .cover-sweep { position: absolute; top: 0; bottom: 0; left: 0; will-change: transform; }
 .cover-sweep-a {
   width: 34%;
-  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.22), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,230,118, 0.22), transparent);
   animation: sweepX 34s ease-in-out infinite;
 }
 .cover-sweep-b {
@@ -425,7 +425,7 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 .cover-vignette { position: absolute; inset: 0; animation: vignettePulse 24s ease-in-out infinite; }
 .cover-scan {
   position: absolute; left: 0; right: 0; top: -2px; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,230,118, 0.55), transparent);
   animation: scanLine 26s linear infinite;
 }
 
@@ -482,7 +482,7 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(
     60% 55% at 50% 45%,
-    rgba(59, 130, 246, 0.18) 0%,
+    rgba(0,230,118, 0.18) 0%,
     transparent 72%
   );
 }
@@ -506,8 +506,8 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   font-family: var(--mono); font-size: 13px;
 }
 .ai-chip-glyph { font-size: 14px; line-height: 1; }
-.ai-chip-gpt    { border: 1px solid rgba(16, 163, 127, 0.45); background: rgba(16, 163, 127, 0.10); color: #3DD6AC; }
-.ai-chip-claude { border: 1px solid rgba(217, 119, 87, 0.45); background: rgba(217, 119, 87, 0.10); color: #E89476; }
+.ai-chip-gpt    { border: 1px solid rgba(16, 163, 127, 0.45); background: rgba(16, 163, 127, 0.10); color: #10A37F; }
+.ai-chip-claude { border: 1px solid rgba(217, 119, 87, 0.45); background: rgba(217, 119, 87, 0.10); color: #D4704F; }
 .ai-chip-gemini { border: 1px solid rgba(66, 133, 244, 0.45); background: rgba(66, 133, 244, 0.10); color: #7BA9F7; }
 .ai-chip-note {
   display: inline-flex; align-items: center; padding: 8px 4px;
@@ -525,7 +525,7 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 /* 형광펜은 밑줄 형태로 글자 아래만 덮는다. 시안의 inset box-shadow 방식 */
 .hero-lead .mark {
   background: none; font-weight: 700; color: var(--text-strong);
-  box-shadow: inset 0 -10px 0 rgba(59, 130, 246, 0.45);
+  box-shadow: inset 0 -10px 0 rgba(0,230,118, 0.45);
 }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 18px; }
 .btn-arrow { font-family: var(--mono); }
@@ -587,8 +587,8 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 .live-rows { display: grid; gap: 12px; }
 .live-row { display: flex; align-items: center; gap: 14px; }
 .live-name { width: 78px; flex: none; font-family: var(--mono); font-size: 13px; }
-.live-gpt    { color: #3DD6AC; }
-.live-claude { color: #E89476; }
+.live-gpt    { color: #10A37F; }
+.live-claude { color: #D4704F; }
 .live-gemini { color: #7BA9F7; }
 .live-track {
   flex: 1; height: 8px; border-radius: 4px;
@@ -596,7 +596,7 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 }
 .live-scan {
   position: absolute; top: 0; left: 0; width: 32%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.85), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0,230,118, 0.85), transparent);
   animation: trackScan 2.6s ease-in-out var(--lag, 0s) infinite;
 }
 .live-val {
@@ -642,8 +642,8 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
   background: var(--accent-hover); font-size: 15px; line-height: 1.6; color: #FFFFFF;
 }
 .feed-engine { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 10px; font-size: 14px; font-weight: 700; }
-.feed-gpt { color: #3DD6AC; }
-.feed-claude { color: #E89476; }
+.feed-gpt { color: #10A37F; }
+.feed-claude { color: #D4704F; }
 .feed-gemini { color: #7BA9F7; }
 .feed-a p {
   margin: 0; padding: 14px 18px; border-radius: 4px 14px 14px 14px;
@@ -678,7 +678,7 @@ small, .caption { font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
 .proc-icon {
   display: inline-flex; align-items: center; justify-content: center;
   width: 52px; height: 52px; margin-bottom: 22px; border-radius: 12px;
-  background: rgba(59, 130, 246, 0.14); border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(0,230,118, 0.14); border: 1px solid rgba(0,230,118, 0.35);
   color: var(--accent-bright);
 }
 .proc-card h3 { margin: 0 0 14px; font-size: 18px; font-weight: 700; color: var(--text-strong); }
@@ -1193,7 +1193,7 @@ body[class^="p-faq"] {
   --f-line: #e3e8ef;
   --f-head: #f5f7fa;
   /* 구획 4색 — 진한 색과 연한 배경이 한 쌍이다 */
-  --t1: #2563EB;  --t1-bg: #eff4fe;
+  --t1: #00E676;  --t1-bg: #eff4fe;
   --t2: #0e7a4a;  --t2-bg: #ebf7f0;
   --t3: #b45309;  --t3-bg: #fdf3e7;
   --t4: #6d28d9;  --t4-bg: #f3effd;
@@ -1231,7 +1231,7 @@ body[class^="p-faq"] .updated,
 body[class^="p-faq"] .related-note,
 body[class^="p-faq"] small,
 body[class^="p-faq"] .caption { color: var(--f-muted); }
-/* 본문 링크는 .content a:not(.btn) 이 --accent(#3B82F6)로 잡고 있다.
+/* 본문 링크는 .content a:not(.btn) 이 --accent(#00E676)로 잡고 있다.
    승인 8색 밖이라 같은 자리를 같은 무게로 덮는다 — !important 를 쓰지 않는다. */
 body[class^="p-faq"] a { color: var(--t1); }
 body[class^="p-faq"] .content a:not(.btn) { color: var(--t1); }
@@ -1239,7 +1239,7 @@ body[class^="p-faq"] .content a:not(.btn) { color: var(--t1); }
 /* 강조(strong) — v46 BA · 사장님 판정 「강조는 색이 아니라 굵기로」.
    기본 규칙 strong { color: var(--text) }(150줄)는 다크 본문색 #E7EBF2 를 물고 있어
    흰 바탕에서 대비 1.20:1 — 사실상 보이지 않았다(v45 AX 실측, 5페이지 120곳 전수 동일).
-   v45 는 #2563EB 로 올렸으나(5.17:1) 120곳이 전부 파랑이 되어 사장님이 검정을 택했다.
+   v45 는 #00E676 로 올렸으나(5.17:1) 120곳이 전부 파랑이 되어 사장님이 검정을 택했다.
    색은 본문색 #1d2a3a(15.5:1), 굵기 700 은 기본 규칙 그대로 둔다 — 굵기가 유일한 강조다.
    링크는 건드리지 않는다(BA-3) — 누를 수 있는 것과 강조는 다르다. */
 body[class^="p-faq"] .content strong,

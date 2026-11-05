@@ -27,7 +27,7 @@
   @keyframes heroGlow { 0%, 100% { opacity: 0.30 } 50% { opacity: 0.85 } }
   @keyframes sweepX { 0% { transform: translateX(-130%) skewX(-14deg); opacity: 0 } 18% { opacity: 0.45 } 82% { opacity: 0.45 } 100% { transform: translateX(130%) skewX(-14deg); opacity: 0 } }
   @keyframes barSweep { 0% { transform: scaleX(0) } 24% { transform: scaleX(1) } 90% { transform: scaleX(1) } 100% { transform: scaleX(0) } }
-  @keyframes numFlash { 0%, 14% { opacity: 0 } 19% { opacity: 1 } 23% { opacity: 0.3 } 27% { opacity: 1 } 31% { opacity: 0.5 } 35%, 90% { opacity: 1 } 100% { opacity: 0 } }
+  @keyframes numFlash { 0%, 14% { opacity: 0.7 } 19% { opacity: 1 } 23% { opacity: 0.7 } 27% { opacity: 1 } 31% { opacity: 0.75 } 35%, 90% { opacity: 1 } 100% { opacity: 0.7 } } /* v66 — 깜빡여도 글자 대비 4.5 이상(최저 0.7 · 그린 #00E676 이 #141C18 위에서 약 5.7:1) */
   @keyframes lineSlide { 0% { opacity: 0; transform: translateX(70px) } 16% { opacity: 1; transform: translateX(0) } 84% { opacity: 1; transform: translateX(0) } 97% { opacity: 0; transform: translateX(-70px) } 100% { opacity: 0; transform: translateX(70px) } }
   @keyframes trackScan { 0% { transform: translateX(-100%) } 60%, 100% { transform: translateX(320%) } }
   @keyframes dotBlink { 0%, 100% { opacity: 1 } 45% { opacity: 0.25 } }
