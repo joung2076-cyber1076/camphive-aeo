@@ -80,20 +80,32 @@ function header(page, ctx) {
     })
     .join('\n        ');
 
-  // 심볼 + 텍스트. 심볼이 안 떠도 상호는 글자로 남아야 하므로
-  // 로고를 글자 대체물로 쓰지 않는다.
-  // "Korea's Number One" 류의 자칭 수식어는 넣지 않는다.
+  // 2026-11-05 v66 전체 개편(제니 최종 지시서 v3 · 대표 확정) — 15쪽이 같은 머리 줄을 쓴다(홈 포함).
+  // 로고는 공식 로고 원본(logo-light.png)의 위쪽 줄만 잘라 줄인 그림이다(다시 그리지 않음).
+  // 원본 아래 줄의 "Korea's Number One" 은 자칭 수식어라 잘라 냈다. 상호는 alt 글자로 남는다.
+  // 신청 단추는 줄인 말 「무료 진단 신청」(지시서 3절 · 버튼).
+  const tel = company.telephone;
   return `<header class="site-header">
-  <div class="wrap">
-    <a class="brand" href="${esc(pathFor(''))}">
-      <img class="brand-mark" src="${assetPath('img/logo-mark.png')}" alt="캠핑하이브 심볼" width="32" height="32" decoding="async">
-      <span class="brand-name">CAMPINGHIVE</span>
-      <span class="brand-sub">Since 2013 · 250개 현장</span>
+  <div class="wrap hdr">
+    <a class="brand" href="${esc(pathFor(''))}" aria-label="캠핑하이브 홈">
+      <img class="brand-logo" src="${assetPath('img/logo-header.png')}" alt="캠핑하이브" width="228" height="30" decoding="async">
     </a>
     ${links ? `<nav class="site-nav" aria-label="주요 메뉴">\n        ${links}\n      </nav>` : ''}
-    <a class="nav-cta" href="${esc(DIAG_TOOL_URL)}" target="_blank" rel="noopener" data-ga="diag_header">무료 진단 받기</a>
+    <div class="hdr-right">
+      <a class="hdr-tel num" href="tel:${esc(tel.replace(/-/g, ''))}">${esc(tel)}</a>
+      <a class="btn btn-p btn-s nav-cta" href="${esc(DIAG_TOOL_URL)}" target="_blank" rel="noopener" data-ga="diag_header">무료 진단 신청</a>
+    </div>
   </div>
 </header>`;
+}
+
+// 따라다니는 신청 바 — 휴대폰 하단(PC 는 머리 줄이 같은 일을 한다 · CSS 로 휴대폰에서만 보임).
+// 지시서 v3 6절: 「하루 20건 무료 진단 · 내 캠핑장 AI 노출 무료 진단 신청」. 「하루 20곳 한정」 금지.
+function applyBar() {
+  return `<div class="apply-bar" role="complementary" aria-label="무료 진단 신청">
+  <span class="apply-bar-note">하루 20건 무료 진단</span>
+  <a class="btn btn-p" href="${esc(DIAG_TOOL_URL)}" target="_blank" rel="noopener" data-ga="diag_bar">내 캠핑장 AI 노출 무료 진단 신청</a>
+</div>`;
 }
 
 function footer(ctx, page) {
@@ -248,7 +260,7 @@ ${head(page, ctx, graph)}
 <body${useDesign ? '' : ` class="p-${esc(page.slug.replace(/\//g, '-'))}"`}>
 <a class="skip" href="#main">본문 바로가기</a>
 ${useDesign ? design.style : ''}
-${useDesign ? design.header : header(page, ctx)}
+${/* v66 — 홈도 15쪽 공통 머리 줄을 쓴다(시안 머리 줄은 쓰지 않음) */ header(page, ctx)}
 ${
   useDesign
     ? design.main
@@ -258,6 +270,7 @@ ${main}
 }
 ${useDesign ? '' : isLanding ? floatingButtons(LANDING.floating) : ''}
 ${useDesign ? design.footer : footer(ctx, page)}${hasSample ? `\n${sampleViewer()}` : ''}
+${applyBar()}
 ${/*
   enhance.js 는 홈에도 붙인다.
 

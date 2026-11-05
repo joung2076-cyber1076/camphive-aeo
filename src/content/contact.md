@@ -30,7 +30,7 @@ related:
     note: 하루 20건 무료 진단
   - slug: about
     label: 캠핑하이브는 어떤 회사야?
-    note: 2013년부터 250개 현장 제작·시공
+    note: 2013년부터 캠핑장 250곳 이상 제작·시공
   - slug: service
     label: AI 검색에 우리 캠핑장 나오게 하려면 어떻게 해?
     note: 네 단계와 각 단계 확인 방법

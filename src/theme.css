@@ -1,0 +1,66 @@
+/* ─────────────────────────────────────────────────────────────
+   theme.css — 15쪽 공통 디자인 한 벌 (v66 · 2026-11-05)
+   근거: 제니 「AEO홈피 디자인개편 최종지시서 v3」 3절 · 대표 확정 기준 화면(시안 A v3)
+   빌드가 이 파일과 theme-pages.css 를 styles.css(하위 14쪽) · home.css(홈) 뒤에 붙인다.
+   ⚠ 여기에는 요소 선택자(h1 · p · section …)를 맨몸으로 쓰지 않는다 — 홈 시안 위에 덧칠된다.
+      공통 부품은 class 로만 잡는다.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  --t-bg:#0A0E0C; --t-surface:#141C18; --t-inner:#101713; --t-line:#1F2D27;
+  --t-accent:#00E676; --t-accent-hover:#2bf08c; --t-on-accent:#06110b;
+  --t-glow:rgba(0,230,118,.25); --t-warn:#FF5722;
+  --t-text:#F2F5F3; --t-sub:#9AA8A1; --t-faint:#5E6B65;
+  /* AI 3사 — 위젯 · 3사 그래프에서만. 값과 순서(ChatGPT · Gemini · Claude)를 바꾸지 않는다 */
+  --t-gpt:#10A37F; --t-gem:#4C8DF6; --t-cla:#D4704F;
+  --t-r:16px; --t-r-in:12px; --t-r-btn:10px;
+  --t-font:"Noto Sans KR","Noto Sans CJK KR",-apple-system,"Segoe UI",sans-serif;
+}
+html{background:var(--t-bg);scroll-padding-top:80px}
+body{background:var(--t-bg);color:var(--t-text);font-family:var(--t-font);word-break:keep-all;-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* 건너뛰기 링크 */
+.skip{position:absolute;left:-9999px;top:8px;z-index:200;background:var(--t-accent);color:var(--t-on-accent);padding:10px 16px;border-radius:var(--t-r-btn);font-weight:700}
+.skip:focus{left:16px}
+
+/* ── 버튼 ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;border-radius:var(--t-r-btn);font-weight:700;cursor:pointer;text-decoration:none;transition:transform .15s,background .2s;font-family:var(--t-font)}
+.btn:active{transform:translateY(1px)}
+.btn-p{background:var(--t-accent);color:var(--t-on-accent)!important;padding:16px 26px;font-size:16px;line-height:1.2;border:0}
+.btn-p:hover{background:var(--t-accent-hover);color:var(--t-on-accent)}
+.btn-p:focus-visible{outline:2px solid var(--t-text);outline-offset:3px}
+.btn-s{padding:9px 16px;font-size:14px}
+.link-u{color:var(--t-text);font-weight:600;font-size:15.5px;text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--t-faint)}
+.link-u:hover{text-decoration-color:var(--t-accent)}
+
+/* ── 머리 줄 (15쪽 같음) ── */
+.site-header{position:sticky;top:0;z-index:60;background:rgba(10,14,12,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--t-line)}
+.site-header .hdr{max-width:1240px;margin:0 auto;padding:0 32px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.site-header .brand{display:flex;align-items:center;flex:none;text-decoration:none}
+.site-header .brand-logo{display:block;height:28px;width:auto}
+.site-header .site-nav{display:flex;align-items:center;gap:28px;flex:1 1 auto;justify-content:center;min-width:0}
+.site-header .site-nav a{color:var(--t-sub);font-size:14.5px;font-weight:500;text-decoration:none;white-space:nowrap;padding:6px 0}
+.site-header .site-nav a:hover{color:var(--t-text)}
+.site-header .site-nav a[aria-current="page"]{color:var(--t-text);font-weight:700}
+.site-header .hdr-right{display:flex;align-items:center;gap:20px;flex:none}
+.site-header .hdr-tel{color:var(--t-sub);font-size:14px;text-decoration:none}
+.site-header .hdr-tel:hover{color:var(--t-text)}
+.site-header .nav-cta{min-height:40px}
+
+/* ── 휴대폰 하단 신청 바 (PC 는 머리 줄이 대신한다) ── */
+.apply-bar{display:none}
+@media (max-width:767px){
+  .site-header .hdr{height:60px;padding:0 16px}
+  .site-header .site-nav,.site-header .hdr-tel{display:none}
+  .site-header .brand-logo{height:24px}
+  .site-header .nav-cta{padding:8px 12px;font-size:13px;min-height:36px}
+  .apply-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;align-items:center;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(10,14,12,.96);border-top:1px solid var(--t-line)}
+  .apply-bar-note{flex:none;font-size:12px;color:var(--t-sub);max-width:5.5em;line-height:1.3}
+  .apply-bar .btn{flex:1 1 auto;min-width:0;padding:13px 10px;font-size:14px;white-space:normal;text-align:center}
+  body{padding-bottom:76px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btn{transition:none}
+}

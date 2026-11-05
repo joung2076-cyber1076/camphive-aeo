@@ -283,7 +283,7 @@
 
     /* 6) 진단 리포트 샘플 창 (2026-11-01 · 11-02 전면 개편) — sample-viewer.mjs 가 만든 마크업
      *
-     * 창 · 9쪽 · 「N / 9」 · 썸네일 · 잠금 안내 · 확대 보기 그림은 이미 마크업에
+     * 창 · 10쪽(2026-11-05 v66 · 새 리포트) · 「N / 10」 · 썸네일 · 잠금 안내 · 확대 보기 그림은 이미 마크업에
      * 다 있다. 여기서는 열고 닫고, is-on 을 옮겨 한 쪽씩 보이고, 쪽을 누르면
      * 확대 보기를 켜고, 끌어서 움직이게만 한다. 이 블록이 실패하면 단추가
      * #sample-report 로 이동해 :target 으로 열리고 쪽이 세로로 이어 보인다.
@@ -489,6 +489,102 @@
         });
       }
       faqApply();
+    }
+
+    /* 8) 홈 첫 화면 위젯 (2026-11-05 v66 · 기준 화면 시안 A v3 그대로)
+     *
+     * 위젯이 화면에 들어올 때 «1회만» 돈다: 0~1.2초 줄 등장 → 1.5초 숫자 · 상태 전환 → 3초 그린 빛.
+     * 그 뒤 숫자는 멈추고 코어(링 회전 · 파동 · 레이더)만 CSS 로 계속 돈다.
+     * 숫자는 카운트업 동안 textContent 를 바꾸고 끝 값(마크업의 data-to · 94)에서 멈춘다 — 글자를 새로 만들지 않는다.
+     * 움직임 줄이기 설정이면 완성 장면(94 · 목표 시나리오)을 바로 정지 화면으로 보여 준다.
+     * 스크립트가 없으면 처음 상태(31 · 예시 화면)가 그대로 보인다(줄은 숨기지 않는다 — armed 는 여기서만 붙는다).
+     */
+    var hw = document.getElementById('hw');
+    if (hw) {
+      var hwSv = document.getElementById('hw-sv');
+      var hwG = document.getElementById('hw-g');
+      var hwLab = document.getElementById('hw-lab');
+      var hwEx = document.getElementById('hw-ex');
+      var hwRows = hw.querySelectorAll('.h-row');
+      var hwBars = hw.querySelectorAll('.h-bar');
+      var hwCount = function (el, from, to, ms) {
+        if (reduced || !window.requestAnimationFrame) { el.textContent = String(to); return; }
+        var t0 = performance.now();
+        var step = function (t) {
+          var p = Math.min(1, (t - t0) / ms);
+          var e = 1 - Math.pow(1 - p, 3);
+          el.textContent = String(Math.round(from + (to - from) * e));
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      var hwRun = function () {
+        var T = reduced ? 0 : 1;
+        hw.classList.add('go');
+        setTimeout(function () {
+          if (hwSv) hwCount(hwSv, 31, 94, 1500);
+          if (hwG) hwG.style.width = '94%';
+          for (var b = 0; b < hwBars.length; b++) {
+            var pv = hwBars[b].querySelector('.h-pv');
+            if (!pv) continue;
+            var to = Number(pv.getAttribute('data-to'));
+            hwBars[b].style.setProperty('--w', to + '%');
+            hwCount(pv, Number(pv.textContent), to, 1500);
+          }
+          for (var r = 0; r < hwRows.length; r++) {
+            (function (row, k) { setTimeout(function () { row.classList.add('flip'); }, k * 250 * T); })(hwRows[r], r);
+          }
+        }, 1500 * T);
+        setTimeout(function () {
+          if (hwG) hwG.style.background = 'var(--t-accent)';
+          hw.classList.add('done');
+          if (hwLab) hwLab.textContent = '목표 점수';
+          if (hwEx) hwEx.textContent = '예시 화면 · 목표 시나리오';
+        }, 3000 * T);
+      };
+      if (reduced || !('IntersectionObserver' in window)) {
+        hwRun();
+      } else {
+        hw.classList.add('armed');
+        var hwIo = new IntersectionObserver(function (es) {
+          for (var i = 0; i < es.length; i++) {
+            if (es[i].isIntersecting) { hwRun(); hwIo.disconnect(); break; }
+          }
+        }, { threshold: 0.3 });
+        hwIo.observe(hw);
+      }
+    }
+
+    /* 9) 홈 홍보영상 (2026-11-05 v66) — 자동 재생 없음 · 누를 때만 받는다(preload="none").
+     * 스크립트가 있으면 기본 재생 막대를 감추고 그린 재생 단추를 보인다. 장 바로가기는 그 시각으로 옮겨 재생한다.
+     */
+    var pv = document.getElementById('promo-video');
+    if (pv) {
+      var pBox = pv.parentNode;
+      var pBtn = pBox.querySelector('.h-play');
+      var pStart = function (t) {
+        pv.setAttribute('controls', '');
+        if (pBtn) pBtn.hidden = true;
+        pBox.classList.add('playing');
+        if (typeof t === 'number') {
+          var seek = function () { try { pv.currentTime = t; } catch (e) { /* 아직 못 옮기면 처음부터 */ } };
+          if (pv.readyState >= 1) seek(); else pv.addEventListener('loadedmetadata', seek, { once: true });
+        }
+        var pr = pv.play();
+        if (pr && pr.catch) pr.catch(function () { /* 브라우저가 막으면 재생 막대로 직접 누른다 */ });
+      };
+      if (pBtn) {
+        pv.removeAttribute('controls');
+        pBtn.hidden = false;
+        pBtn.addEventListener('click', function () { pStart(); });
+      }
+      var pChaps = document.querySelectorAll('[data-seek]');
+      for (var pc = 0; pc < pChaps.length; pc++) {
+        pChaps[pc].addEventListener('click', function () {
+          pStart(Number(this.getAttribute('data-seek')));
+          if (pBox.scrollIntoView) pBox.scrollIntoView({ block: 'center', behavior: reduced ? 'auto' : 'smooth' });
+        });
+      }
     }
   });
 })();

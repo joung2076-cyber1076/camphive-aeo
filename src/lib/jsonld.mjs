@@ -18,6 +18,7 @@
 
 import { CANONICAL_SENTENCE, company } from '../../site.config.mjs';
 import { urlFor } from './html.mjs';
+import { PROMO_VIDEO } from '../content/video.mjs';
 
 const ID = {
   org: (base) => `${base}/#organization`,
@@ -219,6 +220,30 @@ function serviceNode(site, org, url) {
   };
 }
 
+// 홈 홍보영상(v66 · 2026-11-05) — 화면의 #video 절과 같은 값(src/content/video.mjs 정본).
+function videoNode(site, url) {
+  const v = PROMO_VIDEO;
+  const contentUrl = `${site.baseUrl}/${v.file}`;
+  return {
+    '@type': 'VideoObject',
+    '@id': `${url}#video`,
+    name: v.name,
+    description: v.description,
+    thumbnailUrl: `${site.baseUrl}/${v.poster}`,
+    uploadDate: v.uploadDate,
+    duration: v.duration,
+    contentUrl,
+    inLanguage: 'ko-KR',
+    hasPart: v.chapters.map(([name, start, end]) => ({
+      '@type': 'Clip',
+      name,
+      startOffset: start,
+      endOffset: end,
+      url: `${url}#t=${start}`,
+    })),
+  };
+}
+
 export function buildGraph(page, ctx) {
   const { site, org, allPages = [] } = ctx;
   const url = urlFor(site.baseUrl, page.slug);
@@ -235,6 +260,7 @@ export function buildGraph(page, ctx) {
     // Article로 걸면 AI가 이 회사를 '글을 쓴 매체'로 읽는다. 우리는 공급자다.
     nodes.push(serviceNode(site, org, url));
     if (page.faq?.length) nodes.push(faqNode(site, page, url));
+    nodes.push(videoNode(site, url));
   } else if (page.type === 'home') {
     nodes.push(itemListNode(site, allPages, url));
   } else if (page.type === 'page') {

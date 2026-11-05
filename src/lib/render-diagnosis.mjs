@@ -38,7 +38,7 @@ function diagnosisLinks() {
   return `<div class="form-block" id="apply">
       <h3>지금 진단 신청</h3>
       <p>아래 버튼을 누르면 진단 화면이 새 창으로 열립니다. 캠핑장 이름 · 홈페이지 주소 · 이메일 세 가지를 그 화면에서 넣으시면 됩니다.</p>
-      <p><a class="btn btn-primary btn-block" href="${esc(TOOL_URL)}" target="_blank" rel="noopener">지금 진단하기</a></p>
+      <p><a class="btn btn-primary btn-block" href="${esc(TOOL_URL)}" target="_blank" rel="noopener">내 캠핑장 AI 노출 무료 진단 신청</a></p>
       <p><a class="btn btn-block" href="${esc(SAMPLE_HREF)}" data-sample-open>진단서 샘플 보기</a></p>
       <p class="form-note">진단서 샘플은 실제 리포트 양식에서 캠핑장 이름 · 지역을 가린 것입니다.<br>하루 20건 한정</p>
     </div>`;

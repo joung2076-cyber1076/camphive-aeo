@@ -160,7 +160,7 @@ export function renderArticle(page, ctx) {
     parts.push(`<aside class="diag-cta" aria-label="무료 AI 노출 진단">
   <p>ChatGPT · Claude · Gemini 세 곳에 실제로 물어 우리 캠핑장이 답변에 나오는지 확인해 드립니다. 캠핑장 이름 · 홈페이지 주소 · 이메일 세 가지를 진단 화면에서 넣으시면 됩니다. 하루 20건 한정입니다.</p>
   <p class="diag-cta-actions">
-    <a class="btn btn-primary" href="${DIAG_TOOL_URL}" target="_blank" rel="noopener">무료로 AI 노출 진단받기</a>
+    <a class="btn btn-primary" href="${DIAG_TOOL_URL}" target="_blank" rel="noopener">내 캠핑장 AI 노출 무료 진단 신청</a>
     <a class="btn" href="${DIAG_SAMPLE_HREF}" data-sample-open>진단서 샘플 보기</a>
   </p>
 </aside>`);

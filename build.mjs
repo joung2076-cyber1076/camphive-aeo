@@ -238,14 +238,23 @@ async function main() {
     .map(stripCssHead)
     .join('\n');
   const mainCss = stripCssHead(await readFile(path.join(ROOT, 'src', 'styles.css'), 'utf8'));
-  await writeFile(path.join(DIST, 'styles.css'), `@charset "utf-8";\n${fontCss}\n${mainCss}`, 'utf8');
+  // 2026-11-05 v66 — 15쪽 공통 디자인 한 벌(src/theme.css · 제니 지시서 v3 3절).
+  // 하위 14쪽은 styles.css 뒤에, 홈은 폰트 뒤에 같은 파일을 붙인다. 요청 수는 그대로다.
+  //   theme.css       = 색 · 글자 · 버튼 · 머리 줄 · 신청 바(15쪽 공통)
+  //   theme-pages.css = 하위 14쪽 부품(본문 · 카드 · 표 · FAQ · 신청 폼 · 바닥글 · 샘플 창)
+  const themeCss = (
+    await Promise.all(['theme.css', 'theme-pages.css'].map((f) => readFile(path.join(ROOT, 'src', f), 'utf8')))
+  )
+    .map(stripCssHead)
+    .join('\n');
+  await writeFile(path.join(DIST, 'styles.css'), `@charset "utf-8";\n${fontCss}\n${mainCss}\n${themeCss}`, 'utf8');
 
   // 홈 전용 — 폰트 선언만. 시안은 스타일을 전부 인라인 style 과 자체
   // <style> 블록에 담고 있어서, 여기에 우리 styles.css 를 얹으면
   // h1/h2/p/section 같은 요소 선택자가 시안 위에 덧칠된다.
   // "디자인 그대로"를 지키려면 홈에는 폰트만 준다.
   // 홈도 같은 이유로 맨 앞에 한 번만 붙인다(위 stripCssHead 설명 참조).
-  await writeFile(path.join(DIST, 'home.css'), `@charset "utf-8";\n${fontCss}`, 'utf8');
+  await writeFile(path.join(DIST, 'home.css'), `@charset "utf-8";\n${fontCss}\n${themeCss}`, 'utf8');
   console.log(`  ${C.ok('생성')}  home.css  ${C.dim(`폰트 선언만 ${(fontCss.length / 1024).toFixed(1)}KB — 홈은 시안 스타일을 쓴다`)}`);
   console.log(
     `  ${C.ok('생성')}  styles.css  ${C.dim(
