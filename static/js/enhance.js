@@ -586,5 +586,26 @@
         });
       }
     }
+
+    /* 10) 홈 아래 라이트 절 접기 (2026-11-06 v69 · 제니 검수판 지시서 v2) — 통계 카드 설명 · 고민 카드 인용문.
+     * <details> 를 쓰지 않는다 — 홈의 <details> 는 모두 FAQ 로 읽혀 FAQPage 구조화 데이터에 들어간다.
+     * 글은 소스에 그대로 있다. 단추도 소스에 hidden 으로 있다(스크립트는 요소를 만들지 않는다 — verify.mjs).
+     * 스크립트가 없으면 단추는 숨은 채, 글은 다 보인다. 카드 오른쪽 위 +/− 단추로 연다.
+     */
+    var togs = document.querySelectorAll('.lt-tog[aria-controls]');
+    for (var ti = 0; ti < togs.length; ti++) {
+      (function (btn) {
+        var el = document.getElementById(btn.getAttribute('aria-controls'));
+        if (!el) return;
+        el.classList.add('is-folded');
+        btn.hidden = false;
+        btn.addEventListener('click', function () {
+          var open = btn.getAttribute('aria-expanded') !== 'true';
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          btn.setAttribute('aria-label', open ? '설명 접기' : '설명 펼치기');
+          if (open) el.classList.remove('is-folded'); else el.classList.add('is-folded');
+        });
+      })(togs[ti]);
+    }
   });
 })();
