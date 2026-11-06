@@ -909,6 +909,18 @@
     .ft-info { text-align: left; }
   }
 
+  /* ══ v73 (2026-11-06) 대표 지시(그림) — #cta 제목 1줄 · 설명 3줄 · 진단 신청 단추 오른쪽 · 「무료 · 하루 20건 한정」 단추 아래 가운데 ══
+     글은 그대로 · 글자 크기만 줄임(제목 34 → 30px 이하 · 설명 19 → 17px). 휴대폰(720 이하)은 전과 같은 세로 순서(설명 → 카카오 → 신청 카드).
+     제목 크기 = 안폭 ÷ 39.5(글 길이 38.4em + 여유) — 1280 이상 30px · 1024 약 24px · 768 약 18px 에서 한 줄. */
+  .cta-grid { display: grid; gap: 24px; }
+  @media (min-width: 721px) {
+    #cta .cta-h { font-size: min(30px, calc((100vw - 64px) / 39.5)) !important; white-space: nowrap; margin-bottom: 28px !important; }
+    .cta-grid { grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "p card" "sub ."; column-gap: 40px; row-gap: 28px; align-items: center; }
+    #cta .cta-p { grid-area: p; margin: 0 !important; font-size: 17px !important; line-height: 1.8 !important; }
+    #cta .cta-sub { grid-area: sub; align-self: start; }
+    #cta .cta-card { grid-area: card; align-self: center; padding: 22px !important; display: grid; justify-items: center; }
+  }
+
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
@@ -1754,18 +1766,18 @@
 </section>
 
 <section id="cta" data-screen-label="S15 최종 CTA" style="padding:96px 32px;">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center">
-    <div>
-      <h2 style="margin:0 0 20px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#F2F5F3">AI는 한 번에 몇 곳만 추려서 답합니다. 옆 캠핑장 사장님이 먼저 선점하기 전에 확인하십시오.</h2>
-      <p style="margin:0 0 32px;font-size:19px;line-height:1.8;color:#C9C9BF">과거 네이버 플레이스 초창기에도 “설마 저걸로 예약하겠어?”라며 남들 다 할 때까지 기다렸던 분들은 결국 매달 수백만 원의 광고비를 내는 신세가 되었습니다. 지금 AI 검색 시장이 정확히 그때와 똑같습니다. 남들이 아직 반신반의할 때 먼저 깃발을 꽂는 캠핑장만이 먼저 자리를 잡습니다. 지금 바로 우리 캠핑장의 AI 점수를 무료로 확인해 보십시오.</p>
-      <div style="border-top:1px solid rgba(255,255,255,0.14);padding-top:24px;display:grid;gap:12px">
+  <div style="max-width:1200px;margin:0 auto">
+    <h2 class="cta-h" style="margin:0 0 20px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#F2F5F3">AI는 한 번에 몇 곳만 추려서 답합니다. 옆 캠핑장 사장님이 먼저 선점하기 전에 확인하십시오.</h2>
+    <div class="cta-grid">
+      <p class="cta-p" style="margin:0 0 32px;font-size:19px;line-height:1.8;color:#C9C9BF">과거 네이버 플레이스 초창기에도 “설마 저걸로 예약하겠어?”라며 남들 다 할 때까지 기다렸던 분들은 결국 매달 수백만 원의 광고비를 내는 신세가 되었습니다. 지금 AI 검색 시장이 정확히 그때와 똑같습니다. 남들이 아직 반신반의할 때 먼저 깃발을 꽂는 캠핑장만이 먼저 자리를 잡습니다. 지금 바로 우리 캠핑장의 AI 점수를 무료로 확인해 보십시오.</p>
+      <div class="cta-sub" style="border-top:1px solid rgba(255,255,255,0.14);padding-top:24px;display:grid;gap:12px">
         <p style="margin:0;font-size:16px;line-height:1.7;color:#9AA8A1">진단 결과만 받고 종료하셔도 됩니다. 영업 전화는 1회만 드립니다.</p>
         <a class="kakao-btn" href="https://pf.kakao.com/_zprxaX" target="_blank" rel="noopener"><svg viewBox="13 14 22 21" aria-hidden="true" focusable="false"><path fill="#000000" d="M24.0014 14C17.9241 14 13 18.0219 13 22.9825C13 26.1711 15.0368 28.9728 18.1057 30.5656L17.0681 34.5677C17.0295 34.6871 17.0598 34.8151 17.1424 34.9033C17.2029 34.9659 17.2855 35 17.3653 35C17.4341 35 17.5029 34.9772 17.5607 34.9289L22.0196 31.8171C22.661 31.911 23.3215 31.9622 23.9986 31.9622C30.0732 31.9622 35 27.9403 35 22.9797C35 18.0191 30.0759 14 24.0014 14Z"/></svg>카카오톡으로 바로 문의</a>
       </div>
-    </div>
-    <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:36px;box-shadow:none">
-      <a class="btn btn-p" href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_final">내 캠핑장 AI 노출 무료 진단 신청</a>
-      <p style="margin:16px 0 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:#9AA8A1;text-align:center">무료 · 하루 20건 한정</p>
+      <div class="cta-card" style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:36px;box-shadow:none">
+        <a class="btn btn-p" href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_final">내 캠핑장 AI 노출 무료 진단 신청</a>
+        <p style="margin:16px 0 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:#9AA8A1;text-align:center">무료 · 하루 20건 한정</p>
+      </div>
     </div>
   </div>
 </section>
