@@ -627,8 +627,7 @@
   /* 10) #plan — 민트 · 흰 요금 카드 3장 · 스탠다드만 #047857 2px + 다크 리본 · 항목 ✓ 표 */
   #plan [style*="border:2px solid #00E676"] { position: relative; }
   #plan span[style*="background:#00E676;color:#06110b;border-radius:100px"] { position: absolute; top: -15px; right: 24px; padding: 6px 16px !important; font-size: 14px !important; }
-  #plan dl > div:first-child dd { font-size: 19px !important; font-weight: 900 !important; color: var(--lt-acc) !important; }
-  #plan dl > div:not(:first-child):not(:last-child) dd::before { content: "✓"; margin-right: 6px; color: var(--lt-acc); font-weight: 700; }
+  #plan dl > div:not(:last-child) dd::before { content: "✓"; margin-right: 6px; color: var(--lt-acc); font-weight: 700; }
   #plan dd { text-wrap: balance; word-break: keep-all; }
 
   /* 11) #ai-compare — 흰 · 정비 전(회색) / 정비 후(딥그린) 좌우 말풍선 · 「예시 화면 — 실제 AI 답변이 아닙니다」 그대로 */
@@ -665,7 +664,6 @@
     #data .press-card h3 { font-size: 15px !important; line-height: 1.45 !important; }
     #data .press-card [data-fold] { font-size: 14px !important; }
     #data .press-card .press-src { font-size: 12px !important; }
-    #data .lt-tog { top: 10px; right: 8px; width: 36px; height: 36px; font-size: 20px; }
     .lt-big b { font-size: 42px; }
   }
   @media (max-width: 480px) {
@@ -676,6 +674,221 @@
   }
   @media (max-width: 767px) {
     main > section[id]#video { padding-bottom: 64px !important; background: linear-gradient(to bottom, #0A0E0C calc(100% - 60px), #FFFFFF 100%); }
+  }
+
+  /* ══ v70 (2026-11-06) 제니 3차 수정 9곳 — 「AEO 홈페이지 3차 수정 — 제니 시안 9곳 반영」 글의 값 그대로 ══
+     ⚠ 시안 원본 파일 2개 · 이미지 8장은 이 창에 오지 않았다(제니 폴더에도 없음) — 글에 적힌 색 · 크기만 따랐다.
+     지시서가 준 새 색: #E8F5EE(오름 · 아이콘 칸 · 산출물 알약) · #FFF1EB/#C2410C(내림 · 경고 알약) · #EEF1EF/#3D4B44(중립)
+     · #5A6A62(보조 글 · 흰 5.8:1) · #0F1A15(가격 · 테두리 단추) · #B7D3C3(5단계 연결선) · #C9D4CE(다크 위 설명). */
+
+  /* ① #now 머리 — 소제목 + 알약 1개 한 줄 · 제목 40px/800 · 질문만 딥그린 */
+  .lt-nowhead { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; margin: 0 0 22px; }
+  .lt-nowhead .h-eyebrow { margin: 0; }
+  #now .h-chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0; padding: 7px 16px; border: 1px solid #DDE5E0; border-radius: 999px; background: #FFFFFF; }
+  #now .h-chips li { padding: 0; border: 0; font-size: 13px; color: var(--lt-ink); }
+  #now .h-chips .h-cdot { display: inline-block; width: 8px; height: 8px; }
+  #now .h-chips .h-chip-note { border: 0; padding: 0 0 0 2px; font-size: 13px; font-weight: 800; color: #047857; }
+  #now .h-h2 { font-size: 40px; font-weight: 800; line-height: 1.35; letter-spacing: -0.02em; }
+  .lt-em { color: #047857; }
+
+  /* ② #problem — 카드 흰 · 20px 모서리 · 아이콘 칸 #E8F5EE · 큰 번호(장식) · 3번만 2px 딥그린 · 「현장의 목소리 보기 +」 · 다크 마무리 띠 */
+  #problem [style*="border-radius:16px;padding:32px;box-shadow:none"] { border: 1px solid #DDE5E0 !important; border-radius: 20px !important; padding: 28px !important; }
+  #problem [style*="border-radius:16px;padding:32px;box-shadow:none"]:nth-child(3) { border: 2px solid #047857 !important; }
+  #problem .lt-head { justify-content: space-between; margin-bottom: 20px; }
+  #problem .lt-ico { background: #E8F5EE; border: 0; color: #047857; }
+  #problem [style*="box-shadow:none"]:nth-child(3) .lt-ico { background: #0A0E0C; color: #00E676; }
+  #problem .lt-head > div { font-size: 28px !important; font-weight: 800; letter-spacing: 0 !important; line-height: 1; color: #DDE5E0 !important; }
+  #problem h3 { font-size: 20px !important; font-weight: 800 !important; padding-right: 0; }
+  .lt-tog.lt-tog-t { position: static; width: auto; height: auto; min-height: 40px; margin-top: 10px; padding: 0; border: 0; border-radius: 0; background: none; display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: #047857; }
+  .lt-tog.lt-tog-t[hidden] { display: none; }
+  .lt-tog.lt-tog-t::before { content: none; }
+  .lt-tog.lt-tog-t::after { content: "+"; font-size: 18px; line-height: 1; }
+  .lt-tog.lt-tog-t[aria-expanded="true"]::after { content: "−"; }
+  .lt-tog.lt-tog-t:hover { text-decoration: underline; text-underline-offset: 4px; }
+  #problem [style*="border-left:1px solid #1F2D27;border-right"] { background: #0A0E0C !important; border: 0 !important; border-radius: 20px !important; padding: 26px 24px !important; }
+  #problem [style*="position:relative;height:62px"] p { color: #FFFFFF !important; font-size: 18px !important; font-weight: 700 !important; gap: 10px; }
+  .lt-warn { width: 22px; height: 22px; flex: none; color: #00E676; }
+  .lt-neon { color: #00E676; }
+
+  /* ③ #data — 출처 이름 + 추세 원 · 큰 숫자 46px/800 · 내림 「↓」 #C2410C · 전후 막대 2줄 · 출처 1줄 + 「설명 보기 +」 */
+  #data .press-card { padding: 24px !important; }
+  #data .press-card .press-badge { font-size: 13px !important; letter-spacing: 0 !important; color: #5A6A62 !important; padding-right: 48px; margin-bottom: 12px !important; }
+  .lt-trend { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; }
+  .lt-trend svg { width: 18px; height: 18px; }
+  .lt-trend.lt-up { background: #E8F5EE; color: #047857; }
+  .lt-trend.lt-dn { background: #FFF1EB; color: #C2410C; }
+  .lt-trend.lt-nt { background: #EEF1EF; color: #3D4B44; }
+  #data .press-card .press-num { font-size: 46px !important; font-weight: 800 !important; margin-bottom: 10px !important; }
+  #data .press-card .press-num-long { font-size: 32px !important; }
+  #data .press-num .lt-down { color: #C2410C; }
+  #data .press-card h3 { margin-bottom: 14px !important; }
+  .lt-bars { display: grid; gap: 8px; margin: 0 0 18px; }
+  .lt-bar { display: grid; grid-template-columns: 8.8em minmax(36px,1fr) 4.4em; align-items: center; column-gap: 10px; font-size: 12.5px; line-height: 1.4; color: #5A6A62; }
+  .lt-bar-l { white-space: nowrap; }
+  .lt-bar-v { white-space: nowrap; text-align: right; font-weight: 700; color: #0A0E0C; }
+  .lt-bar-t { height: 8px; border-radius: 4px; background: #EEF1EF; overflow: hidden; }
+  .lt-bar-t i { display: block; height: 100%; border-radius: 4px; background: currentColor; opacity: .38; }
+  .lt-bar.is-now .lt-bar-t i { opacity: 1; }
+  .lt-bars.lt-up .lt-bar-t { color: #047857; }
+  .lt-bars.lt-dn .lt-bar-t { color: #C2410C; }
+  .lt-bars.lt-nt .lt-bar-t { color: #3D4B44; }
+  .lt-span { display: flex; align-items: center; gap: 12px; margin: 2px 0 18px; font-size: 12.5px; font-weight: 700; color: #0A0E0C; }
+  .lt-span span { white-space: nowrap; }
+  .lt-span i { position: relative; flex: 1 1 auto; height: 2px; background: #3D4B44; }
+  .lt-span i::before, .lt-span i::after { content: ""; position: absolute; top: -4px; width: 10px; height: 10px; border-radius: 50%; box-sizing: border-box; }
+  .lt-span i::before { left: -2px; background: #FFFFFF; border: 2px solid #3D4B44; }
+  .lt-span i::after { right: -2px; background: #3D4B44; }
+  #data .press-card > .press-src { order: 4; font-size: 12px !important; }
+  #data .press-card > .lt-tog { order: 5; align-self: flex-start; }
+  #data .press-card > [data-fold] { order: 6; margin: 8px 0 0 !important; font-size: 14px !important; }
+
+  /* ④ #gap — 왼쪽 흰 카드 + 주황 알약 · 가운데 흰 원 화살표 · 오른쪽 2px 딥그린 + 2×2 칩 · 아래 문장 18px/700 */
+  #gap [style*="border:2px dashed #C9903F"] { border: 1px solid #DDE5E0 !important; background: #FFFFFF !important; }
+  #gap [style*="color:#C9903F;border:1px solid #C9903F"] { background: #FFF1EB !important; color: #C2410C !important; border-color: #FFF1EB !important; border-radius: 999px !important; }
+  #gap [style*="font-size:32px;color:#00E676"] { width: 56px; height: 56px; background: #FFFFFF !important; border: 1px solid #DDE5E0; color: #047857 !important; font-size: 24px !important; }
+  #gap [style*="border:2px solid #00E676"] ul { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px !important; }
+  #gap [style*="border:2px solid #00E676"] li { background: #F4F7F5; border-radius: 10px; padding: 12px 14px; font-size: 15px !important; font-weight: 700; line-height: 1.45 !important; gap: 8px !important; align-items: flex-start; }
+  #gap p[style*="font-size:22px;line-height:1.65"] { font-size: 18px !important; }
+  #gap p[style*="font-size:22px;line-height:1.65"] > span { color: #047857; }
+
+  /* ⑤ #concept — 아래 맞춤 계단 280 / 330 / 380px · 디딤판 없앰 · STEP 01 민트 · 02 흰 + 테두리 · 03 다크 + 네온 「← 지금」 */
+  #concept [style*="grid-template-columns:repeat(3,1fr)"] > div::after { content: none !important; }
+  #concept [style*="grid-template-columns:repeat(3,1fr)"] > div:nth-child(1) { background: #F4F7F5 !important; border-color: #F4F7F5 !important; }
+  #concept [style*="border:2px solid #00E676"] { background: #0A0E0C !important; border-color: #0A0E0C !important; }
+  #concept [style*="border:2px solid #00E676"] [style*="color:#F2F5F3"], #concept [style*="border:2px solid #00E676"] [style*="color:#F2F2EC"] { color: #FFFFFF !important; }
+  #concept [style*="border:2px solid #00E676"] [style*="color:#9A9A90"], #concept [style*="border:2px solid #00E676"] [style*="color:#C9C9BF"] { color: #C9D4CE !important; }
+  #concept [style*="border:2px solid #00E676"] [style*="color:#00E676"] { color: #00E676 !important; }
+  #concept [style*="border:2px solid #00E676"] [style*="background:#00E676"] { background: #00E676 !important; color: #06110B !important; }
+  @media (min-width: 721px) {
+    #concept [style*="grid-template-columns:repeat(3,1fr)"] { padding-bottom: 0; }
+    #concept [style*="grid-template-columns:repeat(3,1fr)"] > div { margin-bottom: 0 !important; box-sizing: border-box; }
+    #concept [style*="grid-template-columns:repeat(3,1fr)"] > div:nth-child(1) { min-height: 280px; }
+    #concept [style*="grid-template-columns:repeat(3,1fr)"] > div:nth-child(2) { min-height: 330px; }
+    #concept [style*="grid-template-columns:repeat(3,1fr)"] > div:nth-child(3) { min-height: 380px; }
+  }
+
+  /* ⑥ #framework — 관문 4칸(민트 · 관문 N · 작은 자물쇠 · 흰 아이콘 칸 · 이름 24px/800 · 관문 4 다크) · C·A·M·P·AI 검은 원 + 연결선 */
+  .lt-gates { gap: 28px; }
+  .lt-gates li { background: #F4F7F5; border: 0; border-radius: 20px; padding: 18px 18px 22px; justify-items: center; text-align: center; gap: 6px; }
+  .lt-gates li:not(:last-child)::after { right: -23px; font-size: 18px; }
+  .lt-gn { justify-self: start; font-size: 13px; font-weight: 800; color: #047857; }
+  .lt-glock { position: absolute; top: 16px; right: 16px; width: 18px; height: 18px; color: #5A6A62; }
+  .lt-glock svg { width: 18px; height: 18px; display: block; }
+  .lt-gico { width: 52px; height: 52px; border-radius: 14px; background: #FFFFFF; color: #047857; display: grid; place-items: center; margin: 6px 0 4px; }
+  .lt-gico svg { width: 26px; height: 26px; }
+  .lt-gates b { font-size: 24px; font-weight: 800; }
+  .lt-gates li.is-open { background: #0A0E0C; }
+  .lt-gates li.is-open .lt-gn, .lt-gates li.is-open .lt-glock { color: #00E676; }
+  .lt-gates li.is-open .lt-gico { background: #141C18; color: #00E676; }
+  .lt-gates li.is-open b { color: #FFFFFF; }
+  .lt-gates li.is-open .lt-gq { color: #C9D4CE; }
+  #framework [style*="grid-template-columns:88px 1fr 1.4fr 1fr"] { background: transparent !important; border: 0 !important; border-radius: 0 !important; }
+  #framework [style*="grid-template-columns:88px 1fr 1.4fr 1fr"]::after { content: none !important; }
+  #framework [style*="font-size:40px;font-weight:700;color:#00E676"],
+  #framework [style*="font-size:34px;font-weight:700;color:#00E676"] { position: relative; z-index: 1; box-shadow: 0 0 0 6px var(--lt-bg); }
+  #framework [style*="grid-template-columns:88px"] > div:nth-child(2) > div:first-child { font-size: 12px !important; font-weight: 600 !important; letter-spacing: .02em; color: #5A6A62 !important; }
+  #framework [style*="grid-template-columns:88px"] > div:nth-child(2) > div:last-child { margin-top: 2px !important; font-size: 19px !important; font-weight: 800 !important; color: #0A0E0C !important; }
+  #framework [style*="grid-template-columns:88px"] > p { font-size: 14px !important; line-height: 1.65 !important; }
+  #framework [style*="grid-template-columns:88px"] > div:last-child { justify-self: start; width: fit-content; background: #E8F5EE; color: #047857 !important; border: 0 !important; border-radius: 999px; padding: 5px 12px !important; font-size: 13px !important; font-weight: 700; line-height: 1.4 !important; }
+  @media (min-width: 961px) {
+    #framework [style="display:grid;gap:12px"] { position: relative; gap: 20px !important; }
+    #framework [style="display:grid;gap:12px"]::before { content: ""; position: absolute; top: 31px; left: 10%; right: 10%; height: 2px; background: #B7D3C3; }
+    #framework [style*="grid-template-columns:88px 1fr 1.4fr 1fr"] { padding: 0 !important; justify-items: center; text-align: center; gap: 10px !important; }
+    #framework [style*="grid-template-columns:88px"] > div:last-child { justify-self: center; }
+  }
+  @media (max-width: 960px) {
+    .lt-gates li { grid-template-columns: 52px minmax(0,1fr); justify-items: start; text-align: left; column-gap: 16px; row-gap: 2px; padding: 16px 18px; }
+    .lt-gates li .lt-gico { grid-row: 1 / span 3; grid-column: 1; margin: 0; align-self: center; }
+    .lt-gates li .lt-gn, .lt-gates li b, .lt-gates li .lt-gq { grid-column: 2; }
+    .lt-gates li:not(:last-child)::after { left: 40px; bottom: -27px; }
+    .lt-gates b { font-size: 20px; }
+    #framework [style*="grid-template-columns:88px 1fr 1.4fr 1fr"] { grid-template-columns: 64px minmax(0,1fr) !important; column-gap: 16px !important; row-gap: 6px !important; padding: 0 !important; align-items: start !important; }
+    #framework [style*="grid-template-columns:88px"] > :first-child { grid-row: 1 / span 3; }
+    #framework [style*="grid-template-columns:88px"] > :not(:first-child) { grid-column: 2; }
+  }
+
+  /* ⑦ #why — 흰 띠 1개 · 3칸 · 칸 사이 세로선 · 숫자 52px/800 + 단위 26px · 설명 15px */
+  .lt-big { gap: 0; background: #FFFFFF; border: 1px solid #DDE5E0; border-radius: 20px; }
+  .lt-big > div { padding: 26px 28px; }
+  .lt-big > div + div { border-left: 1px solid #DDE5E0; }
+  .lt-big-n { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; color: #047857; }
+  .lt-big-n b { font-family: inherit; font-size: 52px; font-weight: 800; letter-spacing: -0.03em; color: #047857; }
+  .lt-big-d { margin: 8px 0 0; font-size: 15px; color: #5A6A62; }
+
+  /* ⑧ #plan — 가격 위쪽 38px/800(스탠다드만 딥그린) + 「VAT 별도」 13px · 「★ 추천」 위 가운데 · 단추 카드 폭 52px · 모서리 12px */
+  .lt-price { margin: 0 0 20px; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+  .lt-price-l { flex: 0 0 100%; margin-bottom: 4px; font-size: 13px; color: #5A6A62; }
+  .lt-price b { font-size: clamp(26px, 3vw, 38px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: #0F1A15; }
+  .lt-vat { font-size: 13px; font-weight: 600; color: #5A6A62; }
+  #plan [style*="border:2px solid #00E676"] .lt-price b { color: #047857; }
+  #plan span[style*="background:#00E676;color:#06110b;border-radius:100px"] { left: 50%; right: auto !important; transform: translateX(-50%); white-space: nowrap; }
+  #plan [style*="border:1.5px solid rgba(255,255,255,0.30)"] { display: flex !important; width: 100%; box-sizing: border-box; justify-content: center; min-height: 52px !important; border-radius: 12px !important; background: #FFFFFF !important; border: 1.5px solid #0F1A15 !important; color: #0F1A15 !important; }
+  #plan [style*="border:2px solid #00E676"] [style*="border:1.5px solid rgba(255,255,255,0.30)"] { background: #0A0E0C !important; border-color: #0A0E0C !important; color: #00E676 !important; }
+
+  /* ⑨ #report-preview — 머리(왼쪽 소제목 · 제목 · 설명 / 오른쪽 다크 카드 360px) · 「이런 진단서」 한 줄 · 카드 8장 · 맨 아래 흰 상자 */
+  #report-preview .h-svc { display: grid; grid-template-columns: minmax(0,1fr) 360px; column-gap: 40px; align-items: center; background: transparent !important; border: 0 !important; padding: 0 !important; margin: 0 0 56px; }
+  #report-preview .h-svc > :not(.h-feat) { grid-column: 1; }
+  #report-preview .h-feat { grid-column: 2; grid-row: 1 / span 3; margin: 0; background: #0A0E0C; border: 0; border-radius: 20px; padding: 24px 26px; }
+  #report-preview .h-feat-t { margin: 0 0 8px; font-size: 18px; font-weight: 800; color: #00E676; }
+  #report-preview .h-feat .h-body { font-size: 14px; line-height: 1.7; color: #C9D4CE; }
+  #report-preview .h-svc .h-h3 { margin: 0 0 12px; font-size: 28px; font-weight: 800; line-height: 1.4; }
+  .lt-eb { margin: 0 0 10px; font-size: 14px; font-weight: 800; letter-spacing: .02em; color: #047857; }
+  .lt-rphead { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 10px 24px; margin: 0 0 24px; }
+  .lt-rphead h2 { margin: 0 !important; font-size: 22px !important; font-weight: 800 !important; white-space: normal !important; }
+  .lt-rphead p { margin: 0 !important; max-width: 560px; font-size: 14px !important; color: #5A6A62 !important; }
+  #report-preview [style*="grid-template-columns:repeat(4,minmax(0,1fr))"] > div { border: 1px solid #DDE5E0 !important; border-radius: 16px !important; }
+  #report-preview .h-rp-shot { height: 178px; padding: 10px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DDE5E0; }
+  #report-preview .h-rp-shot img { border-radius: 8px; border: 1px solid #EEF1EF; box-sizing: border-box; }
+  #report-preview [style*="repeat(4,minmax(0,1fr))"] [style*="font-size:12px;color:#9AA8A1;margin-bottom:8px"] { color: #047857 !important; font-weight: 800; }
+  #report-preview [style*="grid-template-columns:repeat(4,minmax(0,1fr))"] h3 { font-size: 16px !important; font-weight: 800 !important; }
+  #report-preview [style*="grid-template-columns:repeat(4,minmax(0,1fr))"] p { font-size: 13px !important; }
+  .lt-rpbox { margin-top: 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px 32px; background: #FFFFFF; border: 1px solid #DDE5E0; border-radius: 20px; padding: 28px 32px; }
+  .lt-rpbox-l h3 { margin: 0 0 8px !important; font-size: 24px !important; font-weight: 800 !important; }
+  .lt-rpbox-l p { margin: 0 !important; padding: 0 !important; border: 0 !important; font-size: 15px !important; color: #5A6A62 !important; }
+  .lt-rpbox-r { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .lt-rpbox-r p { margin: 0 !important; }
+  .lt-rpbox-r .link-u { display: inline-flex; align-items: center; min-height: 52px; padding: 0 22px; box-sizing: border-box; border: 1.5px solid #0F1A15; border-radius: 12px; font-size: 16px; font-weight: 700; color: #0F1A15; text-decoration: none; }
+  .lt-rpbox-r .btn-p { display: inline-flex; align-items: center; min-height: 52px; border-radius: 12px; }
+  .lt-rpbox-r .btn-p::after { content: " →"; white-space: pre; }
+
+  /* v70 휴대폰 */
+  @media (max-width: 960px) {
+    #report-preview .h-svc { grid-template-columns: minmax(0,1fr); }
+    #report-preview .h-feat { grid-column: 1; grid-row: auto; margin-top: 16px; }
+    /* 카드가 좁아지는 폭(768에서 216px) — 막대는 「이름 · 값」 위 줄, 막대 아래 줄로 */
+    .lt-bar { grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "l l" "t v"; row-gap: 4px; }
+    .lt-bar-l { grid-area: l; } .lt-bar-t { grid-area: t; } .lt-bar-v { grid-area: v; }
+    .lt-span { flex-wrap: wrap; row-gap: 8px; }
+    .lt-span i { order: 2; flex: 1 0 100%; }
+    .lt-span span:last-child { order: 3; }
+  }
+  @media (max-width: 720px) {
+    #now .h-chips { padding: 6px 12px; gap: 4px 10px; }
+    #problem [style*="border-radius:16px;padding:32px;box-shadow:none"] { padding: 22px !important; }
+    #data .press-card { padding: 16px 14px !important; }
+    #data .press-card .press-badge { font-size: 11px !important; padding-right: 34px; }
+    .lt-trend { top: 12px; right: 10px; width: 28px; height: 28px; }
+    .lt-trend svg { width: 15px; height: 15px; }
+    #data .press-card .press-num { font-size: 20px !important; }
+    #data .press-card .press-num-long { font-size: 16px !important; }
+    .lt-bar { grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "l l" "t v"; row-gap: 4px; font-size: 11.5px; }
+    .lt-bar-l { grid-area: l; } .lt-bar-t { grid-area: t; } .lt-bar-v { grid-area: v; }
+    .lt-span { flex-wrap: wrap; row-gap: 8px; font-size: 11.5px; }
+    .lt-span i { order: 2; flex: 1 0 100%; }
+    .lt-span span:last-child { order: 3; }
+    .lt-tog.lt-tog-t { font-size: 14px; }
+    #gap [style*="border:2px solid #00E676"], #gap [style*="border:1px solid #DDE5E0"], #gap [style*="border:2px dashed #C9903F"] { padding: 22px 18px !important; }
+    .lt-big { grid-template-columns: minmax(0,1fr); }
+    .lt-big > div { padding: 18px 20px; }
+    .lt-big > div + div { border-left: 0; border-top: 1px solid #DDE5E0; }
+    .lt-big-n b { font-size: 44px; }
+    .lt-price b { font-size: 32px; }
+    .lt-rpbox { padding: 22px 20px; }
+    .lt-rpbox-r, .lt-rpbox-r p, .lt-rpbox-r a { width: 100%; }
+    .lt-rpbox-r .link-u, .lt-rpbox-r .btn-p { justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    #report-preview .h-rp-shot { height: 130px; padding: 8px; }
   }
 
 </style>
@@ -854,6 +1067,7 @@
      자동으로 흐르던 대화 예시 · 키워드 띠는 멈춘 목록으로 바꿨다(같은 글 한 벌). -->
 <section id="now" class="h-sec h-now lt" data-screen-label="S01c 지금 벌어지는 일(옮긴 글)">
   <div class="h-in">
+    <div class="lt-nowhead">
     <p class="h-eyebrow">캠핑장 · 글램핑장 전용 AI 검색 최적화(AEO)</p>
     <ul class="h-chips" aria-label="측정하는 AI">
       <li><span class="h-cdot" style="--c:var(--t-gpt)"></span>ChatGPT</li>
@@ -861,7 +1075,8 @@
       <li><span class="h-cdot" style="--c:var(--t-gem)"></span>Gemini</li>
       <li class="h-chip-note">3사 실측 기준</li>
     </ul>
-    <h2 class="h-h2">챗GPT와 네이버 AI에게 “가평 가족 글램핑 추천해 줘”라고 물었을 때,<br>사장님의 캠핑장은 나옵니까?</h2>
+    </div>
+    <h2 class="h-h2">챗GPT와 네이버 AI에게 <span class="lt-em">“가평 가족 글램핑 추천해 줘”</span>라고 물었을 때,<br>사장님의 캠핑장은 나옵니까?</h2>
     <p class="h-body">아직도 대행사에 매달 수십, 수백만 원씩 주면서 블로그 상위노출만 붙잡고 계십니까? 요즘 손님들은 블로그 글 수십 개를 일일이 뒤지지 않습니다. AI에게 내 조건에 딱 맞는 캠핑장 3곳만 추려달라고 시킵니다. AI의 답변 목록에 우리 캠핑장 이름이 없다면, 손님들에게 우리 캠핑장은 <strong>아예 존재하지 않는 곳이나 마찬가지입니다.</strong></p>
     <p class="h-note">영업 전화는 1회만 드립니다. 현재 AI가 우리 캠핑장을 어떻게 알고 있는지 팩트 리포트부터 먼저 받아보세요.</p>
     <!-- v69 대비 도형(지시서 v2 2-1 문구 그대로) — 아래 예시 답변의 A·B·C 와 「사장님의 캠핑장은 나옵니까?」를 한눈에 -->
@@ -912,24 +1127,24 @@
     <h2 style="margin:0 0 48px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#F2F5F3">체험단 무료 숙박권 풀고, 플레이스 광고비도 올렸는데… 왜 예약률은 매년 떨어질까요?</h2>
     <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:32px;box-shadow:none">
-        <div class="lt-head"><span class="lt-ico" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 9v12M3 13.5h18"/><path d="M12 9c-1.5-3.6-6-4-6-1.4C6 9 9 9 12 9zm0 0c1.5-3.6 6-4 6-1.4C18 9 15 9 12 9z"/></svg></span><div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:20px">01</div></div>
+        <div class="lt-head"><span class="lt-ico" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 9v12M3 13.5h18"/><path d="M12 9c-1.5-3.6-6-4-6-1.4C6 9 9 9 12 9zm0 0c1.5-3.6 6-4 6-1.4C18 9 15 9 12 9z"/></svg></span><div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:20px" aria-hidden="true">01</div></div>
         <h3 style="margin:0 0 14px;font-size:22px;line-height:1.5;font-weight:700;color:#F2F5F3">밑 빠진 독에 물 붓는 블로그 체험단</h3>
-        <p data-fold id="lt-fold-1" style="margin:0;font-size:17px;line-height:1.8;color:#9AA8A1">“주말 황금 객실 내어주고 바비큐 세트까지 공짜로 줬는데, 정작 그 글 보고 예약하는 손님은 한 명도 없습니다. 손님들도 이제 ‘업체로부터 제공받아…’로 시작하는 블로그 후기는 다 광고인 줄 알고 아예 누르지도 않습니다.”</p><button type="button" class="lt-tog" aria-controls="lt-fold-1" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <p data-fold id="lt-fold-1" style="margin:0;font-size:17px;line-height:1.8;color:#9AA8A1">“주말 황금 객실 내어주고 바비큐 세트까지 공짜로 줬는데, 정작 그 글 보고 예약하는 손님은 한 명도 없습니다. 손님들도 이제 ‘업체로부터 제공받아…’로 시작하는 블로그 후기는 다 광고인 줄 알고 아예 누르지도 않습니다.”</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-1" aria-expanded="false" hidden>현장의 목소리 보기</button>
       </div>
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:32px;box-shadow:none">
-        <div class="lt-head"><span class="lt-ico" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="15" r="6"/><path d="M9 12.5v5"/><path d="M14.5 8.5L20 3M20 3h-4.5M20 3v4.5"/></svg></span><div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:20px">02</div></div>
+        <div class="lt-head"><span class="lt-ico" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="15" r="6"/><path d="M9 12.5v5"/><path d="M14.5 8.5L20 3M20 3h-4.5M20 3v4.5"/></svg></span><div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:20px" aria-hidden="true">02</div></div>
         <h3 style="margin:0 0 14px;font-size:22px;line-height:1.5;font-weight:700;color:#F2F5F3">끝없이 오르는 키워드·플레이스 광고비</h3>
-        <p data-fold id="lt-fold-2" style="margin:0;font-size:17px;line-height:1.8;color:#9AA8A1">“성수기만 되면 클릭당 단가는 천정부지로 치솟고, 대행사들은 계속 새로운 유료 상품만 권합니다. 매달 따박따박 나가는 마케팅 고정비 때문에 정작 남는 순수익은 갈수록 줄어듭니다.”</p><button type="button" class="lt-tog" aria-controls="lt-fold-2" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <p data-fold id="lt-fold-2" style="margin:0;font-size:17px;line-height:1.8;color:#9AA8A1">“성수기만 되면 클릭당 단가는 천정부지로 치솟고, 대행사들은 계속 새로운 유료 상품만 권합니다. 매달 따박따박 나가는 마케팅 고정비 때문에 정작 남는 순수익은 갈수록 줄어듭니다.”</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-2" aria-expanded="false" hidden>현장의 목소리 보기</button>
       </div>
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:32px;box-shadow:none">
-        <div class="lt-head"><span class="lt-ico" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M12 7.8l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1z"/></svg></span><div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:20px">03</div></div>
+        <div class="lt-head"><span class="lt-ico" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H10l-4.5 3.5V16H4z"/><path d="M12 7.8l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1z"/></svg></span><div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:20px" aria-hidden="true">03</div></div>
         <h3 style="margin:0 0 14px;font-size:22px;line-height:1.5;font-weight:700;color:#F2F5F3">정작 ‘진짜 예약할 손님’은 AI에게 묻고 있습니다</h3>
-        <p data-fold id="lt-fold-3" style="margin:0;font-size:17px;line-height:1.8;color:#9AA8A1">“지금 당장 카드 결제를 할 알짜배기 캠퍼들은 ‘개별 욕실 깨끗하고 매너타임 철저한 곳 찾아줘’라며 AI와 대화하고 있습니다. 여기에 대답할 준비가 안 된 캠핑장은 눈뜨고 손님을 뺏길 수밖에 없습니다.”</p><button type="button" class="lt-tog" aria-controls="lt-fold-3" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <p data-fold id="lt-fold-3" style="margin:0;font-size:17px;line-height:1.8;color:#9AA8A1">“지금 당장 카드 결제를 할 알짜배기 캠퍼들은 ‘개별 욕실 깨끗하고 매너타임 철저한 곳 찾아줘’라며 AI와 대화하고 있습니다. 여기에 대답할 준비가 안 된 캠핑장은 눈뜨고 손님을 뺏길 수밖에 없습니다.”</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-3" aria-expanded="false" hidden>현장의 목소리 보기</button>
       </div>
     </div>
     <div style="margin-top:32px;border-left:1px solid #1F2D27;border-right:1px solid #1F2D27;background:#141C18;padding:40px 28px;border-radius:16px">
       <div style="position:relative;height:62px">
-        <p style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;margin:0;padding:0 8px;font-size:clamp(15px,1.75vw,26px);font-weight:900;letter-spacing:-0.02em;line-height:1.45;text-wrap:balance;color:{{ flashColor }};text-shadow:none}};opacity:0;animation-name:lineSlide;animation-duration:7s;animation-timing-function:ease-in-out;animation-iteration-count:infinite">{{ flashLine }}</p>
+        <p style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;margin:0;padding:0 8px;font-size:clamp(15px,1.75vw,26px);font-weight:900;letter-spacing:-0.02em;line-height:1.45;text-wrap:balance;color:{{ flashColor }};text-shadow:none}};opacity:0;animation-name:lineSlide;animation-duration:7s;animation-timing-function:ease-in-out;animation-iteration-count:infinite"><svg class="lt-warn" data-deco aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5L2.5 20h19z"/><path d="M12 10v4.5"/><path d="M12 17.3v.2"/></svg><span>AI가 3곳을 골라주는 흐름에 <span class="lt-neon">“블로그 상위노출”은 낄 자리가 없습니다.</span></span></p>
       </div>
     </div>
   </div>
@@ -941,47 +1156,53 @@
     <p class="press-sub" style="margin:0 0 48px;font-size:17px;line-height:1.7;color:#9AA8A1;max-width:960px">“우리 캠핑장은 단골도 있고, 아직은 네이버가 최고야.” 정말 그럴까요? 대행사가 굳이 먼저 말하지 않는 검색 시장의 진짜 현실, 국내 메이저 언론 보도와 공식 숫자로 직접 확인해 보십시오.</p>
     <div class="press-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px">
       <article class="press-card" style="background:#141C18;border:1px solid #1F2D27;border-top:1px solid #1F2D27;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column">
-        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">한국경제 · 오픈서베이 조사</span>
+        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">한국경제 · 오픈서베이 조사</span><span class="lt-trend lt-up" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l5-5 3 3 6-6"/><path d="M14 8h5v5"/></svg></span>
         <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">54.5%</div>
         <h3 style="margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.5;color:#F2F5F3">검색에 챗GPT를 쓰는 사람, 9개월 만에 절반을 넘었습니다</h3>
-        <p data-fold id="lt-fold-4" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">최근 3개월 안에 검색 목적으로 챗GPT를 쓴 비율이 2025년 3월 <span class="press-hl">39.6%에서 12월 54.5%로</span> 올랐습니다. 같은 기간 네이버 · 유튜브 · 구글 등 기존 검색 채널의 이용률은 모두 내려갔습니다.</p><button type="button" class="lt-tog" aria-controls="lt-fold-4" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <div class="lt-bars lt-up" data-deco aria-hidden="true"><div class="lt-bar"><span class="lt-bar-l">2025.03</span><span class="lt-bar-t"><i style="width:39.6%"></i></span><span class="lt-bar-v">39.6%</span></div><div class="lt-bar is-now"><span class="lt-bar-l">2025.12</span><span class="lt-bar-t"><i style="width:54.5%"></i></span><span class="lt-bar-v">54.5%</span></div></div>
+        <p data-fold id="lt-fold-4" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">최근 3개월 안에 검색 목적으로 챗GPT를 쓴 비율이 2025년 3월 <span class="press-hl">39.6%에서 12월 54.5%로</span> 올랐습니다. 같은 기간 네이버 · 유튜브 · 구글 등 기존 검색 채널의 이용률은 모두 내려갔습니다.</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-4" aria-expanded="false" hidden>설명 보기</button>
         <p class="press-src" style="margin:auto 0 0;font-size:13px;line-height:1.7;color:#9AA8A1;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · <a href="https://www.hankyung.com/article/202601275738g" target="_blank" rel="noopener">「포털 이용 줄고 생성 AI 쓴다는데…확 달라진 검색 풍경」</a> · 한국경제 · 2026.01.28 · 오픈서베이 「AI 검색 트렌드 리포트 2026」(전국 10~50대 2,000명)</p>
       </article>
       <article class="press-card" style="background:#141C18;border:1px solid #1F2D27;border-top:1px solid #1F2D27;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column">
-        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">매경이코노미 · Ahrefs 분석</span>
-        <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">58% ↓</div>
+        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">매경이코노미 · Ahrefs 분석</span><span class="lt-trend lt-dn" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 3-3 6 6"/><path d="M14 16h5v-5"/></svg></span>
+        <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:44px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">58% <span class="lt-down">↓</span></div>
         <h3 style="margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.5;color:#F2F5F3">AI 요약이 뜨면, 검색 1위 글도 클릭이 절반 넘게 사라집니다</h3>
-        <p data-fold id="lt-fold-5" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">구글에서 AI 요약(AI 개요)이 뜨는 검색은 최상위 결과의 클릭률이 58% 줄었습니다(2023년 12월과 2025년 12월 비교). AI 요약이 뜬 검색의 <span class="press-hl">83%는 클릭 없이 끝났습니다</span>. 네이버도 통합검색의 약 20%를 AI 브리핑이 답하고 있습니다.</p><button type="button" class="lt-tog" aria-controls="lt-fold-5" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <div class="lt-bars lt-dn" data-deco aria-hidden="true"><div class="lt-bar is-now"><span class="lt-bar-l">클릭 없이 종료</span><span class="lt-bar-t"><i style="width:83%"></i></span><span class="lt-bar-v">83%</span></div><div class="lt-bar"><span class="lt-bar-l">네이버 AI 브리핑</span><span class="lt-bar-t"><i style="width:20%"></i></span><span class="lt-bar-v">약 20%</span></div></div>
+        <p data-fold id="lt-fold-5" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">구글에서 AI 요약(AI 개요)이 뜨는 검색은 최상위 결과의 클릭률이 58% 줄었습니다(2023년 12월과 2025년 12월 비교). AI 요약이 뜬 검색의 <span class="press-hl">83%는 클릭 없이 끝났습니다</span>. 네이버도 통합검색의 약 20%를 AI 브리핑이 답하고 있습니다.</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-5" aria-expanded="false" hidden>설명 보기</button>
         <p class="press-src" style="margin:auto 0 0;font-size:13px;line-height:1.7;color:#9AA8A1;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · <a href="https://www.mk.co.kr/news/business/12128090" target="_blank" rel="noopener">「제로클릭에 수익 뚝…AI 브리핑의 역습」</a> · 매경이코노미 제2373호(2026.08.19~25) · Ahrefs</p>
       </article>
       <article class="press-card" style="background:#141C18;border:1px solid #1F2D27;border-top:1px solid #1F2D27;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column">
-        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">조선일보 · 모바일인덱스</span>
-        <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">25만여 명 ↓</div>
+        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">조선일보 · 모바일인덱스</span><span class="lt-trend lt-dn" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l5 5 3-3 6 6"/><path d="M14 16h5v-5"/></svg></span>
+        <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">25만여 명 <span class="lt-down">↓</span></div>
         <h3 style="margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.5;color:#F2F5F3">AI 작성 글이 늘어난 1년, 네이버 블로그 이용자가 25만여 명 줄었습니다</h3>
-        <p data-fold id="lt-fold-6" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">네이버 블로그 월간 이용자(MAU · 모바일인덱스)는 2025년 9월 312만 6,298명에서 2026년 8월 <span class="press-hl">287만 5,020명으로 줄었습니다</span>. 같은 기사는 소셜미디어 이용자 절반(49.9%)이 AI 콘텐츠를 접하면 「인위적이거나 어색하게 느껴진다」고 답한 조사를 함께 전했습니다.</p><button type="button" class="lt-tog" aria-controls="lt-fold-6" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <div class="lt-bars lt-dn" data-deco aria-hidden="true"><div class="lt-bar"><span class="lt-bar-l">2025.09</span><span class="lt-bar-t"><i style="width:100%"></i></span><span class="lt-bar-v">312.6만</span></div><div class="lt-bar is-now"><span class="lt-bar-l">2026.08</span><span class="lt-bar-t"><i style="width:92%"></i></span><span class="lt-bar-v">287.5만</span></div></div>
+        <p data-fold id="lt-fold-6" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">네이버 블로그 월간 이용자(MAU · 모바일인덱스)는 2025년 9월 312만 6,298명에서 2026년 8월 <span class="press-hl">287만 5,020명으로 줄었습니다</span>. 같은 기사는 소셜미디어 이용자 절반(49.9%)이 AI 콘텐츠를 접하면 「인위적이거나 어색하게 느껴진다」고 답한 조사를 함께 전했습니다.</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-6" aria-expanded="false" hidden>설명 보기</button>
         <p class="press-src" style="margin:auto 0 0;font-size:13px;line-height:1.7;color:#9AA8A1;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · <a href="https://v.daum.net/v/20261001101415950" target="_blank" rel="noopener">「네이버 블로그에 AI 작성 글 급증...이용자 25만여명 감소」</a> · 조선일보 · 2026.10.01</p>
       </article>
     </div>
     <div class="press-grid" style="margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
       <article class="press-card" style="background:#141C18;border:1px solid #1F2D27;border-top:1px solid #1F2D27;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column">
-        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">뉴시스 · 네이버 발표</span>
-        <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">20년<svg class="lt-ico-end" data-deco aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="currentColor" stroke="none"/></svg></div>
+        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">뉴시스 · 네이버 발표</span><span class="lt-trend lt-nt" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" stroke="none"/></svg></span>
+        <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">20년</div>
         <h3 style="margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.5;color:#F2F5F3">네이버 「연관검색어」, 20년 만에 종료</h3>
-        <p data-fold id="lt-fold-7" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">네이버가 2000년대 중반부터 운영한 연관검색어를 2026년 4월 30일부로 끝냈습니다. 「캠핑」을 치면 「캠핑장 추천」을 띄우던 자리는 AI가 만드는 「관련 질문」이 대신합니다.</p><button type="button" class="lt-tog" aria-controls="lt-fold-7" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <div class="lt-span" data-deco aria-hidden="true"><span>2000년대 중반</span><i></i><span>2026.04.30 종료</span></div>
+        <p data-fold id="lt-fold-7" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">네이버가 2000년대 중반부터 운영한 연관검색어를 2026년 4월 30일부로 끝냈습니다. 「캠핑」을 치면 「캠핑장 추천」을 띄우던 자리는 AI가 만드는 「관련 질문」이 대신합니다.</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-7" aria-expanded="false" hidden>설명 보기</button>
         <p class="press-src" style="margin:auto 0 0;font-size:13px;line-height:1.7;color:#9AA8A1;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · <a href="https://www.newsis.com/view/NISX20260407_0003581427" target="_blank" rel="noopener">「네이버 '연관검색어' 20년 만에 종료…AI 검색 시대 전환 '신호탄'」</a> · 뉴시스 · 2026.04.07</p>
       </article>
       <article class="press-card" style="background:#141C18;border:1px solid #1F2D27;border-top:1px solid #1F2D27;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column">
-        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">아이뉴스24 · 모바일인덱스</span>
+        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">아이뉴스24 · 모바일인덱스</span><span class="lt-trend lt-up" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l5-5 3 3 6-6"/><path d="M14 8h5v5"/></svg></span>
         <div class="press-num press-num-long" style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">4,702만 > 4,684만</div>
         <h3 style="margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.5;color:#F2F5F3">구글 앱 이용자, 처음으로 네이버를 앞섰습니다</h3>
-        <p data-fold id="lt-fold-8" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">2026년 7월 구글 앱 월간 이용자는 4,702만 명으로 네이버(약 4,684만 명)를 처음 넘었습니다. 검색 점유율은 아직 네이버가 63.65%로 앞섭니다(인터넷트렌드 · 7월).</p><button type="button" class="lt-tog" aria-controls="lt-fold-8" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <div class="lt-bars lt-up" data-deco aria-hidden="true"><div class="lt-bar is-now"><span class="lt-bar-l">구글 앱</span><span class="lt-bar-t"><i style="width:100%"></i></span><span class="lt-bar-v">4,702만</span></div><div class="lt-bar"><span class="lt-bar-l">네이버 앱</span><span class="lt-bar-t"><i style="width:99.6%"></i></span><span class="lt-bar-v">4,684만</span></div></div>
+        <p data-fold id="lt-fold-8" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">2026년 7월 구글 앱 월간 이용자는 4,702만 명으로 네이버(약 4,684만 명)를 처음 넘었습니다. 검색 점유율은 아직 네이버가 63.65%로 앞섭니다(인터넷트렌드 · 7월).</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-8" aria-expanded="false" hidden>설명 보기</button>
         <p class="press-src" style="margin:auto 0 0;font-size:13px;line-height:1.7;color:#9AA8A1;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · <a href="https://www.inews24.com/view/1993989" target="_blank" rel="noopener">「네이버, 모바일앱 이용자 구글에 첫 역전⋯AI가 검색 포털 대체하나」</a> · 아이뉴스24 · 2026.08.11</p>
       </article>
       <article class="press-card" style="background:#141C18;border:1px solid #1F2D27;border-top:1px solid #1F2D27;border-radius:16px;padding:28px 24px;display:flex;flex-direction:column">
-        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">머니투데이 · 과기정통부 실태조사</span>
+        <span class="press-badge" style="display:block;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#00E676;margin-bottom:16px">머니투데이 · 과기정통부 실태조사</span><span class="lt-trend lt-nt" data-deco aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg></span>
         <div class="press-num" style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#00E676;margin-bottom:14px">68.1%</div>
         <h3 style="margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.5;color:#F2F5F3">생성형 AI는 챗GPT, 검색 포털은 네이버 — 정부 실태조사</h3>
-        <p data-fold id="lt-fold-9" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">과기정통부 「2025 부가통신사업 실태조사」(성인 2,500명)에서 가장 많이 쓴 생성형 AI는 챗GPT(68.1%), 검색 포털은 네이버(67.5%)였습니다. 손님은 두 곳 모두에서 캠핑장을 찾습니다.</p><button type="button" class="lt-tog" aria-controls="lt-fold-9" aria-expanded="false" aria-label="설명 펼치기" hidden></button>
+        <div class="lt-bars lt-nt" data-deco aria-hidden="true"><div class="lt-bar is-now"><span class="lt-bar-l">생성형 AI · 챗GPT</span><span class="lt-bar-t"><i style="width:68.1%"></i></span><span class="lt-bar-v">68.1%</span></div><div class="lt-bar"><span class="lt-bar-l">검색 포털 · 네이버</span><span class="lt-bar-t"><i style="width:67.5%"></i></span><span class="lt-bar-v">67.5%</span></div></div>
+        <p data-fold id="lt-fold-9" style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#9AA8A1">과기정통부 「2025 부가통신사업 실태조사」(성인 2,500명)에서 가장 많이 쓴 생성형 AI는 챗GPT(68.1%), 검색 포털은 네이버(67.5%)였습니다. 손님은 두 곳 모두에서 캠핑장을 찾습니다.</p><button type="button" class="lt-tog lt-tog-t" data-deco aria-controls="lt-fold-9" aria-expanded="false" hidden>설명 보기</button>
         <p class="press-src" style="margin:auto 0 0;font-size:13px;line-height:1.7;color:#9AA8A1;border-top:1px dashed rgba(255,255,255,0.14);padding-top:12px">출처 · <a href="https://www.mt.co.kr/tech/2026/06/04/2026060315583195840" target="_blank" rel="noopener">「포털은 네이버·AI는 챗GPT…한국인 92.5%가 쓰는 최애 메신저는?」</a> · 머니투데이 · 2026.06.04</p>
       </article>
     </div>
@@ -1087,12 +1308,15 @@
   <div style="max-width:1200px;margin:0 auto">
     <!-- v66 — 옛 「서비스 소개」(첫 화면 반복) 절의 글을 여기로 옮겼다(지시서 v3 6절). -->
     <div class="h-svc">
+      <p class="lt-eb" data-deco aria-hidden="true">AI 노출 진단서</p>
       <h3 class="h-h3">우리 캠핑장이 AI 답변, AI 추천에서 얼마나 노출되는지 아시나요?</h3>
       <p class="h-body">캠핑하이브는 ChatGPT · Claude · Gemini 3사에 직접 질문하여 캠핑장의 언급률을 산출합니다.<br>실측 데이터를 기반으로 경쟁 전략을 수립하세요.</p>
       <div class="h-feat"><p class="h-feat-t">노출 격차 역전 로드맵</p><p class="h-body">노출 격차의 원인을 분석하고, 무엇을 어떤 순서로 고쳐야 하는지 구체적인 실행안을 제시합니다.</p></div>
     </div>
+    <div class="lt-rphead">
     <h2 style="margin:0 0 12px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#F2F5F3;white-space:nowrap">이런 진단서를 받으십니다</h2>
     <p style="margin:0 0 44px;font-size:17px;color:#9AA8A1">아래 8개 블록은 실제 진단 결과 화면입니다. 썸네일 안의 수치는 화면 예시이며, 실제 값은 진단 시점에 측정됩니다.</p>
+    </div>
     <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px">
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;overflow:hidden;box-shadow:none">
         <div class="h-rp-shot"><img src="/img/sample/report-card-01.webp" alt="실제 진단서 1쪽 일부(상호 가림) — 종합 스코어 19/100 이 적힌 표지" width="560" height="792" loading="lazy" decoding="async" style="object-position:50% 0%"></div>
@@ -1103,11 +1327,11 @@
         <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA8A1;margin-bottom:8px">BLOCK 02</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#F2F5F3">AI 세 곳의 답변 요약</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#9AA8A1;overflow-wrap:anywhere">ChatGPT·Claude·Gemini가 각각 뭐라고 했는지</p></div>
       </div>
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;overflow:hidden;box-shadow:none">
-        <div class="h-rp-shot"><img src="/img/sample/report-card-04.webp" alt="실제 진단서 4쪽 일부(상호 가림) — 3사 답변표 아홉 칸 미언급" width="560" height="792" loading="lazy" decoding="async" style="object-position:50% 28%"></div>
+        <div class="h-rp-shot"><img src="/img/sample/report-card-04a.webp" alt="실제 진단서 4쪽 일부(상호 가림) — 3사 답변표 아홉 칸 미언급" width="640" height="378" loading="lazy" decoding="async" style="object-position:50% 0%"></div>
         <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA8A1;margin-bottom:8px">BLOCK 03</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#F2F5F3">질문별 답변 원문</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#9AA8A1">요약이 아니라 <strong style="font-weight:700;color:#F2F5F3">AI가 실제로 쓴 문장 그대로</strong></p></div>
       </div>
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;overflow:hidden;box-shadow:none">
-        <div class="h-rp-shot"><img src="/img/sample/report-card-04.webp" alt="실제 진단서 4쪽 일부(상호 가림) — AI가 대신 이름을 올린 36곳 대조" width="560" height="792" loading="lazy" decoding="async" style="object-position:50% 80%"></div>
+        <div class="h-rp-shot"><img src="/img/sample/report-card-04b.webp" alt="실제 진단서 4쪽 일부(상호 가림) — AI가 대신 이름을 올린 36곳 대조" width="640" height="405" loading="lazy" decoding="async" style="object-position:50% 50%"></div>
         <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA8A1;margin-bottom:8px">BLOCK 04</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#F2F5F3">대신 추천된 캠핑장</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#9AA8A1">손님이 우리 대신 소개받은 곳들</p></div>
       </div>
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;overflow:hidden;box-shadow:none">
@@ -1127,12 +1351,19 @@
         <div style="padding:20px"><div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA8A1;margin-bottom:8px">BLOCK 08</div><h3 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#F2F5F3">AI 검색 최적화 작업 캠핑하이브에서 대신 해드립니다</h3><p style="margin:0;font-size:15px;line-height:1.7;color:#9AA8A1">직접 하실지, 맡기실지</p></div>
       </div>
     </div>
+    <!-- v70 맨 아래 흰 상자(제니 3차 ⑨) — 왼쪽 제목 + 안내 / 오른쪽 단추 2개. 글 · 링크 · 속성은 그대로, 순서만 바꿈 -->
+    <div class="lt-rpbox">
+      <div class="lt-rpbox-l">
+    <h3 style="margin:0 0 28px;font-size:26px;font-weight:900;color:#F2F5F3">우리 캠핑장은 어떨까요?</h3>
     <p style="margin:32px 0 0;font-size:19px;line-height:1.7;color:#F2F5F3;border-left:1px solid #1F2D27;padding-left:20px">진단서는 계약 여부와 관계없이 드립니다. 받아만 보고 끝내셔도 됩니다. 기록 번호로 언제든 다시 여실 수 있습니다.</p>
+      </div>
+      <div class="lt-rpbox-r">
     <!-- 2026-11-01 샘플 창 — 「진단서 샘플 보기」 두 곳(히어로 · 여기)은 실제 캠핑장 진단서 대신 이름 가린 샘플 창을 연다(제니 지시 「샘플창교체」 · 대표 지시). 창 마크업은 layout.mjs → sample-viewer.mjs 가 본문 바깥(바닥글 뒤)에 붙인다. -->
     <p style="margin:24px 0 0"><a class="link-u" href="#sample-report" data-sample-open>진단서 샘플 보기</a></p>
     <!-- v52 A2 — 0362976 의 #demo 에서 꺼낸 H3 와 버튼. 지시문이 지목한 두 개만 옮겼다. -->
-        <h3 style="margin:0 0 28px;font-size:26px;font-weight:900;color:#F2F5F3">우리 캠핑장은 어떨까요?</h3>
-        <a class="btn btn-p" href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_demo">내 캠핑장 AI 노출 무료 진단 신청</a>
+    <a class="btn btn-p" href="https://camphive-aeo.vercel.app/" target="_blank" rel="noopener" data-ga="diag_demo">내 캠핑장 AI 노출 무료 진단 신청</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1146,10 +1377,10 @@
     <p style="margin:0 0 44px;font-size:18px;line-height:1.7;color:#9AA8A1;max-width:760px">봇이 들어올 수 있는가(접근), 글을 읽을 수 있는가(판독), 우리를 무엇으로 아는가(식별), 왜 우리를 인용하는가(선택). 앞의 관문이 막혀 있으면 뒤의 노력은 결과로 이어지지 않습니다. 캠핑하이브는 이 네 관문을 순서대로 뚫습니다.</p>
     <!-- v69 4개 관문 도형(위 문단의 말 그대로 · 지시서 v2 2-7) -->
     <ol class="lt-gates" data-deco aria-hidden="true">
-      <li><span class="lt-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></svg></span><b>접근</b><span class="lt-gq">봇이 들어올 수 있는가</span></li>
-      <li><span class="lt-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></svg></span><b>판독</b><span class="lt-gq">글을 읽을 수 있는가</span></li>
-      <li><span class="lt-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></svg></span><b>식별</b><span class="lt-gq">우리를 무엇으로 아는가</span></li>
-      <li><span class="lt-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></svg></span><b>선택</b><span class="lt-gq">왜 우리를 인용하는가</span></li>
+      <li><span class="lt-gn">관문 1</span><span class="lt-glock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="lt-gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5h5v17h-5"/><path d="M3.5 12H14"/><path d="M10.5 8.5L14 12l-3.5 3.5"/></svg></span><b>접근</b><span class="lt-gq">봇이 들어올 수 있는가</span></li>
+      <li><span class="lt-gn">관문 2</span><span class="lt-glock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="lt-gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></span><b>판독</b><span class="lt-gq">글을 읽을 수 있는가</span></li>
+      <li><span class="lt-gn">관문 3</span><span class="lt-glock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="lt-gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16.2c.6-1.5 1.8-2.3 3.2-2.3s2.6.8 3.2 2.3"/><path d="M14.5 10h4M14.5 13.5h4"/></svg></span><b>식별</b><span class="lt-gq">우리를 무엇으로 아는가</span></li>
+      <li class="is-open"><span class="lt-gn">관문 4</span><span class="lt-glock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.6-1.7"/></svg></span><span class="lt-gico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg></span><b>선택</b><span class="lt-gq">왜 우리를 인용하는가</span></li>
     </ol>
     <h2 style="margin:0 0 12px;font-size:clamp(20px,3.2vw,40px);line-height:1.4;font-weight:900;letter-spacing:-0.025em;color:#F2F5F3">사장님은 하시던 대로 캠핑장 손님만 맞이하십시오. 복잡한 AI 세팅은 저희가 알아서 끝냅니다.</h2>
     <p style="margin:0 0 44px;font-size:18px;line-height:1.7;color:#9AA8A1;max-width:760px">진단 → 설계 → 구축 → 축적 → 측정. 컴퓨터를 잘 모르셔도, 홈페이지를 만든 지 오래되었어도 전혀 상관없습니다. 검증된 5단계로 빈틈없이 구축해 드립니다.</p>
@@ -1250,7 +1481,7 @@
   <div style="max-width:1200px;margin:0 auto">
     <div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 12px"><div style="box-sizing: border-box; display: flex; flex-direction: column; gap: 12px"><h2 style="margin: 0 0 48px; font-size: clamp(20px,3.2vw,40px); line-height: 1.4; font-weight: 900; letter-spacing: -0.025em; color: #F2F5F3">파쇄석 굵기 하나, 글램핑 결로 문제 하나 모르는 일반 마케팅 대행사가 어떻게 캠퍼의 마음을 읽겠습니까?</h2></div></div>
     <!-- v69 큰 숫자 3개(지시서 v2 2-9) — 시공 현장 사진은 대표가 실제 사진을 주면 넣는다(AI 생성 그림 금지) -->
-    <div class="lt-big" data-deco aria-hidden="true"><p><b>13</b>년</p><p>캠핑장 <b>250</b>곳 이상</p><p>직접 운영 <b>5</b>곳</p></div>
+    <div class="lt-big" data-deco aria-hidden="true"><div><p class="lt-big-n"><b>13</b>년</p><p class="lt-big-d">글램핑 직접 제작</p></div><div><p class="lt-big-n"><b>250</b>곳 이상</p><p class="lt-big-d">캠핑장 시공 · 2013년부터</p></div><div><p class="lt-big-n"><b>5</b>곳</p><p class="lt-big-d">캠핑장 직접 운영</p></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
       <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:32px">
         <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:14px">01</div>
@@ -1289,8 +1520,8 @@
         <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:10px">PLAN A</div>
         <h3 style="margin:0 0 8px;font-size:24px;font-weight:900;color:#F2F5F3">스타터</h3>
         <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#9AA8A1">20면 미만 · 처음 도입해 기본 구조를 잡으려는 곳</p>
+        <p class="lt-price"><span class="lt-price-l">월 구독료</span> <b>330,000원</b> <span class="lt-vat">VAT 별도</span></p>
         <dl style="margin:0 0 24px;display:grid;gap:0">
-          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">월 구독료</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">330,000원 VAT 별도</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">진단·리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">포함</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">홈페이지 구조 작업</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">포함</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">콘텐츠 작성</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">AI 월 10개 · 인스타 5 · 쓰레드 5</dd></div>
@@ -1308,8 +1539,8 @@
         </div>
         <h3 style="margin:0 0 8px;font-size:26px;font-weight:900;color:#F2F5F3">스탠다드</h3>
         <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#9AA8A1">20~50면 · 노출 확대를 목표로 콘텐츠를 늘리려는 곳</p>
+        <p class="lt-price"><span class="lt-price-l">월 구독료</span> <b>270,000원</b> <span class="lt-vat">VAT 별도</span></p>
         <dl style="margin:0 0 24px;display:grid;gap:0">
-          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">월 구독료</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">270,000원 VAT 별도</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">진단·리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">포함</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">홈페이지 구조 작업</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">포함</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">콘텐츠 작성</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">AI 월 15개 · 인스타 10 · 쓰레드 10</dd></div>
@@ -1324,8 +1555,8 @@
         <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.10em;color:#9AA8A1;margin-bottom:10px">PLAN C</div>
         <h3 style="margin:0 0 8px;font-size:24px;font-weight:900;color:#F2F5F3">프리미엄</h3>
         <p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#9AA8A1">50면 이상 또는 다지점 · 1년 동안 지속 발행하려는 곳</p>
+        <p class="lt-price"><span class="lt-price-l">월 구독료</span> <b>220,000원</b> <span class="lt-vat">VAT 별도</span></p>
         <dl style="margin:0 0 24px;display:grid;gap:0">
-          <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">월 구독료</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">220,000원 VAT 별도</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">진단·리포트</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">포함</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">홈페이지 구조 작업</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">포함</dd></div>
           <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #1F2D27"><dt style="font-size:15px;color:#9AA8A1">콘텐츠 작성</dt><dd style="margin:0;font-size:16px;font-weight:500;color:#F2F5F3;text-align:right">AI 월 20개 · 인스타 15 · 쓰레드 15</dd></div>

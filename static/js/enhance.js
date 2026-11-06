@@ -602,7 +602,7 @@
         btn.addEventListener('click', function () {
           var open = btn.getAttribute('aria-expanded') !== 'true';
           btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-          btn.setAttribute('aria-label', open ? '설명 접기' : '설명 펼치기');
+          // v70 — 단추에 글(「설명 보기」 · 「현장의 목소리 보기」)이 생겨 aria-label 은 두지 않는다(보이는 글 = 이름).
           if (open) el.classList.remove('is-folded'); else el.classList.add('is-folded');
         });
       })(togs[ti]);
