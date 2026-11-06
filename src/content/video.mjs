@@ -5,10 +5,13 @@
 // 장 시작 시각: ffmpeg 장면 전환 + 화면 제목 칸 변화량으로 실측(2026-11-05 · _tmp/chapters/video_chapters.json ·
 //       13장 모두 시작 +0.5초 프레임에서 장 제목 글자 확인). 화면의 장 바로가기 4개도 이 값을 쓴다.
 // 화면 문구와 같아야 한다 — 바꾸면 home.dc.html 의 #video 절도 함께 바꾼다.
+// v68 (2026-11-06 대표 지시) — 화면의 「영상 내용 요약」 4문장은 뺐다. description 의 같은 4문장은 영상 내용 설명이라 남긴다.
 
 export const PROMO_VIDEO = {
   file: 'media/CampingHive_AEO_v08_403.mp4',
-  poster: 'media/poster.jpg',
+  // v68 (2026-11-06 대표 지시) — 표지를 글램핑 사진(poster.jpg)에서 영상 0초 화면(「네이버 검색만 믿고 계십니까?」)으로 바꿈.
+  //   poster-intro.jpg = 이 영상 0.0초 프레임(ffmpeg · 1280×720). 영상을 바꾸면 이 그림도 다시 뽑는다.
+  poster: 'media/poster-intro.jpg',
   name: '캠핑장 AI 검색 전략, 4분 요약',
   description:
     '손님이 AI에게 묻는 방식부터 무료 진단까지, 캠핑하이브가 현장에서 정리한 순서 그대로입니다. ' +
