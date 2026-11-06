@@ -892,6 +892,23 @@
     #report-preview .h-rp-shot { height: 130px; padding: 8px; }
   }
 
+  /* ══ v72 (2026-11-06) 제니 「AEO 홈페이지 맨 아래 수정 · 최종」 2곳 ══
+     1) #cta 카카오 단추 — 카카오 로그인 디자인 가이드 색(바탕 #FEE500 · 글씨 #000 85% · 테두리 없음 · 모서리 12px).
+        심볼은 카카오디벨로퍼스 [도구 › 디자인 리소스 다운로드 › 카카오 로그인] ZIP 의 kakao_login_light.svg 말풍선 경로 그대로(색만 #000000).
+        높이 48px — 오른쪽 카드의 연두 단추보다 작게. 이 절의 연두 단추는 오른쪽 하나뿐.
+     2) 푸터 한 줄 — 왼쪽 로고 · 회사명 / 오른쪽 회사 정보 2줄. 면책 문구 · 구분선 · 아래 중복 2줄 삭제. 720 이하는 세로. */
+  .kakao-btn { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 20px; width: fit-content; background: #FEE500; border: 0; border-radius: 12px; color: rgba(0,0,0,.85); font-size: 16px; font-weight: 700; line-height: 1; text-decoration: none; }
+  .kakao-btn:hover, .kakao-btn:focus-visible { color: #000000; }
+  .kakao-btn svg { width: 20px; height: 19px; flex: none; display: block; }
+  .ft-row { max-width: 1200px; margin: 0 auto; display: flex; gap: 24px 48px; justify-content: space-between; align-items: flex-start; }
+  .ft-info { margin: 0; font-size: 13px; line-height: 1.9; color: #9AA8A1; text-align: right; }
+  .ft-info p { margin: 0; }
+  .ft-info a { color: #9AA8A1; }
+  @media (max-width: 720px) {
+    .ft-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .ft-info { text-align: left; }
+  }
+
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
@@ -1743,7 +1760,7 @@
       <p style="margin:0 0 32px;font-size:19px;line-height:1.8;color:#C9C9BF">과거 네이버 플레이스 초창기에도 “설마 저걸로 예약하겠어?”라며 남들 다 할 때까지 기다렸던 분들은 결국 매달 수백만 원의 광고비를 내는 신세가 되었습니다. 지금 AI 검색 시장이 정확히 그때와 똑같습니다. 남들이 아직 반신반의할 때 먼저 깃발을 꽂는 캠핑장만이 먼저 자리를 잡습니다. 지금 바로 우리 캠핑장의 AI 점수를 무료로 확인해 보십시오.</p>
       <div style="border-top:1px solid rgba(255,255,255,0.14);padding-top:24px;display:grid;gap:12px">
         <p style="margin:0;font-size:16px;line-height:1.7;color:#9AA8A1">진단 결과만 받고 종료하셔도 됩니다. 영업 전화는 1회만 드립니다.</p>
-        <a href="https://pf.kakao.com/_zprxaX" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:14px 26px;width:fit-content;border:1.5px solid rgba(255,255,255,0.30);border-radius:100px;color:#F2F5F3;font-size:17px;font-weight:700" style-hover="border-color:#00E676;color:#00E676">카카오톡으로 바로 문의</a>
+        <a class="kakao-btn" href="https://pf.kakao.com/_zprxaX" target="_blank" rel="noopener"><svg viewBox="13 14 22 21" aria-hidden="true" focusable="false"><path fill="#000000" d="M24.0014 14C17.9241 14 13 18.0219 13 22.9825C13 26.1711 15.0368 28.9728 18.1057 30.5656L17.0681 34.5677C17.0295 34.6871 17.0598 34.8151 17.1424 34.9033C17.2029 34.9659 17.2855 35 17.3653 35C17.4341 35 17.5029 34.9772 17.5607 34.9289L22.0196 31.8171C22.661 31.911 23.3215 31.9622 23.9986 31.9622C30.0732 31.9622 35 27.9403 35 22.9797C35 18.0191 30.0759 14 24.0014 14Z"/></svg>카카오톡으로 바로 문의</a>
       </div>
     </div>
     <div style="background:#141C18;border:1px solid #1F2D27;border-radius:16px;padding:36px;box-shadow:none">
@@ -1756,17 +1773,16 @@
 </main>
 
 <footer style="padding:48px 32px;background:#0A0E0C">
-  <div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center">
+  <div class="ft-row">
     <div style="display:flex;align-items:center;gap:10px">
       <!-- v66 — 글자 로고 대신 공식 로고 원본(윗줄)을 쓴다(지시서 v3 8절 「글자 로고 0」) -->
       <img src="/img/logo-header.png" alt="캠핑하이브" width="183" height="24" loading="lazy" decoding="async" style="height:24px;width:auto;display:block" />
       <span style="font-size:15px;color:#9AA8A1;border-left:1px solid rgba(255,255,255,0.18);padding-left:12px">주식회사 캠핑하이브</span>
     </div>
-    <p style="margin:0;font-size:14px;line-height:1.8;color:#8B8B82;max-width:620px">측정 대상 AI 엔진은 ChatGPT · Claude · Gemini 3사입니다. 성과를 보장하지 않으며, 화면의 모든 수치는 측정 시점 기준입니다.</p>
-  </div>
-  <div style="max-width:1200px;margin:24px auto 0;padding-top:20px;border-top:1px solid #1F2D27;font-size:13px;line-height:1.9;color:#9AA8A1">
-    <p style="margin:0">주식회사 캠핑하이브 · 대표 정용택 · 사업자등록번호 829-88-03202 · 개인정보 보호책임자 정용택</p>
-    <p style="margin:0">경기도 포천시 내촌면 청군로 2224 · <a href="tel:07080643789" style="color:#9AA8A1">070-8064-3789</a> · <a href="mailto:joung1076@naver.com" style="color:#9AA8A1">joung1076@naver.com</a> · <a href="/privacy/" style="color:#9AA8A1">개인정보처리방침</a></p>
+    <div class="ft-info">
+      <p>주식회사 캠핑하이브 · 대표 정용택 · 사업자등록번호 829-88-03202 · 개인정보 보호책임자 정용택</p>
+      <p>경기도 포천시 내촌면 청군로 2224 · <a href="tel:07080643789">070-8064-3789</a> · <a href="mailto:joung1076@naver.com">joung1076@naver.com</a> · <a href="/privacy/">개인정보처리방침</a></p>
+    </div>
   </div>
 </footer>
 
